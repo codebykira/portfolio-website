@@ -5,7 +5,10 @@ export const metadata: Metadata = {
   title: "Hi, I'm Kira Cheung",
   description: "Check out my work, writing, and story.",
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/girl.svg", type: "image/svg+xml" },
+    ],
   },
 };
 

@@ -2,7 +2,10 @@
 import type { Configuration } from "webpack";
 
 const nextConfig = {
-  output: "export",
+  // output: "export",
+  // basePath: process.env.NODE_ENV === "production" ? "/portfolio-website" : "",
+  // assetPrefix:
+  //   process.env.NODE_ENV === "production" ? "/portfolio-website/" : "",
   images: {
     unoptimized: true,
   },
@@ -21,6 +24,9 @@ const nextConfig = {
       use: ["@svgr/webpack"],
     });
     return config;
+  },
+  experimental: {
+    turbo: {},
   },
 };
 

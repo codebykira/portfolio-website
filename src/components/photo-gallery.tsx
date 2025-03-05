@@ -42,7 +42,8 @@ const PhotoGallery = () => {
     {
       id: 3,
       src: "/kenya.png",
-      title: "Another standout trip was Kenya, where I met incredible people.",
+      title:
+        "Kenya was unforgettable! A month of volunteering and experiencing a culture so different from my own.",
       icon: "🦒",
     },
     {
@@ -56,7 +57,14 @@ const PhotoGallery = () => {
       id: 5,
       src: "/painting.png",
       title:
-        "This is my very first oil painting! I wanted to play with contrast, one side with makeup and one without, to show two different sides of beauty.",
+        "This is my very first oil painting when I was 14 years old. Still very proud of it!",
+      icon: "🎨",
+    },
+    {
+      id: 6,
+      src: "/haiway.png",
+      title:
+        "Adventuring through KaoHsiung, Taiwan with my partner-in-crime, Haiway! 🚀 Need recos for next stop! ",
       icon: "🎨",
     },
   ];
