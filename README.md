@@ -6,12 +6,6 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -31,6 +25,83 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Prerequisites
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Node.js (v14.6.0 or later)
+- Vercel CLI (install with `npm install -g vercel`)
+- A Vercel account (sign up at [vercel.com](https://vercel.com))
+
+### Deployment Steps
+
+1. **Install Vercel CLI** (if not already installed):
+
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Login to Vercel**:
+
+   ```bash
+   vercel login
+   ```
+
+   Follow the prompts to authenticate with your Vercel account.
+
+3. **Deploy to Production**:
+
+   ```bash
+   vercel --prod
+   ```
+
+   This will deploy your application to production. The first time you run this command, it will guide you through the setup process.
+
+4. **For Subsequent Deployments**:
+   ```bash
+   vercel --prod
+   ```
+
+### Environment Variables
+
+Make sure to set up the following environment variables in your Vercel project settings:
+
+1. Go to your project in the Vercel dashboard
+2. Navigate to Settings > Environment Variables
+3. Add the following variables:
+   ```
+   RESEND_API_KEY=your_resend_api_key_here
+   ```
+
+### Manual Deployment via Vercel Dashboard
+
+1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
+2. Import your repository in the Vercel dashboard
+3. Configure the project settings (if needed) and deploy
+
+### Preview Deployments
+
+Vercel automatically creates preview deployments for pull/merge requests. To create a preview deployment:
+
+```bash
+vercel
+```
+
+### Additional Commands
+
+- View deployment logs:
+
+  ```bash
+  vercel logs
+  ```
+
+- List all deployments:
+
+  ```bash
+  vercel ls
+  ```
+
+- Open the project in your browser:
+  ```bash
+  vercel open
+  ```
+
+For more information, check out the [Vercel CLI documentation](https://vercel.com/docs/cli).

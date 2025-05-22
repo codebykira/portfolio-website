@@ -1,26 +1,15 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Get the base URL for the current environment
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-
 // Initialize Resend with API key from environment variables
 const getResendClient = () => {
-  // Get the API key from environment variables
-  const resendApiKey = process.env.RESEND_API_KEY;
-  
-  // Don't initialize in development without the key to prevent errors during build
-  if (process.env.NODE_ENV !== 'production' && !resendApiKey) {
-    console.warn('RESEND_API_KEY is not set in development');
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    // Return null if API key is missing, we'll handle this case in the route handler
+    console.warn('RESEND_API_KEY is not set');
     return null;
   }
-  
-  if (!resendApiKey) {
-    console.error('RESEND_API_KEY is not set in production');
-    throw new Error('Email service is not properly configured');
-  }
-  
-  return new Resend(resendApiKey);
+  return new Resend(apiKey);
 };
 
 const resend = getResendClient();
@@ -47,21 +36,17 @@ export async function POST(request: Request) {
       );
     }
 
-    // In development without a Resend key, log the email instead of sending
+    // Handle case when Resend client is not available
     if (!resend) {
-      console.log('\n--- Email would be sent in production ---');
-      console.log('From:', name, `<${email}>`);
-      console.log('Message:', message);
-      console.log('----------------------------------------\n');
-      
-      return NextResponse.json(
-        { message: 'Message received! (Email not sent in development)' },
-        { status: 200 }
-      );
+      console.log('Email would be sent but Resend API key is not configured');
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Message received (but email not sent due to missing API key)' 
+      });
     }
-
-    // In production or development with a key, send the actual email
-    const data = await resend.emails.send({
+    
+    // Send email using Resend
+    await resend.emails.send({
       from: 'Portfolio <onboarding@resend.dev>',
       to: 'kiracheung0211@gmail.com',
       replyTo: email,
@@ -85,14 +70,12 @@ export async function POST(request: Request) {
       text: `New Contact Form Submission\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
     });
 
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ success: true });
   } catch (error: unknown) {
     console.error('Error sending email:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
       { 
-        error: 'Failed to send message. Please try again later or contact me directly at kiracheung0211@gmail.com',
-        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+        error: 'Failed to send message. Please try again later or contact me directly at kiracheung0211@gmail.com'
       },
       { status: 500 }
     );

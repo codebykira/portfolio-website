@@ -1,88 +1,79 @@
-'use client';
-
-import { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Kalam } from "next/font/google";
 import Image from "next/image";
 import { motion, useAnimationControls } from "framer-motion";
+import { useCallback } from "react";
 
 const kalam = Kalam({
   subsets: ["latin"],
   weight: ["400"],
 });
 
-// Define photos array outside of component to avoid reference issues
-const photos = [
-  {
-    id: 1,
-    src: "/mikey.png",
-    title: "Meet Mikey, my best friend who brings sunshine to every day.",
-    icon: "🐱",
-  },
-  {
-    id: 2,
-    src: "/north-korea.png",
-    title:
-      "I love traveling, and North Korea stands out as my most surreal adventure.",
-    icon: "🇰🇵",
-  },
-  {
-    id: 3,
-    src: "/kenya.png",
-    title:
-      "Kenya was unforgettable! A month of volunteering and experiencing a culture so different from my own.",
-    icon: "🦒",
-  },
-  {
-    id: 4,
-    src: "/food.png",
-    title:
-      "My adventures are driven by food, always searching for the next amazing meal.",
-    icon: "😋",
-  },
-  {
-    id: 5,
-    src: "/painting.png",
-    title:
-      "This is my very first oil painting when I was 14 years old. Still very proud of it!",
-    icon: "🎨",
-  },
-  {
-    id: 6,
-    src: "/haiway.png",
-    title:
-      "Adventuring through KaoHsiung, Taiwan with my partner-in-crime, Haiway! 🚀 Need recos for next stop! ",
-    icon: "🎨",
-  },
-];
-
 const PhotoGallery = () => {
-  // Define all hooks at the top level in the same order for every render
-  const [mounted, setMounted] = useState(false);
   const controls = useAnimationControls();
   const containerRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Constants
+  // Use a percentage of viewport width instead of fixed pixels
   const photoGap = 50;
   const maxPhotoWidth = 416;
 
-  // Safe window access - avoid using window during SSR
-  const getTotalWidth = useCallback(() => {
-    // During SSR or before mounting, return a fixed value
-    if (!mounted || typeof window === 'undefined') return maxPhotoWidth + photoGap;
+  // Calculate totalWidth based on current viewport
+  const getTotalWidth = () => {
+    // Use min to cap at 416px on larger screens
     const width = Math.min(maxPhotoWidth, window.innerWidth * 0.8);
     return width + photoGap;
-  }, [mounted]);
+  };
 
-  // Handle auto-scrolling
-  const scrollToNext = useCallback(() => {
-    // Don't run animations until component is mounted
-    if (!mounted) return;
-    
+  const photos = [
+    {
+      id: 1,
+      src: "/mikey.png",
+      title: "Meet Mikey, my best friend who brings sunshine to every day.",
+      icon: "🐱",
+    },
+    {
+      id: 2,
+      src: "/north-korea.png",
+      title:
+        "I love traveling, and North Korea stands out as my most surreal adventure.",
+      icon: "🇰🇵",
+    },
+    {
+      id: 3,
+      src: "/kenya.png",
+      title:
+        "Kenya was unforgettable! A month of volunteering and experiencing a culture so different from my own.",
+      icon: "🦒",
+    },
+    {
+      id: 4,
+      src: "/food.png",
+      title:
+        "My adventures are driven by food, always searching for the next amazing meal.",
+      icon: "😋",
+    },
+    {
+      id: 5,
+      src: "/painting.png",
+      title:
+        "This is my very first oil painting when I was 14 years old. Still very proud of it!",
+      icon: "🎨",
+    },
+    {
+      id: 6,
+      src: "/haiway.png",
+      title:
+        "Adventuring through KaoHsiung, Taiwan with my partner-in-crime, Haiway! 🚀 Need recos for next stop! ",
+      icon: "🎨",
+    },
+  ];
+
+  const scrollToNext = useCallback(async () => {
     const nextIndex = (currentIndex + 1) % photos.length;
     const currentTotalWidth = getTotalWidth();
 
-    controls.start({
+    await controls.start({
       x: -currentTotalWidth * nextIndex,
       transition: {
         duration: 1,
@@ -91,36 +82,17 @@ const PhotoGallery = () => {
     });
 
     setCurrentIndex(nextIndex);
-  }, [currentIndex, controls, mounted, getTotalWidth]);
+  }, [currentIndex, controls, photos.length]);
 
-  // Set mounted state
   useEffect(() => {
-    // Only run in browser
-    if (typeof window !== 'undefined') {
-      setMounted(true);
-    }
-  }, []);
-
-  // Set up auto-scroll interval
-  useEffect(() => {
-    if (!mounted) return;
     const interval = setInterval(scrollToNext, 3000);
     return () => clearInterval(interval);
-  }, [scrollToNext, mounted]);
-
-  // Create a consistent placeholder for SSR
-  if (!mounted) {
-    return (
-      <div className="w-full h-full" suppressHydrationWarning>
-        <div className="flex h-full items-center" style={{ visibility: 'hidden' }}></div>
-      </div>
-    );
-  }
+  }, [currentIndex, scrollToNext]);
 
   return (
-    <div className="w-full h-full overflow-hidden" ref={containerRef} suppressHydrationWarning>
+    <div className="overflow-hidden w-full" ref={containerRef}>
       <motion.div
-        className="flex h-full items-center"
+        className="flex"
         animate={controls}
         drag="x"
         dragConstraints={containerRef}
@@ -158,18 +130,17 @@ const PhotoGallery = () => {
             }`}
             style={{
               padding: "12px 12px 20px 12px",
-              width: "min(400px, 80vw)",
+              width: "min(416px, 80vw)",
             }}
           >
             {/* Image */}
-            <div className="relative overflow-hidden rounded-lg" style={{ aspectRatio: '3/4' }}>
+            <div className="relative overflow-hidden">
               <Image
                 src={photo.src}
                 alt={photo.title}
-                fill
-                sizes="(max-width: 768px) 90vw, 400px"
-                className="object-cover"
-                priority={index < 3} // Only preload first few images
+                width={400}
+                height={450}
+                className="w-full h-96 object-cover"
               />
             </div>
 

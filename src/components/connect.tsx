@@ -2,10 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Mail, Github, Linkedin, Instagram, Send } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Connect = () => {
-  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,25 +15,12 @@ const Connect = () => {
     null
   );
 
-  useEffect(() => {
-    // Only run in browser
-    if (typeof window !== 'undefined') {
-      setMounted(true);
-    }
-  }, []);
-
-  // Render a placeholder during SSR to prevent hydration mismatch
-  if (!mounted) {
-    return <div suppressHydrationWarning className="connect-placeholder"></div>;
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/send`;
-      const response = await fetch(apiUrl, {
+      const response = await fetch("/api/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,15 +32,11 @@ const Connect = () => {
         }),
       });
 
-      const responseData = await response.json();
-
       if (response.ok) {
         setSubmitStatus("success");
         setFormData({ name: "", email: "", message: "" });
       } else {
-        console.error("Form submission failed with status:", response.status);
-        console.error("Error details:", responseData);
-        throw new Error(responseData.error || "Form submission failed");
+        throw new Error("Form submission failed");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -94,10 +76,7 @@ const Connect = () => {
   ];
 
   return (
-    <section
-      id="connect"
-      className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gray-50 relative z-10"
-    >
+    <section id="connect" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.h2
@@ -245,6 +224,7 @@ const Connect = () => {
           </motion.div>
 
           {/* Contact Info */}
+
           <motion.div
             className="space-y-8"
             initial={{ opacity: 0, x: 20 }}
@@ -254,13 +234,34 @@ const Connect = () => {
           >
             <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 border border-orange-100">
               <p className="text-gray-600 mb-6">
-                I&apos;m open to new opportunities, collaborations, and projects
-                that speak to people. I care deeply about emotional clarity and
-                visual lightness, building intuitive, simple experiences that
-                feel as good as they look. I&apos;m especially energized by
-                consumer products that create real, everyday impact. Let&apos;s
-                explore what we can build together.
+                I&apos;m currently open to new opportunities, collaborations,
+                and projects that speak to people. I care deeply about emotional
+                clarity and visual lightness, building intuitive, simple
+                experiences that feel as good as they look. I&apos;m especially
+                energized by consumer products that create real, everyday
+                impact. Let&apos;s explore what we can build together.
               </p>
+
+              <a
+                href="mailto:kiracheung0211@gmail.com"
+                className="inline-flex items-center text-orange-600 hover:text-orange-700 font-medium transition-colors"
+              >
+                Get in touch
+                <svg
+                  className="w-4 h-4 ml-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
+                </svg>
+              </a>
             </div>
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-6 text-gray-800">

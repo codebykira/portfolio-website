@@ -7,29 +7,10 @@
   --foreground: #171717;
 }
 
-/* Prevent layout shift during hydration */
-body.preload * {
-  transition: none !important;
-  animation: none !important;
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
-}
-
-body.preload {
-  opacity: 0;
-  overflow: hidden;
-}
-
-.connect-placeholder {
-  min-height: 400px;
-  width: 100%;
-  opacity: 0;
 }
 
 h2 {

@@ -163,9 +163,9 @@ export default function Hero() {
       className="h-screen flex relative w-full overflow-hidden bg-[#EAE7DC]"
     >
       {/* Text */}
-      <div className="flex flex-col items-center text-center pt-28 gap-0 max-w-screen-md mx-auto z-40 max-sm:pt-60">
+      <div className="flex flex-col items-center text-center pt-48 gap-1 max-w-screen-md mx-auto z-40 max-sm:pt-60">
         {/* Welcome + hand */}
-        <div className="flex items-center gap-">
+        <div className="flex items-center gap-2">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
