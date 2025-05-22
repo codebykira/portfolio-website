@@ -30,7 +30,8 @@ const Connect = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/send", {
+      const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/send`;
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

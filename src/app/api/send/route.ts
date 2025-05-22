@@ -1,17 +1,29 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Get the API key from server runtime config
-const resendApiKey = process.env.RESEND_API_KEY || '';
+// Get the base URL for the current environment
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
 
 // Initialize Resend with API key from environment variables
-const resend = new Resend(resendApiKey);
+const getResendClient = () => {
+  // Get the API key from environment variables
+  const resendApiKey = process.env.RESEND_API_KEY;
+  
+  // Don't initialize in development without the key to prevent errors during build
+  if (process.env.NODE_ENV !== 'production' && !resendApiKey) {
+    console.warn('RESEND_API_KEY is not set in development');
+    return null;
+  }
+  
+  if (!resendApiKey) {
+    console.error('RESEND_API_KEY is not set in production');
+    throw new Error('Email service is not properly configured');
+  }
+  
+  return new Resend(resendApiKey);
+};
 
-// Validate required environment variables
-if (!resendApiKey) {
-  console.error('RESEND_API_KEY is not set in environment variables');
-  throw new Error('Email service is not properly configured');
-}
+const resend = getResendClient();
 
 export async function POST(request: Request) {
   try {
@@ -35,7 +47,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send email using Resend
+    // In development without a Resend key, log the email instead of sending
+    if (!resend) {
+      console.log('\n--- Email would be sent in production ---');
+      console.log('From:', name, `<${email}>`);
+      console.log('Message:', message);
+      console.log('----------------------------------------\n');
+      
+      return NextResponse.json(
+        { message: 'Message received! (Email not sent in development)' },
+        { status: 200 }
+      );
+    }
+
+    // In production or development with a key, send the actual email
     const data = await resend.emails.send({
       from: 'Portfolio <onboarding@resend.dev>',
       to: 'kiracheung0211@gmail.com',
