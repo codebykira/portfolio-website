@@ -90,9 +90,9 @@ const PhotoGallery = () => {
   }, [currentIndex, scrollToNext]);
 
   return (
-    <div className="overflow-hidden w-full" ref={containerRef}>
+    <div className="w-full h-full overflow-hidden" ref={containerRef}>
       <motion.div
-        className="flex"
+        className="flex h-full items-center"
         animate={controls}
         drag="x"
         dragConstraints={containerRef}
@@ -130,17 +130,18 @@ const PhotoGallery = () => {
             }`}
             style={{
               padding: "12px 12px 20px 12px",
-              width: "min(416px, 80vw)",
+              width: "min(400px, 80vw)",
             }}
           >
             {/* Image */}
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden rounded-lg" style={{ aspectRatio: '3/4' }}>
               <Image
                 src={photo.src}
                 alt={photo.title}
-                width={400}
-                height={450}
-                className="w-full h-96 object-cover"
+                fill
+                sizes="(max-width: 768px) 90vw, 400px"
+                className="object-cover"
+                priority={index < 3} // Only preload first few images
               />
             </div>
 

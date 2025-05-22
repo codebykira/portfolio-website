@@ -1,55 +1,303 @@
-// pages/contact.js
+"use client";
+
 import { motion } from "framer-motion";
-import { Send } from "lucide-react";
+import { Mail, Github, Linkedin, Instagram, Send } from "lucide-react";
+import { useState } from "react";
 
-const ContactPage = () => {
+const Connect = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<null | "success" | "error">(
+    null
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        console.error("Form submission failed with status:", response.status);
+        console.error("Error details:", responseData);
+        throw new Error(responseData.error || "Form submission failed");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus(null), 5000);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const socialLinks = [
+    {
+      icon: <Github className="w-5 h-5" />,
+      url: "https://github.com/kiracheung0211",
+      label: "GitHub",
+    },
+    {
+      icon: <Linkedin className="w-5 h-5" />,
+      url: "https://linkedin.com/in/kira-cheung",
+      label: "LinkedIn",
+    },
+    {
+      icon: <Instagram className="w-5 h-5" />,
+      url: "https://instagram.com/kkiracheungg",
+      label: "Instagram",
+    },
+  ];
+
   return (
-    <div id="contact" className="w-full">
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-        <div className="bg-gray-100 w-full rounded-3xl p-8">
-          <div className="flex flex-col items-center gap-6">
-            {/* Email section */}
-            <a
-              href="mailto:kiracheung0211@gmail.com"
-              className="flex items-center justify-center gap-2 hover:opacity-60 transition-opacity"
-            >
-              <Send className="w-6 h-6" />
-              <span className="text-xl md:text-2xl font-normal">
-                kiracheung0211@gmail.com
-              </span>
-            </a>
+    <section
+      id="connect"
+      className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gray-50 relative z-10"
+    >
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-16">
+          <motion.h2
+            className="text-5xl font-bold mb-4 text-gray-900"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            Let&apos;s Connect
+          </motion.h2>
+          <motion.p
+            className="text-xl text-gray-600 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Have a project in mind or just want to say hi? Feel free to reach
+            out!
+          </motion.p>
+        </div>
 
-            {/* Social icons */}
-            <div className="flex justify-center items-center gap-6">
-              {/* Instagram */}
-              <motion.a
-                href="https://www.instagram.com/kkiracheungg/"
-                className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 flex items-center justify-center"
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
-              >
-                <svg className="w-6 h-6" fill="white" viewBox="0 0 24 24">
-                  <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.897 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.897-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
-                </svg>
-              </motion.a>
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+          {/* Contact Form */}
+          <motion.div
+            className="bg-white rounded-2xl shadow-lg p-8 h-full"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h3 className="text-2xl font-semibold mb-6 text-gray-800">
+              Send me a message
+            </h3>
 
-              {/* LinkedIn */}
-              <motion.a
-                href="https://www.linkedin.com/in/kira-cheung/"
-                className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center"
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
+            {submitStatus === "success" && (
+              <div className="mb-6 p-4 bg-green-50 text-green-700 rounded-lg">
+                Thank you for your message! I&apos;ll get back to you soon.
+              </div>
+            )}
+
+            {submitStatus === "error" && (
+              <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg">
+                Oops! Something went wrong. Please try again later or email me
+                directly.
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                  placeholder="Your name"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                  placeholder="your.email@example.com"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={5}
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition resize-none"
+                  placeholder="Your message here..."
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition flex items-center justify-center space-x-2 disabled:opacity-70"
               >
-                <svg className="w-6 h-6" fill="white" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z" />
-                </svg>
-              </motion.a>
+                {isSubmitting ? (
+                  <>
+                    <svg
+                      className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Send Message</span>
+                  </>
+                )}
+              </button>
+            </form>
+          </motion.div>
+
+          {/* Contact Info */}
+          <motion.div
+            className="space-y-8"
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 border border-orange-100">
+              <p className="text-gray-600 mb-6">
+                I&apos;m open to new opportunities, collaborations, and projects
+                that speak to people. I care deeply about emotional clarity and
+                visual lightness, building intuitive, simple experiences that
+                feel as good as they look. I&apos;m especially energized by
+                consumer products that create real, everyday impact. Let&apos;s
+                explore what we can build together.
+              </p>
             </div>
-          </div>
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h3 className="text-2xl font-semibold mb-6 text-gray-800">
+                Contact Info
+              </h3>
+
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-orange-500" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-700">Email</h4>
+                    <a
+                      href="mailto:kiracheung0211@gmail.com"
+                      className="text-gray-600 hover:text-orange-500 transition-colors"
+                    >
+                      kiracheung0211@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-gray-100">
+                  <h4 className="font-medium text-gray-700 mb-4">Follow Me</h4>
+                  <div className="flex space-x-4">
+                    {socialLinks.map((link, index) => (
+                      <motion.a
+                        key={link.label}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-12 h-12 rounded-full bg-gray-50 hover:bg-orange-50 flex items-center justify-center text-gray-600 hover:text-orange-500 transition-colors border border-gray-200"
+                        whileHover={{ y: -4, scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 * index }}
+                        aria-label={link.label}
+                      >
+                        {link.icon}
+                      </motion.a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default ContactPage;
+export default Connect;
