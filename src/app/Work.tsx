@@ -8,10 +8,10 @@ const Work = () => {
   return (
     <div id="work" className="min-h-screen">
       {/* Header */}
-      <div className="max-sm:px-2">
+      <div className="max-sm:px-2 md:px-8 ">
         <SectionHeader title="Work" />
       </div>
-      <div className="space-y-6 flex flex-col items-center max-sm:px-2">
+      <div className="space-y-6 flex flex-col items-center px-4 md:px-8 max-sm:px-2">
         <ChillHangouts />
         <WaverlyShowcase />
         <Linkflo />

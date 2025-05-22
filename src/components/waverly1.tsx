@@ -4,6 +4,12 @@ import ProjectShowcase from "./project-showcase";
 export const WaverlyShowcase = () => {
   const projectDetails = {
     title: "Waverly",
+    logo: {
+      src: "/waverly-logo.png",
+      alt: "Waverly Logo",
+      width: 48,
+      height: 48,
+    },
     description: [
       "Built an AI-powered social platform where anyone could create and join communities—just by using natural language. Backed by Betaworks, Greycroft, and Mozilla Ventures, it redefined how people connect online.",
       "To make it even more seamless, I developed smart content filtering and community matching, helping users find the right spaces effortlessly.",

@@ -10,7 +10,7 @@ const Navigation = () => {
 
   return (
     <nav className="fixed pt-6 pr-6 z-50 flex justify-end w-screen max-sm:justify-center max-sm:pr-0">
-      <div className="px-8 py-4 flex items-center justify-center bg-white rounded-full max-sm:py-2 max-sm:px-4">
+      <div className="px-6 py-0.5 flex items-center justify-center border border-gray-200 bg-white rounded-full max-sm:py-2 max-sm:px-4 indie-flower-regular text-xl">
         <div className="flex items-center space-x-8  max-sm:space-x-5">
           <button
             onClick={() => scrollToSection("home")}

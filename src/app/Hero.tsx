@@ -1,11 +1,95 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { Kalam } from "next/font/google";
-const kalam = Kalam({
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
-});
+
+interface AnimatedTextProps {
+  text: string;
+  className?: string;
+  delay?: number;
+  highlightText?: string;
+  highlightClassName?: string;
+}
+
+const AnimatedText: React.FC<AnimatedTextProps> = ({
+  text,
+  className = "",
+  delay = 0,
+  highlightText = "",
+  highlightClassName = "",
+}) => {
+  const [displayText, setDisplayText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText((prev) => prev + text[currentIndex]);
+        setCurrentIndex((prev) => prev + 1);
+      }, 70); // Speed of typing (70ms per character)
+
+      return () => clearTimeout(timeout);
+    } else if (!isComplete) {
+      setIsComplete(true);
+    }
+  }, [currentIndex, text, isComplete]);
+
+  // Reset animation when text changes
+  useEffect(() => {
+    setDisplayText("");
+    setCurrentIndex(0);
+    setIsComplete(false);
+  }, [text]);
+
+  // Function to check if current character is part of the highlight text
+  const shouldHighlight = (index: number) => {
+    if (!highlightText) return false;
+    const startIndex = text.indexOf(highlightText);
+    return (
+      startIndex !== -1 &&
+      index >= startIndex &&
+      index < startIndex + highlightText.length
+    );
+  };
+
+  return (
+    <span className={`inline-block ${className}`}>
+      {displayText.split("").map((char, index) => {
+        const isHighlighted = shouldHighlight(index);
+        return (
+          <motion.span
+            key={index}
+            className={isHighlighted ? highlightClassName : ""}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.3,
+              delay: delay + index * 0.07, // Stagger the animation of each character
+            }}
+          >
+            {char}
+          </motion.span>
+        );
+      })}
+    </span>
+  );
+};
+
 export default function Hero() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+    layoutEffect: false,
+  });
+
+  // Smooth the scroll progress with faster response
+  const smoothScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 200, // Increased stiffness for faster response
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   enum Position {
     Top = "top",
     Right = "right",
@@ -15,50 +99,72 @@ export default function Hero() {
 
   const roles = [
     {
-      text: "Product",
-      position: Position.Top,
-      className: "text-4xl font-bold max-sm:text-2xl",
+      id: "fullstack",
+      image: "/FullStack.png",
+      position: Position.Right,
+      rotate: 5,
+      size: "w-64 max-sm:w-52",
     },
-    { text: "Designer", position: Position.Right, className: "text-xl" },
-    { text: "Engineer", position: Position.Bottom, className: "text-xl" },
-    { text: "Growth", position: Position.Left, className: "text-xl" },
+    {
+      id: "engineer",
+      image: "/Engineer.png",
+      position: Position.Top,
+      rotate: -5,
+      size: "w-72 max-sm:w-56",
+    },
+    {
+      id: "builder",
+      image: "/Builder.png",
+      position: Position.Left,
+      rotate: -8,
+      size: "w-80 max-sm:w-64",
+    },
+    {
+      id: "growth",
+      image: "/Growth.png",
+      position: Position.Bottom,
+      rotate: 5,
+      size: "w-60 max-sm:w-52",
+    },
   ];
 
+  // Calculate viewport width for responsive movement
+  const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+  const movementFactor = Math.min(viewportWidth * 0.4, 400); // Cap at 400px
+
   const positionStyles = {
-    top: "top-1/3 right-1/3 -translate-x-1/2 -translate-y-2",
-    right: "top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 ",
-    bottom: "top-1/3 left-1/3 -translate-x-1/2 translate-y-16",
-    left: "top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2",
-  };
-
-  const arrowStyles = {
-    top: "scale-x-[-1]",
-    right: "scale-x-[-1]",
-    bottom: "",
-    left: "",
-  };
-
-  const getFlexDirection = (position: Position) => {
-    switch (position) {
-      case Position.Top:
-        return "flex-col gap-2";
-      case Position.Right:
-        return "flex-row-reverse";
-      case Position.Bottom:
-        return "flex-col gap-2";
-      default:
-        return "flex-row";
-    }
+    // Engineer - Top Right (moves up and right)
+    top: {
+      x: useTransform(smoothScrollProgress, [0, 1], [0, movementFactor * 0.8]), // Right
+      y: useTransform(smoothScrollProgress, [0, 1], [0, -movementFactor * 1.2]), // Up
+      className: "top-[90%] left-[40%] max-sm:top-[42%] max-sm:left-[50%] ",
+    },
+    // Fullstack - Right (moves right)
+    right: {
+      x: useTransform(smoothScrollProgress, [0, 1], [0, movementFactor]), // Right
+      className: "top-[65%] right-[15%] max-sm:top-[50%] max-sm:right-[0%]",
+    },
+    // Builder - Left (moves left)
+    left: {
+      x: useTransform(smoothScrollProgress, [0, 1], [0, -movementFactor]), // Left
+      className: "top-[75%] left-[30%] max-sm:top-[75%] max-sm:left-[10%]",
+    },
+    // Growth - Bottom (moves down)
+    bottom: {
+      y: useTransform(smoothScrollProgress, [0, 1], [0, movementFactor * 0.8]), // Down
+      className: "bottom-[10%] left-[50%] max-sm:bottom-[5%] max-sm:left-[50%]",
+    },
   };
 
   return (
     <div
+      ref={ref}
       id="home"
       className="h-screen flex relative w-full overflow-hidden bg-[#EAE7DC]"
     >
       {/* Text */}
-      <div className="flex flex-col items-center text-center pt-28 gap-6 max-w-screen-md mx-auto z-40 max-sm:pt-60">
-        {/* Im Kira + hand */}
+      <div className="flex flex-col items-center text-center pt-28 gap-0 max-w-screen-md mx-auto z-40 max-sm:pt-60">
+        {/* Welcome + hand */}
         <div className="flex items-center gap-">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -66,9 +172,8 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
             className="text-center z-40"
           >
-            <h1 className="text-6xl font-bold max-sm:text-4xl">
-              Hi there, I&apos;m{" "}
-              <span className="text-[#FD652D] z-40">Kira</span>
+            <h1 className="text-5xl font-bold max-sm:text-3xl indie-flower-regular flex flex-wrap justify-center">
+              <AnimatedText text="Welcome to my playground" />
             </h1>
           </motion.div>
           {/* Hand */}
@@ -92,7 +197,7 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          Bridging design, engineering, and growth to build products that matter
+          I build software with heart, craft, and intent
         </motion.p>
       </div>
 
@@ -110,34 +215,44 @@ export default function Hero() {
         </div>
 
         {/* Roles */}
-        {roles.map((role, index) => (
+        {roles.map((role) => (
           <motion.div
-            key={role.text}
+            key={role.id}
             className={`absolute flex items-center z-30 ${
-              positionStyles[role.position]
+              positionStyles[role.position].className || ""
             }`}
+            style={{
+              ...positionStyles[role.position],
+              transform: "translate(-50%, -50%)",
+            }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.2, duration: 0.5 }}
+            transition={{ duration: 0.5 }}
           >
             <motion.div
-              className={`${getFlexDirection(role.position)}`}
-              whileHover={{ scale: 1.1 }}
+              className={`${role.size} h-auto relative`}
+              whileHover={{
+                scale: 1.15,
+                rotate: role.rotate + 5,
+                zIndex: 50,
+                transition: {
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 10,
+                },
+              }}
+              whileTap={{
+                scale: 1.1,
+                transition: { duration: 0.1 },
+              }}
+              initial={{ rotate: role.rotate }}
             >
-              <span
-                className={`${kalam.className} ${role.className} max-sm:hidden`}
-              >
-                {role.text}
-              </span>
-
               <Image
-                src="/arrow-right.png"
-                alt="right arrow"
-                width={100}
+                src={role.image}
+                alt={role.image.replace(/^\//, "").replace(".png", "")}
+                width={200}
                 height={100}
-                className={`w-12 h-12 object-contain max-sm:hidden ${
-                  arrowStyles[role.position]
-                }`}
+                className="object-contain"
                 priority
               />
             </motion.div>
