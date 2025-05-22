@@ -89,7 +89,7 @@ const Connect = () => {
             Let&apos;s Connect
           </motion.h2>
           <motion.p
-            className="text-xl text-gray-600 max-w-2xl mx-auto"
+            className="text-xl text-gray-600 max-w-2xl mx-auto font-indie-flower"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
