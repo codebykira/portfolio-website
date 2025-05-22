@@ -66,15 +66,17 @@ const PhotoGallery = () => {
   const photoGap = 50;
   const maxPhotoWidth = 416;
 
-  // Safe window access
+  // Safe window access - avoid using window during SSR
   const getTotalWidth = useCallback(() => {
-    if (typeof window === 'undefined') return maxPhotoWidth + photoGap;
+    // During SSR or before mounting, return a fixed value
+    if (!mounted || typeof window === 'undefined') return maxPhotoWidth + photoGap;
     const width = Math.min(maxPhotoWidth, window.innerWidth * 0.8);
     return width + photoGap;
-  }, []);
+  }, [mounted]);
 
   // Handle auto-scrolling
   const scrollToNext = useCallback(() => {
+    // Don't run animations until component is mounted
     if (!mounted) return;
     
     const nextIndex = (currentIndex + 1) % photos.length;
@@ -93,7 +95,10 @@ const PhotoGallery = () => {
 
   // Set mounted state
   useEffect(() => {
-    setMounted(true);
+    // Only run in browser
+    if (typeof window !== 'undefined') {
+      setMounted(true);
+    }
   }, []);
 
   // Set up auto-scroll interval
@@ -103,13 +108,17 @@ const PhotoGallery = () => {
     return () => clearInterval(interval);
   }, [scrollToNext, mounted]);
 
-  // Don't render during SSR to prevent hydration mismatch
+  // Create a consistent placeholder for SSR
   if (!mounted) {
-    return <div className="w-full h-full" />;
+    return (
+      <div className="w-full h-full" suppressHydrationWarning>
+        <div className="flex h-full items-center" style={{ visibility: 'hidden' }}></div>
+      </div>
+    );
   }
 
   return (
-    <div className="w-full h-full overflow-hidden" ref={containerRef}>
+    <div className="w-full h-full overflow-hidden" ref={containerRef} suppressHydrationWarning>
       <motion.div
         className="flex h-full items-center"
         animate={controls}

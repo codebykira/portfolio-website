@@ -17,12 +17,15 @@ const Connect = () => {
   );
 
   useEffect(() => {
-    setMounted(true);
+    // Only run in browser
+    if (typeof window !== 'undefined') {
+      setMounted(true);
+    }
   }, []);
 
-  // Don't render anything during SSR to prevent hydration mismatch
+  // Render a placeholder during SSR to prevent hydration mismatch
   if (!mounted) {
-    return null;
+    return <div suppressHydrationWarning className="connect-placeholder"></div>;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

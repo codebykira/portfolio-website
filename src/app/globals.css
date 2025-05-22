@@ -26,6 +26,12 @@ body.preload {
   overflow: hidden;
 }
 
+.connect-placeholder {
+  min-height: 400px;
+  width: 100%;
+  opacity: 0;
+}
+
 h2 {
   @apply text-lg text-gray-600 font-normal max-w-full pb-3;
 }
