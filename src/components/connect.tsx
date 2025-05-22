@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion";
 import { Mail, Github, Linkedin, Instagram, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Connect = () => {
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,6 +15,15 @@ const Connect = () => {
   const [submitStatus, setSubmitStatus] = useState<null | "success" | "error">(
     null
   );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Don't render anything during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

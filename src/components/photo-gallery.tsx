@@ -1,79 +1,86 @@
-import React, { useRef, useEffect, useState } from "react";
+'use client';
+
+import { useRef, useEffect, useState, useCallback } from "react";
 import { Kalam } from "next/font/google";
 import Image from "next/image";
 import { motion, useAnimationControls } from "framer-motion";
-import { useCallback } from "react";
 
 const kalam = Kalam({
   subsets: ["latin"],
   weight: ["400"],
 });
 
+// Define photos array outside of component to avoid reference issues
+const photos = [
+  {
+    id: 1,
+    src: "/mikey.png",
+    title: "Meet Mikey, my best friend who brings sunshine to every day.",
+    icon: "🐱",
+  },
+  {
+    id: 2,
+    src: "/north-korea.png",
+    title:
+      "I love traveling, and North Korea stands out as my most surreal adventure.",
+    icon: "🇰🇵",
+  },
+  {
+    id: 3,
+    src: "/kenya.png",
+    title:
+      "Kenya was unforgettable! A month of volunteering and experiencing a culture so different from my own.",
+    icon: "🦒",
+  },
+  {
+    id: 4,
+    src: "/food.png",
+    title:
+      "My adventures are driven by food, always searching for the next amazing meal.",
+    icon: "😋",
+  },
+  {
+    id: 5,
+    src: "/painting.png",
+    title:
+      "This is my very first oil painting when I was 14 years old. Still very proud of it!",
+    icon: "🎨",
+  },
+  {
+    id: 6,
+    src: "/haiway.png",
+    title:
+      "Adventuring through KaoHsiung, Taiwan with my partner-in-crime, Haiway! 🚀 Need recos for next stop! ",
+    icon: "🎨",
+  },
+];
+
 const PhotoGallery = () => {
+  // Define all hooks at the top level in the same order for every render
+  const [mounted, setMounted] = useState(false);
   const controls = useAnimationControls();
   const containerRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Use a percentage of viewport width instead of fixed pixels
+  // Constants
   const photoGap = 50;
   const maxPhotoWidth = 416;
 
-  // Calculate totalWidth based on current viewport
-  const getTotalWidth = () => {
-    // Use min to cap at 416px on larger screens
+  // Safe window access
+  const getTotalWidth = useCallback(() => {
+    if (typeof window === 'undefined') return maxPhotoWidth + photoGap;
     const width = Math.min(maxPhotoWidth, window.innerWidth * 0.8);
     return width + photoGap;
-  };
+  }, []);
 
-  const photos = [
-    {
-      id: 1,
-      src: "/mikey.png",
-      title: "Meet Mikey, my best friend who brings sunshine to every day.",
-      icon: "🐱",
-    },
-    {
-      id: 2,
-      src: "/north-korea.png",
-      title:
-        "I love traveling, and North Korea stands out as my most surreal adventure.",
-      icon: "🇰🇵",
-    },
-    {
-      id: 3,
-      src: "/kenya.png",
-      title:
-        "Kenya was unforgettable! A month of volunteering and experiencing a culture so different from my own.",
-      icon: "🦒",
-    },
-    {
-      id: 4,
-      src: "/food.png",
-      title:
-        "My adventures are driven by food, always searching for the next amazing meal.",
-      icon: "😋",
-    },
-    {
-      id: 5,
-      src: "/painting.png",
-      title:
-        "This is my very first oil painting when I was 14 years old. Still very proud of it!",
-      icon: "🎨",
-    },
-    {
-      id: 6,
-      src: "/haiway.png",
-      title:
-        "Adventuring through KaoHsiung, Taiwan with my partner-in-crime, Haiway! 🚀 Need recos for next stop! ",
-      icon: "🎨",
-    },
-  ];
-
-  const scrollToNext = useCallback(async () => {
+  // Handle auto-scrolling
+  const scrollToNext = useCallback(() => {
+    if (!mounted) return;
+    
     const nextIndex = (currentIndex + 1) % photos.length;
     const currentTotalWidth = getTotalWidth();
 
-    await controls.start({
+    controls.start({
       x: -currentTotalWidth * nextIndex,
       transition: {
         duration: 1,
@@ -82,12 +89,24 @@ const PhotoGallery = () => {
     });
 
     setCurrentIndex(nextIndex);
-  }, [currentIndex, controls, photos.length]);
+  }, [currentIndex, controls, mounted, getTotalWidth]);
 
+  // Set mounted state
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Set up auto-scroll interval
+  useEffect(() => {
+    if (!mounted) return;
     const interval = setInterval(scrollToNext, 3000);
     return () => clearInterval(interval);
-  }, [currentIndex, scrollToNext]);
+  }, [scrollToNext, mounted]);
+
+  // Don't render during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return <div className="w-full h-full" />;
+  }
 
   return (
     <div className="w-full h-full overflow-hidden" ref={containerRef}>
