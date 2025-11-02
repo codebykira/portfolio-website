@@ -50,7 +50,7 @@ const FontCycleText: React.FC<FontCycleTextProps> = ({ children, className = "" 
     }, 300); // Change font every 300ms (faster)
     
     return () => clearInterval(interval);
-  }, []);
+  }, [fonts.length]);
   
   return (
     <span 

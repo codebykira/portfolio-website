@@ -50,7 +50,7 @@ const ProjectScreenshots = ({
                 <Image
                   src={image.src}
                   alt={image.alt}
-                  className="w-72 h-auto rounded-[30px] shadow-lg"
+                  className="w-72 h-auto shadow-lg"
                   width={image.width}
                   height={image.height}
                 />

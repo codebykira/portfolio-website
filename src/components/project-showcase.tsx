@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import ProjectScreenshots from "./project-screenshot";
 
@@ -44,12 +45,12 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
         <div className="flex items-center gap-4 mb-6">
           {logo && (
             <div className="w-12 h-12 relative">
-              <img
+              <Image
                 src={logo.src}
                 alt={logo.alt}
                 className="object-contain w-full h-full"
-                width={logo.width}
-                height={logo.height}
+                width={logo.width || 48}
+                height={logo.height || 48}
               />
             </div>
           )}

@@ -1,21 +1,13 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Gloria_Hallelujah, Aladin, Caveat, Sora } from "next/font/google";
+import { Aladin, Caveat } from "next/font/google";
 import { ArrowLeft } from "lucide-react";
 import FontCycleText from "../../components/FontCycleText";
 import { yellowHighlightAnimation, textColorAnimation } from "../../components/animations";
 
-const gloriaHallelujah = Gloria_Hallelujah({
-  weight: "400",
-  subsets: ["latin"],
-});
 
-const sora = Sora({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 const aladin = Aladin({
   weight: "400",
@@ -28,8 +20,6 @@ const caveat = Caveat({
 });
 
 
-// Reusable handwritten text style
-const handwrittenStyle = `text-base text-gray-600 ${caveat.className} -rotate-3`;
 
 
 
@@ -147,7 +137,7 @@ export default function BlindHangoutsPage() {
                   transition={{ duration: 0.8, ease: "easeOut" }}
                   viewport={{ once: true, amount: 0.3 }}
                 >
-                  <img
+                  <Image
                     src="/ch-1.png"
                     alt="Chill Hangouts App Screenshot"
                     width={150}
@@ -160,7 +150,7 @@ export default function BlindHangoutsPage() {
                   transition={{ duration: 0.8, ease: "easeOut" }}
                   viewport={{ once: true, amount: 0.3 }}
                 >
-                  <img
+                  <Image
                     src="/ch-2.png"
                     alt="Chill Hangouts App Screenshot"
                     width={140}
@@ -180,10 +170,12 @@ export default function BlindHangoutsPage() {
         </motion.p>
 
         <div className="flex flex-row gap-2 lg:gap-6">
-          <img
+          <Image
             src="/alone.png"
             alt="Chill Hangouts App Screenshot"
             className="w-32 md:w-36 lg:w-44 aspect-auto object-contain"
+            width={176}
+            height={200}
           />
           <div className="flex flex-col  space-y-2">
             <div className="flex flex-col space-y-2">
@@ -207,7 +199,7 @@ export default function BlindHangoutsPage() {
                 We all want to feel close, but no one wants to risk being the one who tries first. <motion.span className="inline-block" {...yellowHighlightAnimation}><Image src="/sad.svg" alt="sad" width={30} height={20} className="inline object-contain" /></motion.span>
               </motion.p>
               <motion.p {...textColorAnimation}>
-                That's the part no calendar could fix.
+                That&apos;s the part no calendar could fix.
               </motion.p>
             </div>
           </div>
@@ -232,7 +224,7 @@ export default function BlindHangoutsPage() {
           ))}
         </p>
         <motion.p {...textColorAnimation}>
-          That's how Blind Hangouts was born. An AI that actually gets you and makes the plan.
+          That&apos;s how Blind Hangouts was born. An AI that actually gets you and makes the plan.
         </motion.p>
 
 
@@ -289,7 +281,7 @@ export default function BlindHangoutsPage() {
                     It starts with a mini game of <strong>This or That</strong> to learn what users like to do.
                   </motion.p>
                   <motion.p {...textColorAnimation}>
-                    Instead of a typical onboarding survey, it's a fun, engaging way to learn about you.
+                    Instead of a typical onboarding survey, it&apos;s a fun, engaging way to learn about you.
                   </motion.p>
                 </div>
 
@@ -308,7 +300,7 @@ export default function BlindHangoutsPage() {
 
               <div className="flex flex-col w-48 gap-3">
                 <motion.p {...textColorAnimation}>
-                  Pick your friends, vibe, and time and we'll decide what happens in real life.
+                  Pick your friends, vibe, and time and we&apos;ll decide what happens in real life.
                 </motion.p>
               </div>
               <motion.div className="flex items-center justify-start" {...yellowHighlightAnimation}>
