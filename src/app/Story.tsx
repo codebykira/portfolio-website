@@ -16,21 +16,21 @@ const Story = () => {
           {/* Story Text */}
           <div className="lg:w-1/2 space-y-8 bg-gray-50 rounded-3xl p-8 shadow-sm">
             <div className="space-y-6">
-              <motion.p className="text-lg leading-relaxed" {...textColorAnimation}>
+              <motion.p className="text-lg leading-relaxed text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
                 I&apos;m someone who can&apos;t stop exploring - whether it&apos;s
                 wandering through 20+ countries or diving into new fields that
                 spark my imagination. Through experiencing different cultures and
                 perspectives, I discovered my love for combining creativity with
                 technology to solve problems in unexpected ways.
               </motion.p>
-              <motion.p className="text-lg leading-relaxed" {...textColorAnimation}>
+              <motion.p className="text-lg leading-relaxed text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
                 My startup journey pulled me away from my business studies at
                 UofT, and building Waverly opened my eyes to the magic of AI.
                 Working alongside top AI researchers really lit a fire in me, I
                 couldn&apos;t resist diving deeper, so I headed to UPenn for an AI
                 master&apos;s.
               </motion.p>
-              <motion.p className="text-lg leading-relaxed" {...textColorAnimation}>
+              <motion.p className="text-lg leading-relaxed text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
                 These days, I&apos;m on a mission to use technology to bring
                 people closer together (and maybe make the world a little less
                 lonely while we&apos;re at it!).

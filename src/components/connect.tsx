@@ -81,14 +81,20 @@ const Connect = () => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.h2
-            className="text-md text-gray-500 text-5xl font-bold mb-4"
-            {...textColorAnimation}
+            className="text-5xl font-bold mb-4 text-gray-500"
+            initial={textColorAnimation.initial}
+            whileInView={textColorAnimation.whileInView}
+            transition={textColorAnimation.transition}
+            viewport={textColorAnimation.viewport}
           >
             Let&apos;s Connect
           </motion.h2>
           <motion.p
-            className="text-md text-gray-500 text-xl max-w-2xl mx-auto indie-flower-regular"
-            {...textColorAnimation}
+            className="text-xl max-w-2xl mx-auto indie-flower-regular text-gray-500"
+            initial={textColorAnimation.initial}
+            whileInView={textColorAnimation.whileInView}
+            transition={textColorAnimation.transition}
+            viewport={textColorAnimation.viewport}
           >
             Have a project in mind or just want to say hi? Feel free to reach
             out!
@@ -104,7 +110,7 @@ const Connect = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <motion.h3 className="text-2xl font-semibold mb-6" {...textColorAnimation}>
+            <motion.h3 className="text-2xl font-semibold mb-6 text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
               Send me a message
             </motion.h3>
 
@@ -228,7 +234,7 @@ const Connect = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 border border-orange-100">
-              <motion.p className="mb-6" {...textColorAnimation}>
+              <motion.p className="mb-6 text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
                 I&apos;m currently open to new opportunities, collaborations,
                 and projects that speak to people. I care deeply about emotional
                 clarity and visual lightness, building intuitive, simple
@@ -259,7 +265,7 @@ const Connect = () => {
               </a>
             </div>
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <motion.h3 className="text-2xl font-semibold mb-6" {...textColorAnimation}>
+              <motion.h3 className="text-2xl font-semibold mb-6 text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
                 Contact Info
               </motion.h3>
 

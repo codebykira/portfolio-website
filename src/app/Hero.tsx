@@ -193,8 +193,11 @@ export default function Hero() {
         </div>
 
         <motion.p
-          className="text-2xl z-50 w-full max-sm:text-lg"
-          {...textColorAnimation}
+          className="text-2xl z-50 w-full max-sm:text-lg text-gray-500"
+          initial={textColorAnimation.initial}
+          whileInView={textColorAnimation.whileInView}
+          transition={textColorAnimation.transition}
+          viewport={textColorAnimation.viewport}
         >
           I build software with heart, craft, and intent
         </motion.p>

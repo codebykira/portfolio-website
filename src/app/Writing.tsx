@@ -44,7 +44,7 @@ const Writing = () => {
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>{article.date}</span>
                 </div>
-                <motion.h1 className="text-4xl font-bold pb-5" {...textColorAnimation}>{article.title}</motion.h1>
+                <motion.h1 className="text-4xl font-bold pb-5 text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>{article.title}</motion.h1>
 
                 <div
                   className="relative overflow-hidden"

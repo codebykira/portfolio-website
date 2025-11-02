@@ -147,8 +147,11 @@ const PhotoGallery = () => {
 
             {/* Caption */}
             <motion.p
-              className={`${kalam.className} text-center mt-4`}
-              {...textColorAnimation}
+              className={`${kalam.className} text-center mt-4 text-gray-500`}
+              initial={textColorAnimation.initial}
+              whileInView={textColorAnimation.whileInView}
+              transition={textColorAnimation.transition}
+              viewport={textColorAnimation.viewport}
             >
               {photo.title}
             </motion.p>
