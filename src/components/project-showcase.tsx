@@ -57,9 +57,9 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
         </div>
 
         {description.map((paragraph, index) => (
-          <h2 key={index} className="mb-4 last:mb-0">
+          <p key={index} className="mb-4 last:mb-0">
             {paragraph}
-          </h2>
+          </p>
         ))}
       </div>
 

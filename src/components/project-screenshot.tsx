@@ -29,7 +29,7 @@ const ProjectScreenshots = ({
     >
       <div className="mx-auto relative w-full">
         <div className="grid grid-cols-2 gap-16 max-sm:gap-3">
-          {images.map((image, index) => (
+          {images?.map((image, index) => (
             <motion.div
               key={index}
               className={`flex ${
@@ -50,7 +50,7 @@ const ProjectScreenshots = ({
                 <Image
                   src={image.src}
                   alt={image.alt}
-                  className="w-72 h-auto"
+                  className="w-72 h-auto rounded-[30px] shadow-lg"
                   width={image.width}
                   height={image.height}
                 />

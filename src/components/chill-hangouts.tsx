@@ -1,75 +1,73 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
-import { ProjectImage } from "./type";
 import ProjectScreenshots from "./project-screenshot";
 
-const ChillHangouts = () => {
-  const images: ProjectImage[] = [
-    {
-      src: "/chillhangouts1.png",
-      alt: "Project Screenshot 1",
-      width: 400,
-      height: 500,
-    },
-    {
-      src: "/chillhangouts2.png",
-      alt: "Project Screenshot 2",
-      width: 300,
-      height: 500,
-    },
-  ];
-
-  const handleClick = () => {
-    window.location.href = "/blind-hangouts";
+interface ProjectDetails {
+  title: string;
+  description?: string[];
+  images: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  }[];
+  gradientColor?: string;
+  logo?: {
+    src: string;
+    alt: string;
+    width?: number;
+    height?: number;
   };
+  onClick?: () => void;
+}
 
+const ChillHangouts: React.FC<ProjectDetails> = ({
+  title,
+  description = [],
+  images,
+  gradientColor = "#FEBA4F",
+  logo,
+  onClick,
+}) => {
   return (
     <motion.div
-      className="h-[85vh] max-w-7xl mx-auto overflow-hidden p-8 rounded-3xl bg-gray-100 max-sm:h-2/3 cursor-pointer"
-      onClick={handleClick}
+      className={`h-[85vh] max-w-screen-xl overflow-hidden p-6 rounded-3xl bg-gray-100 max-sm:h-2/3 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick}
       initial={{
         background:
           "linear-gradient(45deg, #F5F5F5 0%, #F5F5F5 40%, #F5F5F5 100%)",
       }}
       whileHover={{
-        background:
-          "linear-gradient(45deg, transparent 0%, transparent 40%, #FEBA4F 100%)",
+        background: `linear-gradient(45deg, transparent 0%, transparent 40%, ${gradientColor} 100%)`,
       }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.2 }}
     >
       {/* Header Section */}
-      <div className="mx-auto mb-8 max-sm:mb-2">
+      <div className="mx-auto mb-8 max-sm:mb-0">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 relative">
-            <Image
-              src="/chillhangouts-logo.png"
-              alt="Chill Hangouts Logo"
-              width={48}
-              height={48}
-              className="object-contain"
-              priority
-            />
-          </div>
-          <h1 className="text-xl font-bold">Blind Hangouts</h1>
+          {logo && (
+            <div className="w-12 h-12 relative">
+              <img
+                src={logo.src}
+                alt={logo.alt}
+                className="object-contain w-full h-full"
+                width={logo.width}
+                height={logo.height}
+              />
+            </div>
+          )}
+          <h1 className="text-xl font-bold">{title}</h1>
         </div>
-        <p>
-          Too many hangouts start with &ldquo;We should catch up&rdquo;—but never happen.
-        </p>
-        <p>
-          I solo-built Chill Hangouts, a social app that makes meeting up with
-          friends in real life effortless.
-        </p>
-        <p>
-          No more endless group chats or guessing who&apos;s around. Chill
-          Hangouts shows you when your friends are free and picks a time and
-          place that works for everyone. It turns a quick phone check into real
-          plans.
-        </p>
+
+        {description.map((paragraph, index) => (
+          <p key={index} className="mb-4 last:mb-0">
+            {paragraph}
+          </p>
+        ))}
       </div>
 
       {/* Screenshots Section */}
-      <ProjectScreenshots images={images} withShadow={true} />
+      <ProjectScreenshots images={images} />
     </motion.div>
   );
 };

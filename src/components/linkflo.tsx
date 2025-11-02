@@ -17,21 +17,21 @@ const WaverlyShowcase = () => {
       transition={{ duration: 0.3 }}
     >
       {/* Header Section */}
-      <div className="mx-auto mb-8">
+      <div className="mx-auto mb-8 space-y-4">
         <div className="flex items-center gap-4 mb-6">
           <h1 className="text-xl font-bold">Linkflo</h1>
         </div>
 
-        <h2>
+        <p>
           At Included VC, I built Linkflo to make investor matchmaking smarter.
           Using GPT-4 and custom LLMs, it analyzed investment theses and AUM
           requirements to pair GPs and LPs more accurately.
-        </h2>
-        <h2>
+        </p>
+        <p>
           In the first month, it improved matching by 35% and led to five
           successful introductions—seeing AI make real connections was
           incredible!
-        </h2>
+        </p>
       </div>
 
       {/* Screenshots Section */}
