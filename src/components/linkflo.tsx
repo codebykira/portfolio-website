@@ -19,7 +19,7 @@ const WaverlyShowcase = () => {
       {/* Header Section */}
       <div className="mx-auto mb-8">
         <div className="flex items-center gap-4 mb-6">
-          <h1 className="text-4xl font-bold">Linkflo</h1>
+          <h1 className="text-xl font-bold">Linkflo</h1>
         </div>
 
         <h2>

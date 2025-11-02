@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Mail, Github, Linkedin, Instagram, Send } from "lucide-react";
 import { useState } from "react";
+import { textColorAnimation } from "./animations";
 
 const Connect = () => {
   const [formData, setFormData] = useState({
@@ -80,20 +81,14 @@ const Connect = () => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.h2
-            className="text-5xl font-bold mb-4 text-gray-900"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            className="text-md text-gray-500 text-5xl font-bold mb-4"
+            {...textColorAnimation}
           >
             Let&apos;s Connect
           </motion.h2>
           <motion.p
-            className="text-xl text-gray-600 max-w-2xl mx-auto indie-flower-regular"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-md text-gray-500 text-xl max-w-2xl mx-auto indie-flower-regular"
+            {...textColorAnimation}
           >
             Have a project in mind or just want to say hi? Feel free to reach
             out!
@@ -109,9 +104,9 @@ const Connect = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h3 className="text-2xl font-semibold mb-6 text-gray-800">
+            <motion.h3 className="text-2xl font-semibold mb-6" {...textColorAnimation}>
               Send me a message
-            </h3>
+            </motion.h3>
 
             {submitStatus === "success" && (
               <div className="mb-6 p-4 bg-green-50 text-green-700 rounded-lg">
@@ -233,14 +228,14 @@ const Connect = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 border border-orange-100">
-              <p className="text-gray-600 mb-6">
+              <motion.p className="mb-6" {...textColorAnimation}>
                 I&apos;m currently open to new opportunities, collaborations,
                 and projects that speak to people. I care deeply about emotional
                 clarity and visual lightness, building intuitive, simple
                 experiences that feel as good as they look. I&apos;m especially
                 energized by consumer products that create real, everyday
                 impact. Let&apos;s explore what we can build together.
-              </p>
+              </motion.p>
 
               <a
                 href="mailto:kiracheung0211@gmail.com"
@@ -264,9 +259,9 @@ const Connect = () => {
               </a>
             </div>
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-2xl font-semibold mb-6 text-gray-800">
+              <motion.h3 className="text-2xl font-semibold mb-6" {...textColorAnimation}>
                 Contact Info
-              </h3>
+              </motion.h3>
 
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">

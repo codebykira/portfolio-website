@@ -1,6 +1,8 @@
 import React from "react";
 import { ChevronRight, Calendar } from "lucide-react";
 import SectionHeader from "../components/section-header";
+import { motion } from "framer-motion";
+import { textColorAnimation } from "../components/animations";
 // Article data in JSON format
 const articles = [
   {
@@ -42,7 +44,7 @@ const Writing = () => {
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>{article.date}</span>
                 </div>
-                <h1 className="text-4xl font-bold pb-5">{article.title}</h1>
+                <motion.h1 className="text-4xl font-bold pb-5" {...textColorAnimation}>{article.title}</motion.h1>
 
                 <div
                   className="relative overflow-hidden"
@@ -50,7 +52,7 @@ const Writing = () => {
                 >
                   {article.paragraphs.map((paragraph, index) => (
                     <React.Fragment key={index}>
-                      <h2>{paragraph}</h2>
+                      <motion.p {...textColorAnimation}>{paragraph}</motion.p>
                       {index < article.paragraphs.length - 1 && <br />}
                     </React.Fragment>
                   ))}

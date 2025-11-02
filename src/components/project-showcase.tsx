@@ -53,7 +53,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
               />
             </div>
           )}
-          <h1 className="text-4xl font-bold">{title}</h1>
+          <h1 className="text-xl font-bold">{title}</h1>
         </div>
 
         {description.map((paragraph, index) => (

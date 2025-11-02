@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
+import { textColorAnimation } from "../components/animations";
 
 interface AnimatedTextProps {
   text: string;
@@ -142,7 +143,7 @@ export default function Hero() {
     // Fullstack - Right (moves right)
     right: {
       x: useTransform(smoothScrollProgress, [0, 1], [0, movementFactor]), // Right
-      className: "top-[65%] right-[15%] max-sm:top-[50%] max-sm:right-[0%]",
+      className: "top-[65%] right-[15%] max-sm:top-[50%] max-sm:right-[-10%]",
     },
     // Builder - Left (moves left)
     left: {
@@ -163,7 +164,7 @@ export default function Hero() {
       className="h-screen flex relative w-full overflow-hidden bg-[#EAE7DC]"
     >
       {/* Text */}
-      <div className="flex flex-col items-center text-center pt-48 gap-1 max-w-screen-md mx-auto z-40 max-sm:pt-60">
+      <div className="flex flex-col items-center text-center pt-48 gap-1 max-w-screen-md mx-auto z-40 max-sm:pt-40">
         {/* Welcome + hand */}
         <div className="flex items-center gap-2">
           <motion.div
@@ -172,7 +173,7 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
             className="text-center z-40"
           >
-            <h1 className="text-5xl font-bold max-sm:text-3xl indie-flower-regular flex flex-wrap justify-center">
+            <h1 className="text-5xl font-bold max-sm:text-3xl indie-flower-regular flex flex-wrap justify-center ">
               <AnimatedText text="Welcome to my playground" />
             </h1>
           </motion.div>
@@ -192,10 +193,8 @@ export default function Hero() {
         </div>
 
         <motion.p
-          className="text-2xl text-gray-600 z-50 w-full max-sm:text-lg"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          className="text-2xl z-50 w-full max-sm:text-lg"
+          {...textColorAnimation}
         >
           I build software with heart, craft, and intent
         </motion.p>

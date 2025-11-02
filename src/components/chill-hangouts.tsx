@@ -21,7 +21,7 @@ const ChillHangouts = () => {
   ];
 
   const handleClick = () => {
-    window.open("https://chillhangouts.com", "_blank");
+    window.location.href = "/blind-hangouts";
   };
 
   return (
@@ -51,21 +51,21 @@ const ChillHangouts = () => {
               priority
             />
           </div>
-          <h1 className="text-4xl font-bold">Chill Hangouts</h1>
+          <h1 className="text-xl font-bold">Blind Hangouts</h1>
         </div>
-        <h2>
+        <p>
           Too many hangouts start with &ldquo;We should catch up&rdquo;—but never happen.
-        </h2>
-        <h2>
+        </p>
+        <p>
           I solo-built Chill Hangouts, a social app that makes meeting up with
           friends in real life effortless.
-        </h2>
-        <h2>
+        </p>
+        <p>
           No more endless group chats or guessing who&apos;s around. Chill
           Hangouts shows you when your friends are free and picks a time and
           place that works for everyone. It turns a quick phone check into real
           plans.
-        </h2>
+        </p>
       </div>
 
       {/* Screenshots Section */}

@@ -3,6 +3,7 @@ import { Kalam } from "next/font/google";
 import Image from "next/image";
 import { motion, useAnimationControls } from "framer-motion";
 import { useCallback } from "react";
+import { textColorAnimation } from "./animations";
 
 const kalam = Kalam({
   subsets: ["latin"],
@@ -145,11 +146,12 @@ const PhotoGallery = () => {
             </div>
 
             {/* Caption */}
-            <p
-              className={`${kalam.className} text-center mt-4 text-md text-gray-800`}
+            <motion.p
+              className={`${kalam.className} text-center mt-4`}
+              {...textColorAnimation}
             >
               {photo.title}
-            </p>
+            </motion.p>
           </motion.div>
         ))}
       </motion.div>
