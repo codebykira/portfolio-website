@@ -16,25 +16,22 @@ const Story = () => {
           {/* Story Text */}
           <div className="lg:w-1/2 space-y-8 bg-gray-50 rounded-3xl p-8 shadow-sm">
             <div className="space-y-6">
-              <motion.p className="text-lg leading-relaxed text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
-                I&apos;m someone who can&apos;t stop exploring - whether it&apos;s
-                wandering through 20+ countries or diving into new fields that
-                spark my imagination. Through experiencing different cultures and
-                perspectives, I discovered my love for combining creativity with
-                technology to solve problems in unexpected ways.
-              </motion.p>
-              <motion.p className="text-lg leading-relaxed text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
-                My startup journey pulled me away from my business studies at
-                UofT, and building Waverly opened my eyes to the magic of AI.
-                Working alongside top AI researchers really lit a fire in me, I
-                couldn&apos;t resist diving deeper, so I headed to UPenn for an AI
-                master&apos;s.
-              </motion.p>
-              <motion.p className="text-lg leading-relaxed text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} transition={textColorAnimation.transition} viewport={textColorAnimation.viewport}>
-                These days, I&apos;m on a mission to use technology to bring
-                people closer together (and maybe make the world a little less
-                lonely while we&apos;re at it!).
-              </motion.p>
+            <p className="text-xl max-w-2xl mx-auto indie-flower-regular text-gray-500">
+Hi, I'm Kira
+              </p>
+              <p>
+              I've always been drawn to learning, especially at the intersection of people and technology.
+              </p>
+              <p>
+              My journey started in finance, but my curiosity kept pulling me toward emerging tech. I explored blockchain at Blockchain Research Institute, then joined the founding team at Waverly, a social app backed by Betaworks and Mozilla. At Waverly, we experimented with how AI could create more meaningful conversations between people. It was during this experience that I realized I wanted to go deeper, so I pursued a Master's in Computer Science at UPenn.
+              </p>
+
+              <p>
+              What really drives me is bringing people closer together in real life. That's why I built Blind Hangouts, an app that takes the work out of your social life by planning events with friends and family. I built it during my time at Founders Inc, and grew it to hundreds on the waitlist with 20k views on Instagram.
+              </p>
+              <p>
+              Right now, I'm exploring what's next and looking for opportunities where I can keep building products that connect people.
+              </p>
             </div>
           </div>
 
