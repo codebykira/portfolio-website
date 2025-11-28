@@ -77,7 +77,7 @@ const Connect = () => {
   ];
 
   return (
-    <section id="connect" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <section id="connect" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50  rounded-3xl">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.h2
@@ -231,56 +231,27 @@ const Connect = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 border border-orange-100">
-              <motion.p className="mb-6 text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
-                I&apos;m currently open to new opportunities, collaborations,
-                and projects that speak to people. I care deeply about emotional
-                clarity and visual lightness, building intuitive, simple
-                experiences that feel as good as they look. I&apos;m especially
-                energized by consumer products that create real, everyday
-                impact. Let&apos;s explore what we can build together.
-              </motion.p>
 
-              <a
-                href="mailto:kiracheung0211@gmail.com"
-                className="inline-flex items-center text-orange-600 hover:text-orange-700 font-medium transition-colors"
-              >
-                Get in touch
-                <svg
-                  className="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
-              </a>
-            </div>
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <motion.h3 className="text-2xl font-semibold mb-6 text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
                 Contact Info
               </motion.h3>
 
               <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-orange-500" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-700">Email</h4>
-                    <a
-                      href="mailto:kiracheung0211@gmail.com"
-                      className="text-gray-600 hover:text-orange-500 transition-colors"
-                    >
-                      kiracheung0211@gmail.com
-                    </a>
-                  </div>
+                <div className="flex items-center space-x-4">
+                  <a href="mailto:kiracheung0211@gmail.com">
+                    <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-orange-200 transition-colors">
+                      <Mail className="w-5 h-5 text-orange-500" />
+                    </div>
+                  </a>
+
+                  <a
+                    href="mailto:kiracheung0211@gmail.com"
+                    className="text-gray-600 font-medium hover:text-orange-500 transition-colors"
+                  >
+                    Email me :)
+                  </a>
+
                 </div>
 
                 <div className="pt-6 border-t border-gray-100">
