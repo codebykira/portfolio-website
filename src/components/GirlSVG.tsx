@@ -1,6 +1,6 @@
 import React from "react";
 
-const GirlSVG = ({ width = 40, height = 40 }) => {
+const GirlSVG = ({ width = 40, height = 40, isActive = false }) => {
   return (
     <div className="svg-container">
       <style>
@@ -12,8 +12,9 @@ const GirlSVG = ({ width = 40, height = 40 }) => {
             display: block;
           }
           .svg-container path {
-            stroke: black;
-            stroke-width: 4;
+            stroke: ${isActive ? '#FD652D' : 'black'};
+            stroke-width: ${isActive ? '8' : '4'};
+            fill: ${isActive ? '#FD652D' : '#000000'};
           }
           .svg-container:hover path {
           fill: #FD652D;

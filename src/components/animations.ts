@@ -6,11 +6,6 @@ export const yellowHighlightAnimation = {
   whileInView: {
     filter: 'brightness(0) saturate(100%) invert(65%) sepia(58%) saturate(348%) hue-rotate(349deg) brightness(101%) contrast(103%)'
   },
-  transition: {
-    delay: 0.5,
-    duration: 0.3,
-    ease: "easeOut"
-  },
   viewport: { once: true, amount: 0.3, margin: "-25% 0px -25% 0px" }
 };
 
@@ -22,10 +17,6 @@ export const textColorAnimation = {
   },
   whileInView: {
     color: '#000000' // text-black
-  },
-  transition: {
-    duration: 0.4,
-    ease: "easeOut"
   },
   viewport: { once: true, amount: 0.3, margin: "-25% 0px -25% 0px" }
 };

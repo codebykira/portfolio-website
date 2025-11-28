@@ -80,8 +80,7 @@ export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
-    layoutEffect: false,
+    offset: ["start start", "end start"]
   });
 
   // Smooth the scroll progress with faster response
@@ -196,7 +195,6 @@ export default function Hero() {
           className="text-2xl z-50 w-full max-sm:text-lg text-gray-500"
           initial={textColorAnimation.initial}
           whileInView={textColorAnimation.whileInView}
-          transition={textColorAnimation.transition}
           viewport={textColorAnimation.viewport}
         >
           I build software with heart, craft, and intent

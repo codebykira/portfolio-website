@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import ProjectScreenshots from "./project-screenshot";
 
 interface ProjectDetails {
@@ -19,6 +18,7 @@ interface ProjectDetails {
     width?: number;
     height?: number;
   };
+  tags?: Array<{emoji: string; label: string}> | string[];
 }
 
 const ProjectShowcase: React.FC<ProjectDetails> = ({
@@ -27,46 +27,61 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
   images,
   gradientColor = "#FEBA4F",
   logo,
+  tags = [],
 }) => {
   return (
-    <motion.div
-      className="h-[85vh] max-w-screen-xl overflow-hidden p-6 rounded-3xl bg-gray-100 max-sm:h-2/3"
-      initial={{
-        background:
-          "linear-gradient(45deg, #F5F5F5 0%, #F5F5F5 40%, #F5F5F5 100%)",
-      }}
-      whileHover={{
-        background: `linear-gradient(45deg, transparent 0%, transparent 40%, ${gradientColor} 100%)`,
-      }}
-      transition={{ duration: 0.2 }}
+    <div
+      className="h-[45vh] max-w-4xl overflow-hidden rounded-3xl bg-white border border-gray-200 max-sm:h-2/3 project-card"
+      style={{ boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)' }}
     >
-      {/* Header Section */}
-      <div className="mx-auto mb-8 max-sm:mb-0">
-        <div className="flex items-center gap-4 mb-6">
-          {logo && (
-            <div className="w-12 h-12 relative">
-              <Image
-                src={logo.src}
-                alt={logo.alt}
-                className="object-contain w-full h-full"
-                width={logo.width || 48}
-                height={logo.height || 48}
-              />
+      <div className="flex flex-row gap-4 h-full max-sm:flex-col items-center">
+        {/* Header Section */}
+        <div className="flex-1 max-sm:mb-4 p-6 space-y-4">
+          <div className="flex items-center gap-4">
+            {logo && (
+              <div className="w-12 h-12 relative">
+                <Image
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="object-contain w-full h-full"
+                  width={logo.width || 48}
+                  height={logo.height || 48}
+                />
+              </div>
+            )}
+            <h1 className="text-xl font-bold">{title}</h1>
+          </div>
+
+          {description.map((paragraph, index) => (
+            <p key={index} className="last:mb-0">
+              {paragraph}
+            </p>
+          ))}
+          
+          {tags.length > 0 && (
+            <div className="flex flex-wrap">
+              {tags.map((tag, index) => (
+                <span key={index} className="glass-tag">
+                  {typeof tag === 'string' ? (
+                    tag
+                  ) : (
+                    <>
+                      <span>{tag.emoji}</span>
+                      <span>{tag.label}</span>
+                    </>
+                  )}
+                </span>
+              ))}
             </div>
           )}
-          <h1 className="text-xl font-bold">{title}</h1>
         </div>
 
-        {description.map((paragraph, index) => (
-          <p key={index} className="mb-4 last:mb-0">
-            {paragraph}
-          </p>
-        ))}
+        {/* Screenshots Section */}
+        <div className="flex-1">
+          <ProjectScreenshots images={images} />
+        </div>
       </div>
-
-      {/* Screenshots Section */}
-      <ProjectScreenshots images={images} />
-    </motion.div>
+    </div>
   );
 };
 

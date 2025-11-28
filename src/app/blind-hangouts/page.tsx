@@ -351,7 +351,6 @@ export default function BlindHangoutsPage() {
   className={`${caveat.className} text-xl -rotate-1 text-md text-gray-500`}
   initial={textColorAnimation.initial}
   whileInView={textColorAnimation.whileInView}
-  transition={textColorAnimation.transition}
   viewport={textColorAnimation.viewport}
 >
 Real moments with real people.

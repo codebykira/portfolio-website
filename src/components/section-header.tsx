@@ -1,5 +1,6 @@
 import React from "react";
 import { Kalam } from "next/font/google";
+import AnimatedContent from "./AnimatedContent";
 
 const kalam = Kalam({
   weight: "400",
@@ -18,22 +19,34 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   color = "text-orange-500",
 }) => {
   return (
-    <div className="flex justify-start w-screen max-w-screen-xl mx-auto">
-      <div className="mb-16 ">
-        <h1
-          className={`text-8xl font-bold ${color} tracking-tighter text-left`}
-        >
-          {title}
-        </h1>
-        {subtitle && (
-          <p
-            className={`absolute left-56 -rotate-3 text-base text-gray-600 ${kalam.className}`}
+    <AnimatedContent
+      distance={150}
+      direction="horizontal"
+      reverse={false}
+      duration={1.2}
+      ease="easeOut"
+      initialOpacity={0.2}
+      animateOpacity
+      scale={1.1}
+      threshold={0.2}
+      delay={0.3}
+    >
+      <div className="w-full max-w-4xl flex justify-start">
+
+          <h1
+            className={`text-8xl font-bold ${color} tracking-tighter text-left`}
           >
-            {subtitle}
-          </p>
-        )}
-      </div>
-    </div>
+            {title}
+          </h1>
+          {subtitle && (
+            <p
+              className={`left-4 bottom-4 -rotate-3 text-base text-gray-600 ${kalam.className}`}
+            >
+              {subtitle}
+            </p>
+          )}
+        </div>
+    </AnimatedContent>
   );
 };
 
