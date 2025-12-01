@@ -27,8 +27,10 @@ export default function Home() {
   }, []);
 
   const spring = {
-    type: "tween" as const,
-    duration: 0,
+    type: "spring" as const,
+    damping: 25,
+    stiffness: 700,
+    mass: 0.5,
   };
 
   const variants = {
