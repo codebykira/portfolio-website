@@ -10,6 +10,7 @@ export default {
     extend: {
       fontFamily: {
         'indie-flower': ['Indie Flower', 'cursive'],
+        'inter-tight': ['var(--font-inter-tight)', 'sans-serif'],
       },
       colors: {
         background: "var(--background)",
