@@ -1,0 +1,18 @@
+/* The global base layer sets `* { cursor: none }` so the homepage can render
+   its custom motion cursor. This page has no custom cursor, so restore the
+   native one here (scoped to the /atrios page only). */
+.atrios-page,
+.atrios-page * {
+  cursor: auto;
+}
+
+.atrios-page a,
+.atrios-page button,
+.atrios-page [role="button"] {
+  cursor: pointer;
+}
+
+.atrios-page input,
+.atrios-page textarea {
+  cursor: text;
+}

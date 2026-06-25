@@ -36,39 +36,46 @@ const Navigation = () => {
 
   return (
     <nav className="fixed pt-6 pr-6 z-50 flex justify-end w-screen max-sm:justify-center max-sm:pr-0">
-      <div className="px-6 py-0.5 flex items-center justify-center border border-gray-200 bg-white rounded-full max-sm:py-2 max-sm:px-4 indie-flower-regular text-xl opacity-90 backdrop-blur-sm">
+      <div
+        className="px-6 py-0.5 flex items-center justify-center rounded-full shadow-lg shadow-black/20 backdrop-blur-xl backdrop-saturate-150 max-sm:py-2 max-sm:px-4 indie-flower-regular text-xl"
+        style={{
+          border: "0.5px solid transparent",
+          background:
+            "linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.1) 100%) border-box",
+        }}
+      >
         <div className="flex items-center space-x-8  max-sm:space-x-5">
           <button
             onClick={() => scrollToSection("home")}
-            className="transition-colors text-gray-600 hover:text-black hover:font-bold"
-            style={activeSection === "home" ? { color: "black", fontWeight: "bold" } : {}}
+            className="transition-colors text-white/80 hover:text-white hover:font-bold"
+            style={activeSection === "home" ? { color: "white", fontWeight: "bold" } : {}}
           >
             <GirlSVG isActive={activeSection === "home"} />
           </button>
           <button
             onClick={() => scrollToSection("work")}
-            className="transition-colors text-gray-600 hover:text-[#FD652D] hover:font-bold"
+            className="transition-colors text-white/80 hover:text-[#FD652D] hover:font-bold"
             style={activeSection === "work" ? { color: "#FD652D", fontWeight: "bold" } : {}}
           >
             Work
           </button>
           {/* <button
             onClick={() => scrollToSection("writing")}
-            className="transition-colors text-gray-600 hover:text-[#FD652D] hover:font-bold"
+            className="transition-colors text-white/80 hover:text-[#FD652D] hover:font-bold"
             style={activeSection === "writing" ? { color: "#FD652D", fontWeight: "bold" } : {}}
           >
             Writing
           </button> */}
           <button
             onClick={() => scrollToSection("story")}
-            className="transition-colors text-gray-600 hover:text-[#FD652D] hover:font-bold"
+            className="transition-colors text-white/80 hover:text-[#FD652D] hover:font-bold"
             style={activeSection === "story" ? { color: "#FD652D", fontWeight: "bold" } : {}}
           >
             Story
           </button>
           <button
             onClick={() => scrollToSection("connect")}
-            className="transition-colors text-gray-600 hover:text-[#FD652D] hover:font-bold"
+            className="transition-colors text-white/80 hover:text-[#FD652D] hover:font-bold"
             style={activeSection === "connect" ? { color: "#FD652D", fontWeight: "bold" } : {}}
           >
             Connect

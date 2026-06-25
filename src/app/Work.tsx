@@ -17,7 +17,7 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
 
       <div className="space-y-6 flex flex-col items-center ">
         <div
-          className="cursor-none"
+          className="cursor-pointer"
           onMouseEnter={onProjectEnter}
           onMouseLeave={onProjectLeave}
           onClick={() => window.location.href = '/blind-hangouts'}

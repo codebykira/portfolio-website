@@ -9,14 +9,14 @@ export const yellowHighlightAnimation = {
   viewport: { once: true, amount: 0.3, margin: "-25% 0px -25% 0px" }
 };
 
-// Reusable text color animation style (gray to black)
+// Reusable text color animation style (dim to design-system 70% white)
 export const textColorAnimation = {
-  className: "text-md text-gray-500",
+  className: "text-md",
   initial: {
-    color: '#9CA3AF' // text-gray-400
+    color: 'rgba(255, 255, 255, 0.2)'
   },
   whileInView: {
-    color: '#000000' // text-black
+    color: 'rgba(255, 255, 255, 0.7)' // --ds-text
   },
   viewport: { once: true, amount: 0.3, margin: "-25% 0px -25% 0px" }
 };

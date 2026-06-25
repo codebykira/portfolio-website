@@ -77,11 +77,11 @@ const Connect = () => {
   ];
 
   return (
-    <section id="connect" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50  rounded-3xl">
+    <section id="connect" className="py-20 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.h2
-            className="text-5xl font-bold mb-4 text-gray-500"
+            className="text-5xl font-bold mb-4"
             initial={textColorAnimation.initial}
             whileInView={textColorAnimation.whileInView}
                         viewport={textColorAnimation.viewport}
@@ -89,7 +89,7 @@ const Connect = () => {
             Let&apos;s Connect
           </motion.h2>
           <motion.p
-            className="text-xl max-w-2xl mx-auto indie-flower-regular text-gray-500"
+            className="text-xl max-w-2xl mx-auto indie-flower-regular text-white"
             initial={textColorAnimation.initial}
             whileInView={textColorAnimation.whileInView}
                         viewport={textColorAnimation.viewport}
@@ -102,13 +102,13 @@ const Connect = () => {
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Contact Form */}
           <motion.div
-            className="bg-white rounded-2xl shadow-lg p-8 h-full"
+            className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-8 h-full text-white"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <motion.h3 className="text-2xl font-semibold mb-6 text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
+            <motion.h3 className="text-2xl font-semibold mb-6 text-white" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
               Send me a message
             </motion.h3>
 
@@ -129,7 +129,7 @@ const Connect = () => {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-white mb-1"
                 >
                   Name
                 </label>
@@ -140,7 +140,7 @@ const Connect = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                  className="w-full px-4 py-3 bg-white/5 text-white placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition"
                   placeholder="Your name"
                 />
               </div>
@@ -148,7 +148,7 @@ const Connect = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-white mb-1"
                 >
                   Email
                 </label>
@@ -159,7 +159,7 @@ const Connect = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                  className="w-full px-4 py-3 bg-white/5 text-white placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -167,7 +167,7 @@ const Connect = () => {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-white mb-1"
                 >
                   Message
                 </label>
@@ -178,7 +178,7 @@ const Connect = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition resize-none"
+                  className="w-full px-4 py-3 bg-white/5 text-white placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition resize-none"
                   placeholder="Your message here..."
                 ></textarea>
               </div>
@@ -186,7 +186,7 @@ const Connect = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition flex items-center justify-center space-x-2 disabled:opacity-70"
+                className="w-full bg-[#412D15] hover:bg-[#2e2010] text-white font-medium py-3 px-6 rounded-lg transition flex items-center justify-center space-x-2 disabled:opacity-70"
               >
                 {isSubmitting ? (
                   <>
@@ -232,30 +232,30 @@ const Connect = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
 
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <motion.h3 className="text-2xl font-semibold mb-6 text-gray-500" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-8 text-white">
+              <motion.h3 className="text-2xl font-semibold mb-6 text-white" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
                 Contact Info
               </motion.h3>
 
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <a href="mailto:kiracheung0211@gmail.com">
-                    <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-orange-200 transition-colors">
-                      <Mail className="w-5 h-5 text-orange-500" />
+                    <div className="w-12 h-12 rounded-full bg-[#412D15] flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-[#2e2010] transition-colors">
+                      <Mail className="w-5 h-5 text-white" />
                     </div>
                   </a>
 
                   <a
                     href="mailto:kiracheung0211@gmail.com"
-                    className="text-gray-600 font-medium hover:text-orange-500 transition-colors"
+                    className="text-white font-medium hover:opacity-70 transition-opacity"
                   >
                     Email me :)
                   </a>
 
                 </div>
 
-                <div className="pt-6 border-t border-gray-100">
-                  <h4 className="font-medium text-gray-700 mb-4">Follow Me</h4>
+                <div className="pt-6 border-t border-white/10">
+                  <h4 className="font-medium text-white mb-4">Follow Me</h4>
                   <div className="flex space-x-4">
                     {socialLinks.map((link, index) => (
                       <motion.a
@@ -263,7 +263,7 @@ const Connect = () => {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-12 h-12 rounded-full bg-gray-50 hover:bg-orange-50 flex items-center justify-center text-gray-600 hover:text-orange-500 transition-colors border border-gray-200"
+                        className="w-12 h-12 rounded-full bg-white/5 hover:bg-[#412D15] flex items-center justify-center text-white hover:text-white transition-colors border border-white/15"
                         whileHover={{ y: -4, scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         initial={{ opacity: 0, y: 20 }}

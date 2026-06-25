@@ -31,8 +31,8 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
 }) => {
   return (
     <div
-      className="h-[45vh] max-w-4xl overflow-hidden rounded-3xl bg-white border border-gray-200 max-sm:h-2/3 project-card"
-      style={{ boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)' }}
+      className="h-[45vh] max-w-4xl overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 text-white/70 max-sm:h-2/3 project-card"
+      style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.37)' }}
     >
       <div className="flex flex-row gap-4 h-full max-sm:flex-col items-center">
         {/* Header Section */}

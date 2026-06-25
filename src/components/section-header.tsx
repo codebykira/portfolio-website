@@ -16,7 +16,7 @@ interface SectionHeaderProps {
 const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   subtitle,
-  color = "text-orange-500",
+  color = "",
 }) => {
   return (
     <AnimatedContent
@@ -40,7 +40,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
           </h1>
           {subtitle && (
             <p
-              className={`left-4 bottom-4 -rotate-3 text-base text-gray-600 ${kalam.className}`}
+              className={`left-4 bottom-4 -rotate-3 text-base text-white/70 ${kalam.className}`}
             >
               {subtitle}
             </p>

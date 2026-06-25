@@ -2,23 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design system tokens ─────────────────────────────── */
+:root {
+  --ds-bg: #0b0a0e;            /* page background */
+  --ds-text: rgba(255, 255, 255, 0.7); /* all body + heading text */
+  --ds-accent: #412D15;        /* brand accent (was orange) */
+  --ds-font-heading: var(--font-playfair), Georgia, serif;
+}
+
+/* Headings use the heading font; everything inherits the 70% white text. */
+.ds-page {
+  color: var(--ds-text);
+}
+
+.ds-page h1,
+.ds-page h2,
+.ds-page h3,
+.ds-page h4 {
+  font-family: var(--ds-font-heading);
+  color: var(--ds-text);
+}
+
 h2 {
-  @apply text-lg text-gray-600 font-normal max-w-full pb-3;
+  @apply text-lg font-normal max-w-full pb-3;
 }
 
 .glass-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem; /* space between emoji and text */
-  background-color: #F2F2F7; /* systemGray6 */
-  border: 1px solid #D1D1D6; /* systemGray5 */
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
   border-radius: 30px;
   padding: 0.4rem 0.8rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #1C1C1E; /* primary text color */
+  color: rgba(255, 255, 255, 0.7); /* primary text color */
   margin: 0.3rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 
@@ -133,7 +155,6 @@ h2 {
 @layer base {
   * {
     @apply border-border;
-    cursor: none;
   }
   body {
     @apply bg-background text-foreground;
