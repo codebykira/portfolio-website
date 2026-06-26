@@ -81,7 +81,7 @@ const Connect = () => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.h2
-            className="text-5xl font-bold mb-4"
+            className="ds-title text-5xl font-bold mb-4"
             initial={textColorAnimation.initial}
             whileInView={textColorAnimation.whileInView}
                         viewport={textColorAnimation.viewport}
@@ -89,7 +89,7 @@ const Connect = () => {
             Let&apos;s Connect
           </motion.h2>
           <motion.p
-            className="text-xl max-w-2xl mx-auto indie-flower-regular text-white"
+            className="text-xl max-w-2xl mx-auto indie-flower-regular text-white/70"
             initial={textColorAnimation.initial}
             whileInView={textColorAnimation.whileInView}
                         viewport={textColorAnimation.viewport}
@@ -102,13 +102,13 @@ const Connect = () => {
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Contact Form */}
           <motion.div
-            className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-8 h-full text-white"
+            className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-8 h-full"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <motion.h3 className="text-2xl font-semibold mb-6 text-white" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
+            <motion.h3 className="ds-title text-2xl font-semibold mb-6" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
               Send me a message
             </motion.h3>
 
@@ -129,7 +129,7 @@ const Connect = () => {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-white mb-1"
+                  className="block text-sm font-medium text-white/70 mb-1"
                 >
                   Name
                 </label>
@@ -140,7 +140,7 @@ const Connect = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-white/5 text-white placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition"
+                  className="w-full px-4 py-3 bg-white/5 text-white/70 placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition"
                   placeholder="Your name"
                 />
               </div>
@@ -148,7 +148,7 @@ const Connect = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-white mb-1"
+                  className="block text-sm font-medium text-white/70 mb-1"
                 >
                   Email
                 </label>
@@ -159,7 +159,7 @@ const Connect = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-white/5 text-white placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition"
+                  className="w-full px-4 py-3 bg-white/5 text-white/70 placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -167,7 +167,7 @@ const Connect = () => {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-white mb-1"
+                  className="block text-sm font-medium text-white/70 mb-1"
                 >
                   Message
                 </label>
@@ -178,7 +178,7 @@ const Connect = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-white/5 text-white placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition resize-none"
+                  className="w-full px-4 py-3 bg-white/5 text-white/70 placeholder:text-white/40 border border-white/15 rounded-lg focus:ring-2 focus:ring-[#412D15] focus:border-[#412D15] outline-none transition resize-none"
                   placeholder="Your message here..."
                 ></textarea>
               </div>
@@ -232,8 +232,8 @@ const Connect = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
 
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-8 text-white">
-              <motion.h3 className="text-2xl font-semibold mb-6 text-white" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-8">
+              <motion.h3 className="ds-title text-2xl font-semibold mb-6" initial={textColorAnimation.initial} whileInView={textColorAnimation.whileInView} viewport={textColorAnimation.viewport}>
                 Contact Info
               </motion.h3>
 
@@ -247,7 +247,7 @@ const Connect = () => {
 
                   <a
                     href="mailto:kiracheung0211@gmail.com"
-                    className="text-white font-medium hover:opacity-70 transition-opacity"
+                    className="text-white/70 font-medium hover:text-white transition-colors"
                   >
                     Email me :)
                   </a>
@@ -255,7 +255,7 @@ const Connect = () => {
                 </div>
 
                 <div className="pt-6 border-t border-white/10">
-                  <h4 className="font-medium text-white mb-4">Follow Me</h4>
+                  <h4 className="font-medium mb-4">Follow Me</h4>
                   <div className="flex space-x-4">
                     {socialLinks.map((link, index) => (
                       <motion.a

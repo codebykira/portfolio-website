@@ -16,8 +16,8 @@ interface NotebookDrawProps {
 const COLORS = ["#2b2b2b", "#FD652D", "#2563eb", "#dc2626", "#16a34a"];
 
 // Internal canvas resolution (2x the notebook's natural size for crisp strokes).
-const CANVAS_W = 1560;
-const CANVAS_H = 840;
+const CANVAS_W = 1820;
+const CANVAS_H = 1386;
 
 export default function NotebookDraw({
   open,
@@ -59,7 +59,18 @@ export default function NotebookDraw({
           }
         }
       }
-      onSave(hasInk ? canvas.toDataURL("image/png") : null);
+      const dataUrl = hasInk ? canvas.toDataURL("image/png") : null;
+      onSave(dataUrl);
+      // Fire-and-forget: email the drawing to the site owner.
+      if (dataUrl) {
+        fetch("/api/drawing", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: dataUrl }),
+        }).catch(() => {
+          /* best-effort; never block the UI */
+        });
+      }
     }
     onClose();
   };
@@ -140,13 +151,13 @@ export default function NotebookDraw({
           <motion.div
             layoutId="notebook-card"
             transition={{ type: "spring", stiffness: 230, damping: 28 }}
-            className="relative z-10 w-[min(92vw,900px)]"
+            className="relative z-10 w-[min(80vw,600px)]"
           >
             <Image
-              src="/hero/notebook.png"
+              src="/hero/notebook-v2.png"
               alt="Open notebook"
-              width={780}
-              height={420}
+              width={910}
+              height={693}
               priority
               draggable={false}
               className="pointer-events-none h-auto w-full select-none drop-shadow-[0_40px_80px_rgba(0,0,0,0.7)]"

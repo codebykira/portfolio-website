@@ -26,7 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className={`${inter.className} ${interTight.variable} ${playfair.variable}`}>
+      <body
+        suppressHydrationWarning={true}
+        className={`${inter.className} ${interTight.variable} ${playfair.variable}`}
+      >
         {children}
       </body>
     </html>
