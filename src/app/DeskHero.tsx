@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import NotebookDraw from "@/components/NotebookDraw";
-import SpotifyPlayer from "@/components/SpotifyPlayer";
+import SpotifyPlayer, { type SpotifyPlayerHandle } from "@/components/SpotifyPlayer";
 import { playKeyboardSound } from "@/lib/keyboardSound";
 
 /**
@@ -64,7 +64,16 @@ export default function DeskHero() {
   const [snackIdx, setSnackIdx] = useState(0);
   const [airpodsOpen, setAirpodsOpen] = useState(false);
   const matRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<SpotifyPlayerHandle>(null);
   const playlistId = "29hKafNXqqmRYjLYSJwR3n";
+
+  const toggleAirpods = () => {
+    const next = !airpodsOpen;
+    setAirpodsOpen(next);
+    // Call play/pause synchronously within the click so autoplay isn't blocked.
+    if (next) playerRef.current?.play();
+    else playerRef.current?.pause();
+  };
 
   return (
     <>
@@ -304,7 +313,7 @@ export default function DeskHero() {
         {/* ── AirPods case (click to pop the earbuds out) ── */}
         <motion.button
           type="button"
-          onClick={() => setAirpodsOpen((v) => !v)}
+          onClick={toggleAirpods}
           variants={enter(0.4)}
           initial="hidden"
           animate="show"
@@ -315,13 +324,18 @@ export default function DeskHero() {
           className="absolute z-[14] block w-[7%] cursor-pointer focus:outline-none"
           style={{ top: "71%", left: "37%", rotate: "2deg" }}
         >
-          <Image
-            src="/hero/airpods.png"
-            alt="AirPods Pro case with a memoji engraving"
-            width={794}
-            height={613}
-            className="h-auto w-full drop-shadow-[4px_16px_16px_rgba(0,0,0,0.6)]"
-          />
+          <motion.div
+            animate={{ opacity: airpodsOpen ? 0 : 1 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <Image
+              src="/hero/airpods.png"
+              alt="AirPods Pro case with a memoji engraving"
+              width={794}
+              height={613}
+              className="h-auto w-full drop-shadow-[4px_16px_16px_rgba(0,0,0,0.6)]"
+            />
+          </motion.div>
           <motion.div
             className="absolute inset-x-0 top-0"
             animate={{ opacity: airpodsOpen ? 1 : 0 }}
@@ -398,20 +412,20 @@ export default function DeskHero() {
         }}
       />
 
-      {/* Spotify player — appears when the AirPods are taken out */}
-      <AnimatePresence>
-        {airpodsOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.95 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="absolute bottom-6 right-6 z-50 h-[152px] w-[360px] overflow-hidden rounded-xl shadow-2xl max-sm:left-3 max-sm:right-3 max-sm:w-auto"
-          >
-            <SpotifyPlayer uri={`spotify:playlist:${playlistId}`} height={152} autoPlay />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Spotify player — kept mounted (so it's ready to play instantly),
+          shown when the AirPods are taken out */}
+      <motion.div
+        initial={false}
+        animate={
+          airpodsOpen
+            ? { opacity: 1, y: 0, pointerEvents: "auto" }
+            : { opacity: 0, y: 24, pointerEvents: "none" }
+        }
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="absolute bottom-6 right-6 z-50 h-[152px] w-[360px] overflow-hidden rounded-xl shadow-2xl max-sm:left-3 max-sm:right-3 max-sm:w-auto"
+      >
+        <SpotifyPlayer ref={playerRef} uri={`spotify:playlist:${playlistId}`} height={152} />
+      </motion.div>
     </section>
 
     <NotebookDraw

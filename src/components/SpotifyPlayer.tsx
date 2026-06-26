@@ -1,21 +1,28 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
+
+export interface SpotifyPlayerHandle {
+  play: () => void;
+  pause: () => void;
+}
 
 interface SpotifyPlayerProps {
   /** A Spotify URI, e.g. "spotify:playlist:29hKafNXqqmRYjLYSJwR3n". */
   uri: string;
   /** Height of the embed (152 ≈ compact, 360+ ≈ full list). */
   height?: number;
-  /** Start playback as soon as the controller is ready. */
-  autoPlay?: boolean;
 }
 
 interface SpotifyController {
   play: () => void;
   pause: () => void;
   destroy: () => void;
-  addListener: (event: string, cb: (e: unknown) => void) => void;
 }
 
 interface SpotifyIframeApi {
@@ -45,7 +52,6 @@ function whenApiReady(cb: (api: SpotifyIframeApi) => void) {
     return;
   }
   readyWaiters.push(cb);
-
   if (typeof window === "undefined") return;
   if (!window.onSpotifyIframeApiReady) {
     window.onSpotifyIframeApiReady = (api) => {
@@ -61,42 +67,61 @@ function whenApiReady(cb: (api: SpotifyIframeApi) => void) {
   }
 }
 
-export default function SpotifyPlayer({
-  uri,
-  height = 152,
-  autoPlay = false,
-}: SpotifyPlayerProps) {
-  const hostRef = useRef<HTMLDivElement>(null);
+/**
+ * Mount this once (kept alive, even when hidden) so the Spotify controller is
+ * ready before the user interacts. Then call `play()` from a click handler so
+ * playback starts within the user gesture and isn't blocked by autoplay policy.
+ */
+const SpotifyPlayer = forwardRef<SpotifyPlayerHandle, SpotifyPlayerProps>(
+  function SpotifyPlayer({ uri, height = 152 }, ref) {
+    const hostRef = useRef<HTMLDivElement>(null);
+    const controllerRef = useRef<SpotifyController | null>(null);
+    const wantPlayRef = useRef(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    let controller: SpotifyController | null = null;
+    useImperativeHandle(
+      ref,
+      () => ({
+        play() {
+          if (controllerRef.current) controllerRef.current.play();
+          else wantPlayRef.current = true; // controller not ready yet — queue it
+        },
+        pause() {
+          wantPlayRef.current = false;
+          controllerRef.current?.pause();
+        },
+      }),
+      []
+    );
 
-    whenApiReady((api) => {
-      if (cancelled || !hostRef.current) return;
-      api.createController(
-        hostRef.current,
-        { uri, width: "100%", height },
-        (ctrl) => {
-          if (cancelled) {
-            ctrl.destroy();
-            return;
+    useEffect(() => {
+      let cancelled = false;
+      whenApiReady((api) => {
+        if (cancelled || !hostRef.current) return;
+        api.createController(
+          hostRef.current,
+          { uri, width: "100%", height },
+          (ctrl) => {
+            if (cancelled) {
+              ctrl.destroy();
+              return;
+            }
+            controllerRef.current = ctrl;
+            if (wantPlayRef.current) {
+              wantPlayRef.current = false;
+              ctrl.play();
+            }
           }
-          controller = ctrl;
-          if (autoPlay) {
-            // The controller is ready here; the opening click is the user
-            // gesture that unlocks playback.
-            ctrl.play();
-          }
-        }
-      );
-    });
+        );
+      });
+      return () => {
+        cancelled = true;
+        controllerRef.current?.destroy();
+        controllerRef.current = null;
+      };
+    }, [uri, height]);
 
-    return () => {
-      cancelled = true;
-      controller?.destroy();
-    };
-  }, [uri, height, autoPlay]);
+    return <div ref={hostRef} className="h-full w-full" />;
+  }
+);
 
-  return <div ref={hostRef} className="h-full w-full" />;
-}
+export default SpotifyPlayer;
