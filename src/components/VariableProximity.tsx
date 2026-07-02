@@ -160,7 +160,9 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
     // Limit cache size to prevent memory leaks
     if (settingsCache.current.size > 100) {
       const firstKey = settingsCache.current.keys().next().value;
-      settingsCache.current.delete(firstKey);
+      if (firstKey !== undefined) {
+        settingsCache.current.delete(firstKey);
+      }
     }
     
     return newSettings;
