@@ -20,36 +20,6 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
           className="cursor-none"
           onMouseEnter={onProjectEnter}
           onMouseLeave={onProjectLeave}
-          onClick={() =>
-            document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })
-          }
-        >
-          <ProjectShowcase
-            title="Personal Website"
-            description={[
-              "This site — an interactive desk-scene hero. Tap the lamp, drag the sticky note, doodle in the notebook, and take the AirPods out for a playlist.",
-            ]}
-            images={[
-              {
-                src: "/personal-website.png",
-                alt: "Personal website desk-scene hero",
-                width: 2880,
-                height: 1640
-              }
-            ]}
-            gradientColor="#15131a"
-            tags={[
-              { emoji: "🎨", label: "Designer" },
-              { emoji: "💻", label: "Full-Stack Developer" },
-              { emoji: "✨", label: "Framer Motion" }
-            ]}
-          />
-        </div>
-
-        <div
-          className="cursor-none"
-          onMouseEnter={onProjectEnter}
-          onMouseLeave={onProjectLeave}
           onClick={() => window.location.href = '/atrios'}
         >
           <ProjectShowcase
