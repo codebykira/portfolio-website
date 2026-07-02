@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Aladin, Caveat } from "next/font/google";
 import { ArrowLeft } from "lucide-react";
 import FontCycleText from "../../components/FontCycleText";
-import { yellowHighlightAnimation, textColorAnimation } from "../../components/animations";
+import { yellowHighlightAnimation, textColorAnimationDark as textColorAnimation } from "../../components/animations";
 
 
 

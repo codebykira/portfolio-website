@@ -39,7 +39,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
         <div className="flex-1 max-sm:mb-4 p-6 space-y-4">
           <div className="flex items-center gap-4">
             {logo && (
-              <div className="w-12 h-12 relative">
+              <div className="w-12 h-12 relative overflow-hidden rounded-xl">
                 <Image
                   src={logo.src}
                   alt={logo.alt}

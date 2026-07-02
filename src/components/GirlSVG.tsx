@@ -12,13 +12,13 @@ const GirlSVG = ({ width = 40, height = 40, isActive = false }) => {
             display: block;
           }
           .svg-container path {
-            stroke: ${isActive ? '#FD652D' : 'black'};
+            stroke: ${isActive ? '#ffffff' : 'rgba(255,255,255,0.8)'};
             stroke-width: ${isActive ? '8' : '4'};
-            fill: ${isActive ? '#FD652D' : '#000000'};
+            fill: ${isActive ? '#ffffff' : 'rgba(255,255,255,0.8)'};
           }
           .svg-container:hover path {
-          fill: #FD652D;
-            stroke: #FD652D;
+            fill: #ffffff;
+            stroke: #ffffff;
             stroke-width: 8;
           }
         `}

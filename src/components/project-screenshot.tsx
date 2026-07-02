@@ -27,7 +27,7 @@ const ProjectScreenshots = ({
             <div
               className={`${
                 withShadow ? "shadow-2xl" : ""
-              } rounded-3xl`}
+              } overflow-hidden rounded-3xl`}
             >
               <Image
                 src={images[0].src}

@@ -17,7 +17,70 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
 
       <div className="space-y-6 flex flex-col items-center ">
         <div
-          className="cursor-pointer"
+          className="cursor-none"
+          onMouseEnter={onProjectEnter}
+          onMouseLeave={onProjectLeave}
+          onClick={() =>
+            document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          <ProjectShowcase
+            title="Personal Website"
+            description={[
+              "This site — an interactive desk-scene hero. Tap the lamp, drag the sticky note, doodle in the notebook, and take the AirPods out for a playlist.",
+            ]}
+            images={[
+              {
+                src: "/personal-website.png",
+                alt: "Personal website desk-scene hero",
+                width: 2880,
+                height: 1640
+              }
+            ]}
+            gradientColor="#15131a"
+            tags={[
+              { emoji: "🎨", label: "Designer" },
+              { emoji: "💻", label: "Full-Stack Developer" },
+              { emoji: "✨", label: "Framer Motion" }
+            ]}
+          />
+        </div>
+
+        <div
+          className="cursor-none"
+          onMouseEnter={onProjectEnter}
+          onMouseLeave={onProjectLeave}
+          onClick={() => window.location.href = '/atrios'}
+        >
+          <ProjectShowcase
+            title="Atrios"
+            description={[
+              "Turning trust into a product — warm introductions booked straight into a company's calendar.",
+            ]}
+            images={[
+              {
+                src: "/atrios-companies-v2.png",
+                alt: "Atrios companies marketplace",
+                width: 3024,
+                height: 1654
+              }
+            ]}
+            logo={{
+              src: "/atrios-icon.png",
+              alt: "Atrios Logo",
+              width: 530,
+              height: 506
+            }}
+            gradientColor="#F3E6C4"
+            tags={[
+              { emoji: "🎨", label: "Product Designer" },
+              { emoji: "💻", label: "Full-Stack Developer" }
+            ]}
+          />
+        </div>
+
+        <div
+          className="cursor-none"
           onMouseEnter={onProjectEnter}
           onMouseLeave={onProjectLeave}
           onClick={() => window.location.href = '/blind-hangouts'}
