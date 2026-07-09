@@ -1,0 +1,155 @@
+/* ============================================================
+   BASE — shared skeleton, theme-agnostic
+   ============================================================ */
+.resume-root * { margin: 0; padding: 0; box-sizing: border-box; }
+html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.resume-root { min-height: 100vh; }
+
+/* Toolbar */
+.resume-root .toolbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 24px;
+  backdrop-filter: blur(8px);
+}
+.resume-root .toolbar .label { font-size: 12px; margin-right: 4px; }
+.resume-root .toolbar button {
+  font-size: 13px; cursor: pointer;
+  padding: 7px 14px; border-radius: 8px;
+  border: 1px solid transparent; background: transparent;
+  transition: background .15s ease, border-color .15s ease;
+}
+.resume-root .toolbar .spacer { flex: 1; }
+
+/* Sheet */
+.resume-root .sheet {
+  position: relative;
+  width: 8.5in; min-height: 11in; max-width: calc(100vw - 32px);
+  margin: 24px auto 64px;
+  padding: 0.45in 0.55in 0.45in;
+}
+
+
+/* Header */
+.resume-root .name-row { display: flex; align-items: baseline; justify-content: center; gap: 10px; }
+.resume-root .contact { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; margin-top: 4px; }
+.resume-root .contact a, .resume-root .contact span { text-decoration: none; display: inline-flex; align-items: center; gap: 3px; }
+.resume-root .contact svg { flex: none; }
+.resume-root .summary { margin-top: 6px; text-align: center; text-wrap: balance; }
+
+/* Sections */
+.resume-root section { margin-top: 10px; }
+.resume-root .section-title-row { display: flex; align-items: center; gap: 10px; }
+.resume-root .section-title-row .rule { flex: 1; height: 1px; }
+
+/* Entries */
+.resume-root .entry { margin-top: 7px; }
+.resume-root .entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.resume-root .entry-head .org-line { min-width: 0; }
+.resume-root .entry-date { white-space: nowrap; }
+.resume-root .tagline { margin-top: 2px; }
+.resume-root .tagline a { margin-left: 5px; display: inline-flex; align-items: center; gap: 2px; }
+.resume-root ul.points { list-style: none; margin-top: 4px; }
+.resume-root ul.points li { display: flex; gap: 8px; margin-top: 2px; }
+.resume-root ul.points li .marker { flex: 0 0 auto; }
+.resume-root .edu-detail { margin-top: 2px; }
+
+/* Awards + skills */
+.resume-root .award { display: flex; gap: 8px; margin-top: 4px; align-items: flex-start; }
+.resume-root .award .marker { flex: 0 0 auto; }
+.resume-root .award .award-text { flex: 1; min-width: 0; }
+.resume-root .skills-flow { margin-top: 6px; line-height: 1.7; }
+.resume-root .skills-flow .group-label { margin-right: 2px; }
+.resume-root .skills-flow .sep { margin: 0 6px; }
+
+/* ============================================================
+   THEME: PLAIN — faithful to the current resume
+   ============================================================ */
+[data-theme="plain"] .resume-root { background: #EDEFF3; }
+[data-theme="plain"] .resume-root .toolbar { background: rgba(237,239,243,.85); border-bottom: 1px solid #E2E8F0; }
+[data-theme="plain"] .resume-root .toolbar .label { color: #64748B; font-family: 'Plus Jakarta Sans', sans-serif; }
+[data-theme="plain"] .resume-root .toolbar button { font-family: 'Plus Jakarta Sans', sans-serif; color: #334155; }
+[data-theme="plain"] .resume-root .toolbar button:hover { background: #E2E8F0; }
+[data-theme="plain"] .resume-root .toolbar button.active { background: #334155; color: #fff; }
+
+[data-theme="plain"] .resume-root .sheet {
+  background: #FFFFFF; color: #0F172A;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 9.5px; line-height: 1.42;
+  box-shadow: 0 1px 3px rgba(15,23,42,.12);
+}
+[data-theme="plain"] .resume-root .name { font-weight: 800; font-size: 30px; color: #334155; }
+[data-theme="plain"] .resume-root .name-mark { display: none; }
+[data-theme="plain"] .resume-root .contact { font-size: 8.5px; color: #334155; }
+[data-theme="plain"] .resume-root .contact a { color: #334155; text-decoration: underline; background: linear-gradient(transparent 65%, rgba(119,51,255,0.18) 65%); }
+[data-theme="plain"] .resume-root .summary { font-size: 9.5px; color: #000; }
+[data-theme="plain"] .resume-root .summary em { font-style: italic; }
+[data-theme="plain"] .resume-root .section-title { font-weight: 800; font-size: 14.5px; color: #0F172A; }
+[data-theme="plain"] .resume-root .section-title-row .rule { background: #CBD5E1; }
+[data-theme="plain"] .resume-root .org { font-weight: 700; font-size: 10.5px; }
+[data-theme="plain"] .resume-root .role { font-weight: 400; font-size: 10.5px; }
+[data-theme="plain"] .resume-root .entry-date { font-family: 'Inconsolata', monospace; font-weight: 500; font-size: 9.5px; letter-spacing: -0.4px; }
+[data-theme="plain"] .resume-root .tagline { font-size: 10px; }
+[data-theme="plain"] .resume-root .tagline a { color: #0F172A; background: linear-gradient(transparent 65%, rgba(119,51,255,0.18) 65%); }
+[data-theme="plain"] .resume-root ul.points li .marker { width: 5px; height: 5px; border-radius: 1.5px; background: #CBD5E1; margin-top: 4.5px; }
+[data-theme="plain"] .resume-root .award .marker { width: 5px; height: 5px; border-radius: 1.5px; background: #CBD5E1; margin-top: 4.5px; }
+[data-theme="plain"] .resume-root .award b, [data-theme="plain"] .resume-root .skills-flow .group-label { font-weight: 700; }
+[data-theme="plain"] .resume-root .skills-flow { font-size: 9.5px; }
+[data-theme="plain"] .resume-root .skills-flow .sep { color: #94A3B8; }
+[data-theme="plain"] .resume-root .edu-detail { font-size: 9.5px; }
+
+/* ============================================================
+   THEME: CLAUDE — Claude Light Editorial
+   colors: ink #141413 · muted #6c6a64 · border #D9D7D1
+           neutral bg #F8F8F6 · surface #FFF · accent #F27A4B
+   type:   Lora (serif headlines) + Inter (light body)
+   ============================================================ */
+[data-theme="claude"] .resume-root { background: #F8F8F6; }
+[data-theme="claude"] .resume-root .toolbar { background: rgba(248,248,246,.85); border-bottom: 1px solid #D9D7D1; }
+[data-theme="claude"] .resume-root .toolbar .label { color: #6c6a64; font-family: 'Inter', sans-serif; }
+[data-theme="claude"] .resume-root .toolbar button { font-family: 'Inter', sans-serif; color: #141413; }
+[data-theme="claude"] .resume-root .toolbar button:hover { background: #F0EEE8; border-color: #D9D7D1; }
+[data-theme="claude"] .resume-root .toolbar button.active { background: #141413; color: #FFFFFF; }
+
+[data-theme="claude"] .resume-root .sheet {
+  background: #FFFFFF; color: #141413;
+  border: 1px solid #D9D7D1; border-radius: 24px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300; font-size: 10px; line-height: 1.5;
+  box-shadow: 0 2px 12px rgba(20,20,19,.05);
+}
+[data-theme="claude"] .resume-root .name { font-family: 'Lora', serif; font-weight: 500; font-size: 31px; letter-spacing: 0; color: #141413; }
+[data-theme="claude"] .resume-root .name-mark { width: 22px; height: 22px; align-self: center; transform: translateY(1px); display: inline-block; }
+[data-theme="claude"] .resume-root .contact { font-size: 10px; color: #6c6a64; }
+[data-theme="claude"] .resume-root .contact a { color: #6c6a64; border-bottom: 1px solid #D9D7D1; }
+[data-theme="claude"] .resume-root .contact a:hover { border-bottom-color: #F27A4B; }
+[data-theme="claude"] .resume-root .summary { font-size: 10px; color: #6c6a64; max-width: 92%; margin-left: auto; margin-right: auto; }
+[data-theme="claude"] .resume-root section { margin-top: 12px; }
+[data-theme="claude"] .resume-root .section-title { font-family: 'Lora', serif; font-weight: 500; font-size: 14px; color: #141413; }
+[data-theme="claude"] .resume-root .section-title-row .rule { background: #D9D7D1; }
+[data-theme="claude"] .resume-root .entry { margin-top: 8px; }
+[data-theme="claude"] .resume-root .org { font-weight: 500; font-size: 10px; }
+[data-theme="claude"] .resume-root .role { font-weight: 300; font-size: 10px; color: #141413; }
+[data-theme="claude"] .resume-root .entry-date { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 10px; color: #6c6a64; }
+[data-theme="claude"] .resume-root .tagline { font-size: 10px; color: #6c6a64; }
+[data-theme="claude"] .resume-root .tagline a { color: #6c6a64; border-bottom: 1px solid #D9D7D1; text-decoration: none; }
+[data-theme="claude"] .resume-root ul.points li .marker { width: 4px; height: 4px; border-radius: 9999px; background: #F27A4B; margin-top: 5px; }
+[data-theme="claude"] .resume-root .award .marker { width: 4px; height: 4px; border-radius: 9999px; background: #F27A4B; margin-top: 5px; }
+[data-theme="claude"] .resume-root .award b { font-weight: 500; }
+[data-theme="claude"] .resume-root .skills-flow { font-size: 10px; color: #6c6a64; }
+[data-theme="claude"] .resume-root .skills-flow .group-label { font-weight: 500; color: #141413; }
+[data-theme="claude"] .resume-root .skills-flow .sep { color: #BEBBB4; }
+[data-theme="claude"] .resume-root .edu-detail { font-size: 10px; }
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@page { size: letter; margin: 0; }
+@media print {
+  .resume-root .toolbar { display: none; }
+  html[data-resume], body:has(.resume-root) { background: #fff !important; }
+  .resume-root .sheet {
+    width: 8.5in; max-width: none; margin: 0; zoom: 1 !important;
+    border: none !important; border-radius: 0 !important; box-shadow: none !important;
+  }
+}
