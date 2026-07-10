@@ -1,6 +1,7 @@
 import "./globals.css";
 import "./fonts.css";
 import { Inter, Inter_Tight, Playfair_Display } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${inter.className} ${interTight.variable} ${playfair.variable}`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
