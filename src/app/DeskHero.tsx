@@ -19,7 +19,11 @@ import { playKeyboardSound } from "@/lib/keyboardSound";
  * All assets are background-removed PNGs in /public/hero.
  */
 
-const enter = (delay: number): Variants => ({
+// Every desk item shares this one delay so they all enter together,
+// just after the mat has faded in.
+const ENTER_DELAY = 0.15;
+
+const enter = (delay: number = ENTER_DELAY): Variants => ({
   hidden: { opacity: 0, y: 18, scale: 0.97 },
   show: {
     opacity: 1,
@@ -123,7 +127,7 @@ export default function DeskHero() {
 
         {/* ── Lamp (top-left, tap to toggle) ── */}
         <motion.div
-          variants={enter(0.1)}
+          variants={enter()}
           initial="hidden"
           animate="show"
           className="absolute z-30 w-[22%]"
@@ -205,7 +209,7 @@ export default function DeskHero() {
           const entrance = {
             initial: { opacity: 0, y: 14 },
             animate: { opacity: 1, y: 0 },
-            transition: { duration: 0.6, delay: 0.3 + i * 0.08, ease: "easeOut" as const },
+            transition: { duration: 0.7, delay: ENTER_DELAY, ease: [0.22, 1, 0.36, 1] as const },
           };
           return mug.href ? (
             <motion.a
@@ -236,7 +240,7 @@ export default function DeskHero() {
 
         {/* ── Cat photo frame (top, left of centre) ── */}
         <motion.div
-          variants={enter(0.25)}
+          variants={enter()}
           initial="hidden"
           animate="show"
           whileHover={HOVER}
@@ -254,7 +258,7 @@ export default function DeskHero() {
 
         {/* ── Notebook (bottom-left) — click to zoom in and draw on it ── */}
         <motion.div
-          variants={enter(0.35)}
+          variants={enter()}
           initial="hidden"
           animate="show"
           className="absolute z-[15] w-[22%]"
@@ -291,7 +295,7 @@ export default function DeskHero() {
 
         {/* ── Laptop (centre) with sticky note on the screen ── */}
         <motion.div
-          variants={enter(0.2)}
+          variants={enter()}
           initial="hidden"
           animate="show"
           whileHover={HOVER}
@@ -314,7 +318,7 @@ export default function DeskHero() {
         <motion.button
           type="button"
           onClick={toggleAirpods}
-          variants={enter(0.4)}
+          variants={enter()}
           initial="hidden"
           animate="show"
           whileHover={HOVER}
@@ -361,7 +365,7 @@ export default function DeskHero() {
           whileDrag={{ scale: 1.08, rotate: 3 }}
           initial={{ opacity: 0, scale: 0.85, rotate: 6 }}
           animate={{ opacity: 1, scale: 1, rotate: 6 }}
-          transition={{ duration: 0.5, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, delay: ENTER_DELAY, ease: [0.22, 1, 0.36, 1] }}
           className="absolute z-30 w-[7%] cursor-grab touch-none active:cursor-grabbing"
           style={{ top: "calc(2% + 209px)", left: "calc(55% - 15px)" }}
         >
