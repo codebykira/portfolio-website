@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   Link as LinkIcon,
@@ -10,19 +10,8 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import type { Resume } from "./resumeData";
+import { THEMES, type ThemeId, useResumeTheme } from "./ThemeContext";
 import "./resume.css";
-
-/* ============================================================
-   THEME REGISTRY — add a new company style here + a CSS block in resume.css
-   ============================================================ */
-const THEMES = [
-  { id: "claude", label: "Claude" },
-  { id: "notion", label: "Notion" },
-  { id: "openai", label: "OpenAI" },
-  { id: "plain", label: "Plain" },
-] as const;
-
-type ThemeId = (typeof THEMES)[number]["id"];
 
 /* Per-role variant → PDF endpoint + download filename + nav routing */
 export type Variant = "product" | "design" | "ai";
@@ -58,7 +47,8 @@ function SectionTitle({ title, icon: SectionIcon }: { title: string; icon: Icon 
 }
 
 export default function ResumeDoc({ data, variant }: { data: Resume; variant: Variant }) {
-  const [theme, setTheme] = useState<ThemeId>("claude");
+  // Company "Style" is owned by the resume layout so it survives role switches.
+  const { theme, setTheme } = useResumeTheme();
   const [zoom, setZoom] = useState(1);
 
   // Fit the whole Letter page (8.5in x 11in) within the current viewport.
@@ -96,41 +86,6 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
       setSaving(false);
     }
   };
-
-  // Load saved theme on mount, mark the document for print styling,
-  // and clean up when navigating away so other routes aren't themed.
-  useEffect(() => {
-    let saved: ThemeId = "claude";
-    // A ?theme= override (used by the server-side PDF render) wins over
-    // the persisted choice so the exported PDF matches the picked style.
-    const urlTheme = new URLSearchParams(window.location.search).get("theme");
-    if (urlTheme && THEMES.some((t) => t.id === urlTheme)) {
-      saved = urlTheme as ThemeId;
-    } else {
-      try {
-        const stored = localStorage.getItem("resume-theme");
-        if (stored && THEMES.some((t) => t.id === stored)) saved = stored as ThemeId;
-      } catch {
-        /* localStorage unavailable */
-      }
-    }
-    setTheme(saved);
-    document.documentElement.setAttribute("data-resume", "");
-    return () => {
-      document.documentElement.removeAttribute("data-theme");
-      document.documentElement.removeAttribute("data-resume");
-    };
-  }, []);
-
-  // Reflect the active theme on <html> and persist it.
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    try {
-      localStorage.setItem("resume-theme", theme);
-    } catch {
-      /* localStorage unavailable */
-    }
-  }, [theme]);
 
   return (
     <>
