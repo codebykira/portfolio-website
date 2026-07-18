@@ -32,6 +32,8 @@ interface ProjectDetails {
   /** Crop a single stacked image to this aspect ratio (e.g. "16/7") to trim
       transparent top/bottom margins. Omit to show the image uncropped. */
   mediaAspect?: string;
+  /** Show only the media by default; reveal the text overlay on hover. */
+  revealOnHover?: boolean;
 }
 
 const ProjectShowcase: React.FC<ProjectDetails> = ({
@@ -47,7 +49,74 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
   stacked = false,
   imageScale = 1,
   mediaAspect,
+  revealOnHover = false,
 }) => {
+  const tagList = tags.length > 0 && (
+    <div className="flex flex-wrap">
+      {tags.map((tag, index) => (
+        <span key={index} className="glass-tag">
+          {typeof tag === "string" ? (
+            tag
+          ) : (
+            <>
+              <span>{tag.emoji}</span>
+              <span>{tag.label}</span>
+            </>
+          )}
+        </span>
+      ))}
+    </div>
+  );
+
+  // Media fills the card; the logo stays visible, and title/description/tags
+  // fade in over a scrim on hover.
+  if (revealOnHover) {
+    return (
+      <div
+        className={`group relative ${heightClass} ${widthClass} overflow-hidden rounded-3xl bg-white/5 text-white/70 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)]`}
+      >
+        {/* Media fills the card */}
+        <div className="absolute inset-0">
+          {media ? (
+            media
+          ) : images[0] ? (
+            <Image
+              src={images[0].src}
+              alt={images[0].alt}
+              fill
+              sizes="900px"
+              className="object-cover"
+            />
+          ) : null}
+        </div>
+
+        {/* Persistent logo — always visible */}
+        {logo && (
+          <div className="absolute left-4 top-4 z-10 h-11 w-11 overflow-hidden rounded-xl border border-white/15 bg-black/25 backdrop-blur-sm">
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              width={logo.width || 48}
+              height={logo.height || 48}
+              className="h-full w-full object-contain"
+            />
+          </div>
+        )}
+
+        {/* Hover overlay: title + description + tags */}
+        <div className="absolute inset-0 flex flex-col justify-end gap-3 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
+          <h1 className="text-xl font-bold text-white">{title}</h1>
+          {description.map((paragraph, index) => (
+            <p key={index} className="text-sm">
+              {paragraph}
+            </p>
+          ))}
+          {tagList}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`${heightClass} ${widthClass} overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md text-white/70 max-sm:h-2/3 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)] transition-colors duration-300 ease-out hover:bg-white/10`}

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import ProjectShowcase from "../components/project-showcase";
+import ChristmasCardEmbed from "../components/christmas-card-embed";
 
 // Live demo of the Christmas card site.
 const CHRISTMAS_CARD_DEMO_URL = "https://christmas-cards-web.vercel.app/";
@@ -44,8 +45,9 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
               height: 506
             }}
             gradientColor="#F3E6C4"
-            heightClass="h-auto"
-            stacked
+            widthClass="w-[800px] max-w-full"
+            heightClass="h-[45vh]"
+            revealOnHover
           />
         </div>
 
@@ -90,20 +92,11 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
             description={[
               "An interactive 3D Christmas card you can personalize with a message and photos, then share as a link.",
             ]}
-            images={[
-              {
-                src: "/christmas-card.png",
-                alt: "3D ornament Christmas tree from the Christmas card site",
-                width: 1040,
-                height: 1600
-              }
-            ]}
+            media={<ChristmasCardEmbed />}
             gradientColor="#C0392B"
-            widthClass="max-w-md"
-            tags={[
-              { emoji: "🎄", label: "Creative Dev" },
-              { emoji: "💻", label: "Three.js / WebGL" },
-            ]}
+            widthClass="w-[360px] max-w-full"
+            heightClass="h-[42vh]"
+            revealOnHover
           />
         </div>
 
