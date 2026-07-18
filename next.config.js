@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Hide the on-screen dev indicators so they don't show up in the /api/resume-pdf render.
+  devIndicators: {
+    buildActivity: false,
+    appIsrStatus: false,
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

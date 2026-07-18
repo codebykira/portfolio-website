@@ -20,13 +20,19 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
   transition: background .15s ease, border-color .15s ease;
 }
 .resume-root .toolbar .spacer { flex: 1; }
+.resume-root .toolbar .version-link {
+  font-size: 13px; cursor: pointer; text-decoration: none;
+  padding: 7px 14px; border-radius: 8px;
+  border: 1px solid transparent; background: transparent;
+  transition: background .15s ease, border-color .15s ease;
+}
 
-/* Sheet */
+/* Sheet — standard US Letter: 8.5in × 11in */
 .resume-root .sheet {
   position: relative;
-  width: 8.5in; min-height: 11in; max-width: calc(100vw - 32px);
+  width: 8.5in; min-height: 11in; max-width: 8.5in;
   margin: 24px auto 64px;
-  padding: 0.45in 0.55in 0.45in;
+  padding: 0.45in 0.55in;
 }
 
 
@@ -39,8 +45,10 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
 
 /* Sections */
 .resume-root section { margin-top: 10px; }
-.resume-root .section-title-row { display: flex; align-items: center; gap: 10px; }
-.resume-root .section-title-row .rule { flex: 1; height: 1px; }
+.resume-root .section-title-row { display: flex; align-items: center; gap: 7px; }
+.resume-root .section-title-pill { display: inline-flex; align-items: center; gap: 7px; }
+.resume-root .section-title-row .rule { flex: 1; height: 1px; margin-left: 3px; }
+.resume-root .section-icon { flex: none; }
 
 /* Entries */
 .resume-root .entry { margin-top: 7px; }
@@ -61,6 +69,9 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
 .resume-root .skills-flow { margin-top: 6px; line-height: 1.7; }
 .resume-root .skills-flow .group-label { margin-right: 2px; }
 .resume-root .skills-flow .sep { margin: 0 6px; }
+/* Keep each group's label glued to its first item so the label never
+   gets orphaned at the end of a line. */
+.resume-root .skills-flow .group-lead { white-space: nowrap; }
 
 /* ============================================================
    THEME: PLAIN — faithful to the current resume
@@ -71,6 +82,9 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
 [data-theme="plain"] .resume-root .toolbar button { font-family: 'Plus Jakarta Sans', sans-serif; color: #334155; }
 [data-theme="plain"] .resume-root .toolbar button:hover { background: #E2E8F0; }
 [data-theme="plain"] .resume-root .toolbar button.active { background: #334155; color: #fff; }
+[data-theme="plain"] .resume-root .toolbar .version-link { font-family: 'Plus Jakarta Sans', sans-serif; color: #334155; }
+[data-theme="plain"] .resume-root .toolbar .version-link:hover { background: #E2E8F0; }
+[data-theme="plain"] .resume-root .toolbar .version-link.active { background: #334155; color: #fff; }
 
 [data-theme="plain"] .resume-root .sheet {
   background: #FFFFFF; color: #0F172A;
@@ -110,6 +124,9 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
 [data-theme="claude"] .resume-root .toolbar button { font-family: 'Inter', sans-serif; color: #141413; }
 [data-theme="claude"] .resume-root .toolbar button:hover { background: #F0EEE8; border-color: #D9D7D1; }
 [data-theme="claude"] .resume-root .toolbar button.active { background: #141413; color: #FFFFFF; }
+[data-theme="claude"] .resume-root .toolbar .version-link { font-family: 'Inter', sans-serif; color: #141413; }
+[data-theme="claude"] .resume-root .toolbar .version-link:hover { background: #F0EEE8; border-color: #D9D7D1; }
+[data-theme="claude"] .resume-root .toolbar .version-link.active { background: #141413; color: #FFFFFF; }
 
 [data-theme="claude"] .resume-root .sheet {
   background: #FFFFFF; color: #141413;
@@ -124,9 +141,10 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
 [data-theme="claude"] .resume-root .contact a { color: #6c6a64; border-bottom: 1px solid #D9D7D1; }
 [data-theme="claude"] .resume-root .contact a:hover { border-bottom-color: #F27A4B; }
 [data-theme="claude"] .resume-root .summary { font-size: 10px; color: #6c6a64; max-width: 92%; margin-left: auto; margin-right: auto; }
-[data-theme="claude"] .resume-root section { margin-top: 12px; }
+[data-theme="claude"] .resume-root section { margin-top: 10px; }
 [data-theme="claude"] .resume-root .section-title { font-family: 'Lora', serif; font-weight: 500; font-size: 14px; color: #141413; }
 [data-theme="claude"] .resume-root .section-title-row .rule { background: #D9D7D1; }
+[data-theme="claude"] .resume-root .section-icon { color: #141413; }
 [data-theme="claude"] .resume-root .entry { margin-top: 8px; }
 [data-theme="claude"] .resume-root .org { font-weight: 500; font-size: 10px; }
 [data-theme="claude"] .resume-root .role { font-weight: 300; font-size: 10px; color: #141413; }
@@ -140,6 +158,122 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
 [data-theme="claude"] .resume-root .skills-flow .group-label { font-weight: 500; color: #141413; }
 [data-theme="claude"] .resume-root .skills-flow .sep { color: #BEBBB4; }
 [data-theme="claude"] .resume-root .edu-detail { font-size: 10px; }
+
+/* ============================================================
+   THEME: NOTION — "Notion Clean"
+   colors: ink #000 · muted #6B7280 · border #0000001A
+           neutral bg #F7F7F5 · surface #FFF · accent #455DD3 · link #0075DE
+   type:   Inter — bold, tightly-tracked headlines; clean body
+   ============================================================ */
+[data-theme="notion"] .resume-root { background: #F7F7F5; }
+[data-theme="notion"] .resume-root .toolbar { background: rgba(247,247,245,.85); border-bottom: 1px solid #0000001A; }
+[data-theme="notion"] .resume-root .toolbar .label { color: #6B7280; font-family: 'Inter', sans-serif; }
+[data-theme="notion"] .resume-root .toolbar button { font-family: 'Inter', sans-serif; color: #000; }
+[data-theme="notion"] .resume-root .toolbar button:hover { background: #F2F4FF; }
+[data-theme="notion"] .resume-root .toolbar button.active { background: #455DD3; color: #FFFFFF; }
+[data-theme="notion"] .resume-root .toolbar .version-link { font-family: 'Inter', sans-serif; color: #000; }
+[data-theme="notion"] .resume-root .toolbar .version-link:hover { background: #F2F4FF; }
+[data-theme="notion"] .resume-root .toolbar .version-link.active { background: #455DD3; color: #FFFFFF; }
+
+[data-theme="notion"] .resume-root .sheet {
+  background: #FFFFFF; color: #000000;
+  border: 1px solid #0000001A; border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; font-size: 9.5px; line-height: 1.5;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+[data-theme="notion"] .resume-root .name { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 32px; letter-spacing: -1px; color: #000; }
+[data-theme="notion"] .resume-root .name-mark { width: 46px; height: 46px; align-self: center; transform: translateY(1px); display: inline-block; object-fit: contain; }
+[data-theme="notion"] .resume-root .contact { font-size: 10px; color: #6B7280; }
+[data-theme="notion"] .resume-root .contact a { color: #0075DE; }
+[data-theme="notion"] .resume-root .contact a:hover { text-decoration: underline; }
+[data-theme="notion"] .resume-root .summary { font-size: 10px; color: #6B7280; max-width: 92%; margin-left: auto; margin-right: auto; }
+[data-theme="notion"] .resume-root section { margin-top: 8px; }
+[data-theme="notion"] .resume-root ul.points li { margin-top: 2px; }
+[data-theme="notion"] .resume-root .section-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: -0.3px; color: #000; }
+[data-theme="notion"] .resume-root .section-title-row .rule { background: #0000001A; }
+/* Notion "Think"-style pill: light-blue capsule + blue Phosphor icon */
+[data-theme="notion"] .resume-root .section-icon { color: #455DD3; }
+[data-theme="notion"] .resume-root .section-title-pill { background: #F2F4FF; border-radius: 9999px; padding: 3px 12px 3px 10px; gap: 6px; }
+[data-theme="notion"] .resume-root .entry { margin-top: 5px; }
+[data-theme="notion"] .resume-root .org { font-weight: 600; font-size: 10px; color: #000; }
+[data-theme="notion"] .resume-root .role { font-weight: 400; font-size: 10px; color: #000; }
+[data-theme="notion"] .resume-root .entry-date { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: #6B7280; }
+[data-theme="notion"] .resume-root .tagline { font-size: 10px; color: #6B7280; }
+[data-theme="notion"] .resume-root .tagline a { color: #0075DE; text-decoration: none; }
+[data-theme="notion"] .resume-root .tagline a:hover { text-decoration: underline; }
+[data-theme="notion"] .resume-root ul.points li .marker { width: 4px; height: 4px; border-radius: 9999px; background: #455DD3; margin-top: 5px; }
+[data-theme="notion"] .resume-root .award .marker { width: 4px; height: 4px; border-radius: 9999px; background: #455DD3; margin-top: 5px; }
+[data-theme="notion"] .resume-root .award b { font-weight: 600; }
+[data-theme="notion"] .resume-root .skills-flow { font-size: 10px; color: #6B7280; }
+[data-theme="notion"] .resume-root .skills-flow .group-label { font-weight: 600; color: #000; }
+[data-theme="notion"] .resume-root .skills-flow .sep { color: #C7CBD1; }
+[data-theme="notion"] .resume-root .edu-detail { font-size: 10px; color: #000; }
+
+/* ============================================================
+   THEME: OPENAI — "OpenAI Minimal"
+   colors: ink #000 · muted #6B7280 · border #E5E7EB
+           surface #FFF · muted-fill #F5F5F5 · error #DC2626
+   type:   Inter (OpenAI Sans stand-in) — restrained weights,
+           tight tracking on display; pill controls, soft borders
+   ============================================================ */
+[data-theme="openai"] .resume-root { background: #FFFFFF; }
+[data-theme="openai"] .resume-root .toolbar { background: rgba(255,255,255,.85); border-bottom: 1px solid #E5E7EB; }
+[data-theme="openai"] .resume-root .toolbar .label { color: #6B7280; font-family: 'Inter', sans-serif; }
+[data-theme="openai"] .resume-root .toolbar button { font-family: 'Inter', sans-serif; color: #000; border-radius: 9999px; border-color: #E5E7EB; }
+[data-theme="openai"] .resume-root .toolbar button:hover { background: #F5F5F5; }
+[data-theme="openai"] .resume-root .toolbar button.active { background: #000; color: #FFF; border-color: #000; }
+[data-theme="openai"] .resume-root .toolbar .version-link { font-family: 'Inter', sans-serif; color: #000; border-radius: 9999px; border-color: #E5E7EB; }
+[data-theme="openai"] .resume-root .toolbar .version-link:hover { background: #F5F5F5; }
+[data-theme="openai"] .resume-root .toolbar .version-link.active { background: #000; color: #FFF; border-color: #000; }
+
+[data-theme="openai"] .resume-root .sheet {
+  background: #FFFFFF; color: #000000;
+  border: 1px solid #E5E7EB; border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; font-size: 9.5px; line-height: 1.5;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+[data-theme="openai"] .resume-root .name { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 31px; letter-spacing: -0.6px; color: #000; }
+[data-theme="openai"] .resume-root .name-mark { display: none; }
+[data-theme="openai"] .resume-root .contact { font-size: 10px; color: #6B7280; }
+[data-theme="openai"] .resume-root .contact a { color: #6B7280; border-bottom: 1px solid #E5E7EB; }
+[data-theme="openai"] .resume-root .contact a:hover { color: #000; border-bottom-color: #000; }
+[data-theme="openai"] .resume-root .summary { font-size: 10px; color: #6B7280; max-width: 92%; margin-left: auto; margin-right: auto; }
+[data-theme="openai"] .resume-root section { margin-top: 8px; }
+[data-theme="openai"] .resume-root ul.points li { margin-top: 2px; }
+[data-theme="openai"] .resume-root .section-title { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: -0.2px; color: #FFFFFF; }
+[data-theme="openai"] .resume-root .section-title-row .rule { background: #E5E7EB; }
+/* OpenAI outlined pill: white fill, thin gray border, soft shadow, text-only (no icon) */
+[data-theme="openai"] .resume-root .section-icon { display: none; }
+[data-theme="openai"] .resume-root .section-title-pill { background: #000000; border: none; border-radius: 9999px; padding: 5px 18px; gap: 0; box-shadow: none; }
+[data-theme="openai"] .resume-root .entry { margin-top: 4px; }
+[data-theme="openai"] .resume-root .org { font-weight: 600; font-size: 10.5px; color: #000; }
+[data-theme="openai"] .resume-root .role { font-weight: 400; font-size: 10.5px; color: #6B7280; }
+[data-theme="openai"] .resume-root .entry-date { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: #6B7280; }
+[data-theme="openai"] .resume-root .tagline { font-size: 10px; color: #6B7280; }
+[data-theme="openai"] .resume-root .tagline a { color: #000; text-decoration: none; border-bottom: 1px solid #E5E7EB; }
+[data-theme="openai"] .resume-root .tagline a:hover { border-bottom-color: #000; }
+[data-theme="openai"] .resume-root ul.points li .marker { width: 4px; height: 4px; border-radius: 9999px; background: #6B7280; margin-top: 5px; }
+[data-theme="openai"] .resume-root .award .marker { width: 4px; height: 4px; border-radius: 9999px; background: #6B7280; margin-top: 5px; }
+[data-theme="openai"] .resume-root .award b { font-weight: 600; }
+[data-theme="openai"] .resume-root .skills-flow { font-size: 10px; color: #6B7280; }
+[data-theme="openai"] .resume-root .skills-flow .group-label { font-weight: 600; color: #000; }
+[data-theme="openai"] .resume-root .skills-flow .sep { color: #E5E7EB; }
+[data-theme="openai"] .resume-root .edu-detail { font-size: 10px; color: #6B7280; }
+
+/* ============================================================
+   NOTION & OPENAI: stretch sections to fill the page
+   Distribute the leftover vertical space evenly between the header
+   and each section so the content fills the full letter page height
+   instead of leaving whitespace at the bottom.
+   ============================================================ */
+[data-theme="notion"] .resume-root .sheet,
+[data-theme="openai"] .resume-root .sheet {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
 /* ============================================================
    PRINT

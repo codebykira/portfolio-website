@@ -2,6 +2,9 @@
 import React from "react";
 import ProjectShowcase from "../components/project-showcase";
 
+// Live demo of the Christmas card site.
+const CHRISTMAS_CARD_DEMO_URL = "https://christmas-cards-web.vercel.app/";
+
 
 interface WorkProps {
   onProjectEnter: () => void;
@@ -17,15 +20,14 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
 
       <div className="space-y-6 flex flex-col items-center ">
         <div
-          className="cursor-none"
-          onMouseEnter={onProjectEnter}
-          onMouseLeave={onProjectLeave}
+          className="cursor-pointer"
           onClick={() => window.location.href = '/atrios'}
         >
           <ProjectShowcase
             title="Atrios"
             description={[
-              "Turning trust into a product — warm introductions booked straight into a company's calendar.",
+              "The best products you use came from a friend, not an ad. Atrios is built on that instinct: you think about what your friends would actually want, curate a few, and get rewarded for the care. They discover things worth their time. We're building the version that does.",
+              "I shape the Atrios experience. I designed every screen and write the code behind them, backend to frontend. From the tastemaker's first onboarding question to the email that lands when a meeting books, it's one continuous surface, and I hold all of it. The best products feel like someone cared, and that's the part I don't compromise on.",
             ]}
             images={[
               {
@@ -42,36 +44,27 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
               height: 506
             }}
             gradientColor="#F3E6C4"
-            tags={[
-              { emoji: "🎨", label: "Product Designer" },
-              { emoji: "💻", label: "Full-Stack Developer" }
-            ]}
+            heightClass="h-auto"
+            stacked
           />
         </div>
 
         <div
-          className="cursor-none"
-          onMouseEnter={onProjectEnter}
-          onMouseLeave={onProjectLeave}
+          className="cursor-pointer"
           onClick={() => window.location.href = '/blind-hangouts'}
         >
           <ProjectShowcase
             title="Blind Hangouts"
             description={[
-              "AI that plans your social life, built at Founders Inc.",
+              "The people you want to see most are usually the ones you see least. Not because you don't care, but because caring costs coordination.",
+              "I founded Blind Hangouts to take the coordination off your plate. It learns what you and your friends like to do, finds a time that works for everyone, and books the plan. There's always a small surprise in it too.",
             ]}
             images={[
               {
-                src: "/bh-1.png",
-                alt: "Blind Hangouts App Screenshot 1",
-                width: 300,
-                height: 600
-              },
-              {
-                src: "/bh-2.png",
-                alt: "Blind Hangouts App Screenshot 2",
-                width: 300,
-                height: 600
+                src: "/screenshots.png",
+                alt: "Blind Hangouts app screenshots",
+                width: 1920,
+                height: 1080
               }
             ]}
             logo={{
@@ -81,11 +74,35 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
               height: 48
             }}
             gradientColor="#F7EED7"
+            heightClass="h-auto"
+            stacked
+            imageScale={1.3}
+            mediaAspect="16/6"
+          />
+        </div>
+
+        <div
+          className="cursor-pointer"
+          onClick={() => window.open(CHRISTMAS_CARD_DEMO_URL, "_blank", "noopener,noreferrer")}
+        >
+          <ProjectShowcase
+            title="Christmas Card"
+            description={[
+              "An interactive 3D Christmas card you can personalize with a message and photos, then share as a link.",
+            ]}
+            images={[
+              {
+                src: "/christmas-card.png",
+                alt: "3D ornament Christmas tree from the Christmas card site",
+                width: 1040,
+                height: 1600
+              }
+            ]}
+            gradientColor="#C0392B"
+            widthClass="max-w-md"
             tags={[
-              { emoji: "🧑‍💼", label: "Founder" },
-              { emoji: "🎨", label: "Product Designer" },
-              { emoji: "📱", label: "iOS Engineer" },
-              { emoji: "💻", label: "Full-Stack Developer" }
+              { emoji: "🎄", label: "Creative Dev" },
+              { emoji: "💻", label: "Three.js / WebGL" },
             ]}
           />
         </div>

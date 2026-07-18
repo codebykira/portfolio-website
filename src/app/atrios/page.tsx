@@ -93,7 +93,7 @@ export default function AtriosPage() {
 
         <p>I joined a product that almost nobody was using.</p>
         <p>
-          Five people. Ten thousand dollars in revenue. A right idea that hadn&apos;t found its shape yet.
+          Ten thousand dollars in revenue. A right idea that hadn&apos;t found its shape yet.
         </p>
         <p>
           Atrios is built on the oldest move in business: someone you trust says you should meet this person. A warm introduction. We had a network of well-connected people — tastemakers — who could open their world, introducing friends to products they actually needed, and turning each intro into a booked meeting on a company&apos;s calendar. No cold outreach. Just trust, turned into a product.
@@ -152,14 +152,14 @@ export default function AtriosPage() {
         <p>Three months in, it worked.</p>
 
         <p>
-          Ten thousand became one million in ARR. Five people became two thousand — all of them actively making real introductions, into real calendars, for real.
+          Ten thousand became one million in ARR. Real introductions, into real calendars, for real.
         </p>
         <p>
           I designed every screen they touch. I built the systems under them. But what I&apos;m proudest of isn&apos;t any single thing I shipped.
         </p>
 
         <p>
-          I took something five people used, and made it something two thousand people trust.
+          I took something almost no one used, and made it something people trust with their name.
         </p>
 
         {/* Navigation back */}

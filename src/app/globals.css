@@ -44,6 +44,18 @@ h2 {
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+/* Static (non-animated) dot grid — used as a subtle backdrop behind
+   project screenshots. Pure CSS, no JS, no motion. */
+.dot-grid-static {
+  background-image: radial-gradient(
+    circle,
+    rgba(252, 247, 233, 0.18) 1.5px,
+    transparent 1.6px
+  );
+  background-size: 22px 22px;
+  background-position: center;
+}
+
 
 
 @layer base {
