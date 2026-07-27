@@ -1,0 +1,320 @@
+/* let it. — a black table under a low light. Typewriter face, red-ribbon accent.
+   The paper is real footage: chroma-keyed crumple / uncrumple sequences. */
+
+.letit {
+  --cream: #efe8d2;
+  --cream-dim: #c9c4ac;
+  --cream-faint: #a7ab8d;
+  --ink: #2b2721;
+  --ribbon: #b23a2e;
+
+  min-height: 100dvh;
+  background-color: #0c0c0c;
+  background-image: radial-gradient(
+    115% 90% at 50% 18%,
+    #1e1e1e 0%,
+    #0c0c0c 42%,
+    #060606 76%,
+    #000 100%
+  );
+  background-attachment: fixed;
+  color: var(--cream);
+  font-size: 17px;
+  line-height: 1.66;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.6rem 1.4rem;
+  overflow-x: hidden;
+}
+
+.letit .stage {
+  width: 100%;
+  max-width: 30rem;
+  animation: letit-rise 1s cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+.letit .stage.wide { max-width: 46rem; }
+
+@keyframes letit-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes letit-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.letit .eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin: 0 0 1.9rem;
+}
+
+.letit h1 {
+  font-weight: 400;
+  font-size: clamp(1.28rem, 1.05rem + 1.2vw, 1.6rem);
+  line-height: 1.42;
+  letter-spacing: 0.002em;
+  text-wrap: balance;
+  margin: 0 0 1.15rem;
+  color: var(--cream);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.letit p {
+  margin: 0 0 1.05rem;
+  color: var(--cream-dim);
+  max-width: 32rem;
+}
+.letit p.tight { margin-bottom: 0; }
+
+/* typewriter-bracket buttons */
+.letit .go {
+  display: inline-block;
+  margin-top: 1.7rem;
+  background: none;
+  border: 0;
+  padding: 0.1rem 0.2rem;
+  font-family: inherit;
+  font-size: 0.98rem;
+  color: var(--cream);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: color 0.35s ease;
+}
+.letit .go::before { content: "[ "; color: var(--cream-faint); transition: color 0.35s ease; }
+.letit .go::after { content: " ]"; color: var(--cream-faint); transition: color 0.35s ease; }
+.letit .go:hover:not(:disabled),
+.letit .go:focus-visible { color: #fff; }
+.letit .go:hover:not(:disabled)::before,
+.letit .go:hover:not(:disabled)::after,
+.letit .go:focus-visible::before,
+.letit .go:focus-visible::after { color: var(--ribbon); }
+.letit .go:disabled { color: var(--cream-faint); cursor: default; opacity: 0.55; }
+
+.letit .quiet {
+  background: none;
+  border: 0;
+  padding: 0.2rem 0;
+  font-family: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--cream-faint);
+  cursor: pointer;
+  margin-top: 2.4rem;
+  transition: color 0.3s ease;
+}
+.letit .quiet:hover,
+.letit .quiet:focus-visible { color: var(--cream-dim); }
+
+.letit :focus-visible { outline: 2px solid var(--cream); outline-offset: 4px; border-radius: 2px; }
+.letit textarea:focus-visible,
+.letit textarea:focus { outline: none; }
+
+/* type / draw toolbar */
+.letit .tools {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+.letit .tool {
+  background: none;
+  border: 0;
+  padding: 0.1rem 0.1rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--cream-faint);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.letit .tool::before { content: "[ "; }
+.letit .tool::after { content: " ]"; }
+.letit .tool:hover,
+.letit .tool:focus-visible { color: var(--cream-dim); }
+.letit .tool.active { color: var(--cream); }
+.letit .tool.active::before,
+.letit .tool.active::after { color: var(--ribbon); }
+
+/* the drawing layer on the paper. Explicit width/height matter: a canvas is a
+   replaced element, so `inset` alone won't stretch it — its intrinsic size
+   would win and resizing it in JS would feed back into layout. */
+.letit .marks {
+  position: absolute;
+  top: 8%;
+  left: 7%;
+  width: 86%;
+  height: 84%;
+  touch-action: none;
+  cursor: crosshair;
+  transition: opacity 0.3s ease;
+}
+
+/* a stranger's drawing, shown over the opened paper */
+.letit .paperbox > img.marks-shown {
+  position: absolute;
+  inset: auto;
+  top: 8%;
+  left: 7%;
+  width: 86%;
+  height: 84%;
+  object-fit: fill;
+  pointer-events: none;
+  animation: letit-fade 0.6s ease both;
+}
+
+/* ---------- the paper (footage + overlay) ---------- */
+.letit .paperbox {
+  position: relative;
+  width: min(88vw, 500px);
+  aspect-ratio: 1204 / 1213;
+  margin: 0 auto;
+  filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.55));
+}
+.letit .paperbox > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.letit .overlay {
+  position: absolute;
+  inset: 13% 12.5%;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.3s ease;
+}
+
+.letit textarea {
+  flex: 1;
+  width: 100%;
+  background: none;
+  border: 0;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  font-size: clamp(0.95rem, 0.75rem + 1vw, 1.12rem);
+  line-height: 1.75;
+  color: var(--ink);
+  caret-color: var(--ribbon);
+  padding: 0;
+}
+.letit textarea::placeholder { color: rgba(43, 39, 33, 0.38); }
+
+.letit .meter {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 0.5rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: rgba(43, 39, 33, 0.52);
+  font-variant-numeric: tabular-nums;
+}
+.letit .meter .low { color: var(--ribbon); }
+
+/* typed note */
+.letit .typed {
+  font-size: clamp(0.95rem, 0.75rem + 1vw, 1.14rem);
+  line-height: 1.8;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+  cursor: default;
+  transition: opacity 0.25s ease;
+}
+.letit .typed .caret {
+  display: inline-block;
+  width: 0.58em;
+  height: 1.05em;
+  background: var(--ribbon);
+  vertical-align: text-bottom;
+  margin-left: 1px;
+  animation: letit-blink 1.05s steps(1) infinite;
+}
+@keyframes letit-blink { 50% { opacity: 0; } }
+
+/* ---------- the table of crumpled notes ---------- */
+.letit .tabletext { text-align: center; }
+.letit .tabletext p { margin-left: auto; margin-right: auto; }
+
+.letit .pile {
+  position: relative;
+  height: 320px;
+  margin-top: 0.6rem;
+}
+.letit .ball {
+  position: absolute;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+  transform: rotate(var(--rot, 0deg)) scaleX(var(--flip, 1));
+  will-change: transform;
+}
+.letit .ball img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.5)) brightness(var(--bri, 1));
+}
+.letit .ball:hover,
+.letit .ball:focus-visible {
+  transform: rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)) translateY(-8px);
+}
+.letit .ball.mine { animation: letit-toss 1.15s cubic-bezier(0.3, 1.35, 0.4, 1) both; }
+@keyframes letit-toss {
+  0% { transform: translateY(-56vh) rotate(150deg) scaleX(var(--flip, 1)); }
+  70% { transform: translateY(0) rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)); }
+  84% { transform: translateY(-10px) rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)); }
+  100% { transform: translateY(0) rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)); }
+}
+.letit .ball.shake { animation: letit-refuse 0.45s ease; }
+@keyframes letit-refuse {
+  0%, 100% { margin-left: 0; }
+  25% { margin-left: -6px; }
+  60% { margin-left: 6px; }
+}
+
+.letit .hint {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--cream-faint);
+  animation: letit-fade 1.1s ease 1.15s both;
+}
+
+
+.letit hr.rule {
+  border: 0;
+  border-top: 1px dashed rgba(239, 232, 210, 0.28);
+  margin: 2.4rem 0 1.4rem;
+}
+.letit .footnote {
+  font-size: 0.7rem;
+  line-height: 1.7;
+  color: var(--cream-faint);
+  letter-spacing: 0.03em;
+  max-width: 34rem;
+}
+
+.letit .readwrap p.solo { margin-top: 1.6rem; font-size: 0.92rem; }
+
+.letit .fadeable { transition: opacity 0.8s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .letit .stage,
+  .letit .ball.mine { animation-duration: 0.01s !important; }
+  .letit .typed .caret { animation: none; }
+}
