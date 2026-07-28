@@ -1,10 +1,11 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Courier_Prime } from "next/font/google";
+import { IM_Fell_DW_Pica } from "next/font/google";
 import "./let-it.css";
 
-// Typewriter face, consistent cross-platform.
-const courier = Courier_Prime({ weight: ["400", "700"], subsets: ["latin"] });
+// IM Fell DW Pica — an old Fell printing type, loaded the Next.js way
+// (next/font self-hosts it; no external <link> needed).
+const pica = IM_Fell_DW_Pica({ weight: "400", style: ["normal", "italic"], subsets: ["latin"] });
 
 // The paper is real footage: a crumpled ball blooming open (20 frames) and a
 // flat sheet folding closed (14 frames), chroma-keyed to transparency.
@@ -338,7 +339,7 @@ export default function LetIt() {
   const remaining = 240 - text.length;
 
   return (
-    <main className={`letit ${courier.className}`}>
+    <main className={`letit ${pica.className}`}>
       {scene === "table" && (
         <section className="stage wide">
           <div className="tabletext">
