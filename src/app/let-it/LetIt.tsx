@@ -26,7 +26,6 @@ const POOL = [
 ];
 
 const COPY = {
-  tableH1: "Someone sat at this table before you and left something behind.",
   tableP:
     "Every ball is a real note a stranger couldn't say out loud. Reach for one — or set down one of your own.",
   tableLanded: "Yours just landed. Nobody can tell which one it is — including you.",
@@ -70,7 +69,7 @@ type Scene = "table" | "write" | "read" | "done";
 
 export default function LetIt() {
   const [scene, setScene] = useState<Scene>("table");
-  const [tableLine, setTableLine] = useState(COPY.tableH1);
+  const [tableLine, setTableLine] = useState("");
   const [deposited, setDeposited] = useState(false);
   const [visited, setVisited] = useState(false);
   const [text, setText] = useState("");
@@ -344,7 +343,7 @@ export default function LetIt() {
         <section className="stage wide">
           <div className="tabletext">
             <p className="eyebrow">let it.</p>
-            <h1>{tableLine}</h1>
+            {tableLine !== "" && <h1>{tableLine}</h1>}
             <p>{COPY.tableP}</p>
             <button className="go" onClick={openWrite}>
               {deposited ? COPY.leaveAnother : COPY.leaveNote}
