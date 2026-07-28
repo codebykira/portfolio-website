@@ -34,7 +34,6 @@ const COPY = {
   leaveAnother: "leave another",
   placeholder: "the thing you haven't said.",
   release: "crumple it and let go",
-  solo: "No one will know you read it.",
   fold: "fold it away",
 };
 
@@ -456,7 +455,6 @@ export default function LetIt() {
               <div className="typed" ref={typedRef} aria-live="polite" />
             </div>
           </div>
-          <p className="solo">{COPY.solo}</p>
           <button
             className="quiet fadeable"
             style={{ opacity: typedDone ? 1 : 0 }}
