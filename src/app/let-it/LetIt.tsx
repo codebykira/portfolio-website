@@ -27,6 +27,8 @@ const POOL = [
 ];
 
 const COPY = {
+  tableTitle: "A place to let it go.",
+  tableSub: "Write what you can't say out loud. No one will know it was you.",
   tableLanded: "Yours just landed. Nobody can tell which one it is — including you.",
   leaveNote: "leave a note",
   leaveAnother: "leave another",
@@ -43,14 +45,14 @@ interface Note {
 
 // [left %, bottom px, size px, rot deg, flip, brightness]
 const SPOTS: Array<[number, number, number, number, number, number]> = [
-  [28, -4, 124, -14, 1, 0.96],
-  [37, 18, 104, 24, -1, 0.92],
-  [44, -8, 142, 8, 1, 1.02],
-  [55, 12, 116, -6, -1, 0.9],
-  [62, -4, 100, -20, 1, 0.95],
-  [33, 34, 92, 30, -1, 0.86],
+  [22, -6, 170, -14, 1, 0.62],
+  [33, 24, 145, 24, -1, 0.8],
+  [41, -10, 195, 8, 1, 0.95],
+  [55, 16, 160, -6, -1, 0.72],
+  [64, -6, 140, -20, 1, 0.88],
+  [28, 46, 128, 30, -1, 0.68],
 ];
-const MINE: [number, number, number, number, number, number] = [48, 40, 108, -8, 1, 1];
+const MINE: [number, number, number, number, number, number] = [46, 54, 150, -8, 1, 1.05];
 
 type Scene = "table" | "write" | "read";
 
@@ -328,7 +330,9 @@ export default function LetIt() {
       {scene === "table" && (
         <section className="stage wide">
           <div className="tabletext">
-            {tableLine !== "" && <h1>{tableLine}</h1>}
+            <h1>{COPY.tableTitle}</h1>
+            <p>{COPY.tableSub}</p>
+            {tableLine !== "" && <p className="landed">{tableLine}</p>}
             <button className="go" onClick={openWrite}>
               {deposited ? COPY.leaveAnother : COPY.leaveNote}
             </button>
