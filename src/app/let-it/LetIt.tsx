@@ -27,27 +27,13 @@ const POOL = [
 ];
 
 const COPY = {
-  tableP:
-    "Every ball is a real note a stranger couldn't say out loud. Reach for one — or set down one of your own.",
   tableLanded: "Yours just landed. Nobody can tell which one it is — including you.",
-  tableAgain: "The table keeps what people leave on it. Take another, or let it be.",
-  tableMine: "Not that one. That one is yours — it belongs to whoever sits here next.",
   leaveNote: "leave a note",
   leaveAnother: "leave another",
-  hint: "reach for a ball to open it",
-  writeBack: "back to the table",
   placeholder: "the thing you haven't said.",
-  noEdit: "you can't edit this later",
   release: "crumple it and let go",
   solo: "No one will know you read it.",
   fold: "fold it away",
-  leave: "leave the table",
-  doneH1: "The table stays. What people leave on it stays.",
-  doneP:
-    "Come back when you have something to set down, or something to look for.",
-  footnote:
-    "Notes are stored anonymously — no name, no account, no way to trace one back to whoever wrote it. What you leave here joins the pile for the next person.",
-  sitDown: "sit back down",
 };
 
 interface Note {
@@ -57,29 +43,27 @@ interface Note {
 
 // [left %, bottom px, size px, rot deg, flip, brightness]
 const SPOTS: Array<[number, number, number, number, number, number]> = [
-  [5, -2, 112, -14, 1, 1],
-  [24, 12, 88, 24, -1, 0.95],
-  [41, 46, 116, -6, 1, 0.9],
-  [52, -8, 138, 8, -1, 1.02],
-  [70, 4, 100, -20, 1, 0.93],
-  [83, 44, 84, 30, -1, 0.88],
+  [28, -4, 124, -14, 1, 0.96],
+  [37, 18, 104, 24, -1, 0.92],
+  [44, -8, 142, 8, 1, 1.02],
+  [55, 12, 116, -6, -1, 0.9],
+  [62, -4, 100, -20, 1, 0.95],
+  [33, 34, 92, 30, -1, 0.86],
 ];
-const MINE: [number, number, number, number, number, number] = [16, 62, 104, -8, 1, 1];
+const MINE: [number, number, number, number, number, number] = [48, 40, 108, -8, 1, 1];
 
-type Scene = "table" | "write" | "read" | "done";
+type Scene = "table" | "write" | "read";
 
 export default function LetIt() {
   const [scene, setScene] = useState<Scene>("table");
   const [tableLine, setTableLine] = useState("");
   const [deposited, setDeposited] = useState(false);
-  const [visited, setVisited] = useState(false);
   const [text, setText] = useState("");
   const [mode, setMode] = useState<"type" | "draw">("type");
   const [hasDrawn, setHasDrawn] = useState(false);
   const [releasing, setReleasing] = useState(false);
   const [typedDone, setTypedDone] = useState(false);
   const [readDrawing, setReadDrawing] = useState("");
-  const [shakeIdx, setShakeIdx] = useState<number | null>(null);
 
   const writeImg = useRef<HTMLImageElement>(null);
   const drawCanvas = useRef<HTMLCanvasElement>(null);
@@ -89,6 +73,8 @@ export default function LetIt() {
   const typedRef = useRef<HTMLDivElement>(null);
   const reading = useRef(false);
   const ownId = useRef("");
+  const ownNote = useRef<Note | null>(null);
+  const readOwn = useRef(false);
   const lastPool = useRef(-1);
   const timers = useRef<number[]>([]);
   const reduced = useRef(false);
@@ -252,6 +238,7 @@ export default function LetIt() {
     // send it to the pool while the paper crumples; the ritual proceeds
     // regardless — a network hiccup shouldn't hold the moment hostage.
     const payload: Note = { text: text.trim(), drawing: captureDrawing() };
+    ownNote.current = payload;
     fetch("/api/let-it", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -274,15 +261,10 @@ export default function LetIt() {
     timers.current.push(window.setTimeout(after, reduced.current ? 0 : 320));
   };
 
-  const pick = (idx: number, mine: boolean) => {
+  const pick = (mine: boolean) => {
     if (reading.current) return;
-    if (mine) {
-      setShakeIdx(idx);
-      setTableLine(COPY.tableMine);
-      timers.current.push(window.setTimeout(() => setShakeIdx(null), 480));
-      return;
-    }
     reading.current = true;
+    readOwn.current = mine;
     setTypedDone(false);
     setReadDrawing("");
     setScene("read");
@@ -291,22 +273,26 @@ export default function LetIt() {
   // when the read scene mounts: fetch a stranger's note while the paper opens
   useEffect(() => {
     if (scene !== "read") return;
-    const fetchNote = fetch(
-      `/api/let-it/random${ownId.current ? `?exclude=${ownId.current}` : ""}`
-    )
-      .then((r) => (r.ok ? (r.json() as Promise<Note>) : null))
-      .catch(() => null);
+    const own = readOwn.current;
+    readOwn.current = false;
+    const fetchNote: Promise<Note | null> =
+      own && ownNote.current
+        ? Promise.resolve(ownNote.current)
+        : fetch(`/api/let-it/random${ownId.current ? `?exclude=${ownId.current}` : ""}`)
+            .then((r) => (r.ok ? (r.json() as Promise<Note>) : null))
+            .catch(() => null);
 
     if (readImg.current) readImg.current.src = OPEN[0];
     playSeq(readImg.current, OPEN, 1900, () => {
       void fetchNote.then((note) => {
         let show = note;
-        if (!show || (show.text === "" && show.drawing === "")) {
+        if (!own && (!show || (show.text === "" && show.drawing === ""))) {
           let n = Math.floor(Math.random() * POOL.length);
           if (n === lastPool.current) n = (n + 1) % POOL.length;
           lastPool.current = n;
           show = { text: POOL[n], drawing: "" };
         }
+        if (!show) show = { text: POOL[0], drawing: "" };
         setReadDrawing(show.drawing);
         typeInto(typedRef.current, show.text, () => setTypedDone(true));
       });
@@ -323,8 +309,7 @@ export default function LetIt() {
         typedRef.current.style.opacity = "1";
       }
       reading.current = false;
-      setVisited(true);
-      setTableLine(COPY.tableAgain);
+      setTableLine("");
       setScene("table");
     });
   };
@@ -343,9 +328,7 @@ export default function LetIt() {
       {scene === "table" && (
         <section className="stage wide">
           <div className="tabletext">
-            <p className="eyebrow">let it.</p>
             {tableLine !== "" && <h1>{tableLine}</h1>}
-            <p>{COPY.tableP}</p>
             <button className="go" onClick={openWrite}>
               {deposited ? COPY.leaveAnother : COPY.leaveNote}
             </button>
@@ -356,8 +339,8 @@ export default function LetIt() {
               return (
                 <button
                   key={i}
-                  className={`ball${mine ? " mine" : ""}${shakeIdx === i ? " shake" : ""}`}
-                  aria-label={mine ? "your crumpled note" : "a stranger's crumpled note"}
+                  className={`ball${mine ? " mine" : ""}`}
+                  aria-label={mine ? "your note - open it again" : "a stranger's crumpled note"}
                   style={
                     {
                       left: `${sp[0]}%`,
@@ -370,7 +353,7 @@ export default function LetIt() {
                       "--bri": sp[5],
                     } as React.CSSProperties
                   }
-                  onClick={() => pick(i, mine)}
+                  onClick={() => pick(mine)}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={BALL} alt="" />
@@ -378,20 +361,11 @@ export default function LetIt() {
               );
             })}
           </div>
-          <p className="hint">{COPY.hint}</p>
-          {visited && (
-            <div style={{ textAlign: "center" }}>
-              <button className="quiet" onClick={() => setScene("done")}>
-                {COPY.leave} &rarr;
-              </button>
-            </div>
-          )}
         </section>
       )}
 
       {scene === "write" && (
         <section className="stage">
-          <p className="eyebrow">write it once</p>
           <div className="tools">
             <button
               className={`tool${mode === "type" ? " active" : ""}`}
@@ -427,7 +401,6 @@ export default function LetIt() {
               />
               <div className="meter">
                 <span className={remaining < 30 ? "low" : ""}>{remaining}</span>
-                <span>{COPY.noEdit}</span>
               </div>
             </div>
             <canvas
@@ -462,11 +435,6 @@ export default function LetIt() {
               {COPY.release}
             </button>
           </div>
-          <div style={{ textAlign: "center" }}>
-            <button className="quiet" disabled={releasing} onClick={() => setScene("table")}>
-              {COPY.writeBack}
-            </button>
-          </div>
         </section>
       )}
 
@@ -496,18 +464,6 @@ export default function LetIt() {
         </section>
       )}
 
-      {scene === "done" && (
-        <section className="stage">
-          <p className="eyebrow">until next time</p>
-          <h1>{COPY.doneH1}</h1>
-          <p>{COPY.doneP}</p>
-          <hr className="rule" />
-          <p className="footnote">{COPY.footnote}</p>
-          <button className="quiet" onClick={() => setScene("table")}>
-            {COPY.sitDown}
-          </button>
-        </section>
-      )}
     </main>
   );
 }
