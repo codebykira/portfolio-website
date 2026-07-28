@@ -38,18 +38,19 @@ const COPY = {
 };
 
 interface Note {
+  id?: string;
   text: string;
   drawing: string;
 }
 
 // [left %, bottom px, size px, rot deg, flip, brightness]
 const SPOTS: Array<[number, number, number, number, number, number]> = [
-  [22, -6, 170, -14, 1, 0.62],
-  [33, 24, 145, 24, -1, 0.8],
-  [41, -10, 195, 8, 1, 0.95],
-  [55, 16, 160, -6, -1, 0.72],
-  [64, -6, 140, -20, 1, 0.88],
-  [28, 46, 128, 30, -1, 0.68],
+  [12, -6, 170, -14, 1, 0.62],
+  [27, 24, 145, 24, -1, 0.8],
+  [40, -10, 195, 8, 1, 0.95],
+  [58, 16, 160, -6, -1, 0.72],
+  [71, -6, 140, -20, 1, 0.88],
+  [19, 46, 128, 30, -1, 0.68],
 ];
 const MINE: [number, number, number, number, number, number] = [46, 54, 150, -8, 1, 1.05];
 
@@ -75,6 +76,7 @@ export default function LetIt() {
   const reading = useRef(false);
   const ownId = useRef("");
   const ownNote = useRef<Note | null>(null);
+  const lastRead = useRef("");
   const readOwn = useRef(false);
   const lastPool = useRef(-1);
   const timers = useRef<number[]>([]);
@@ -276,10 +278,11 @@ export default function LetIt() {
     if (scene !== "read") return;
     const own = readOwn.current;
     readOwn.current = false;
+    const excludes = [ownId.current, lastRead.current].filter(Boolean).join(",");
     const fetchNote: Promise<Note | null> =
       own && ownNote.current
         ? Promise.resolve(ownNote.current)
-        : fetch(`/api/let-it/random${ownId.current ? `?exclude=${ownId.current}` : ""}`)
+        : fetch(`/api/let-it/random${excludes ? `?exclude=${excludes}` : ""}`)
             .then((r) => (r.ok ? (r.json() as Promise<Note>) : null))
             .catch(() => null);
 
@@ -294,6 +297,7 @@ export default function LetIt() {
           show = { text: POOL[n], drawing: "" };
         }
         if (!show) show = { text: POOL[0], drawing: "" };
+        if (!own && show.id) lastRead.current = show.id;
         setReadDrawing(show.drawing);
         typeInto(typedRef.current, show.text, () => setTypedDone(true));
       });
@@ -330,7 +334,7 @@ export default function LetIt() {
         <section className="stage wide">
           <div className="tabletext">
             <h1>{COPY.tableTitle}</h1>
-            <p>{COPY.tableSub}</p>
+            <p className="sub">{COPY.tableSub}</p>
             {tableLine !== "" && <p className="landed">{tableLine}</p>}
             <button className="go" onClick={openWrite}>
               {deposited ? COPY.leaveAnother : COPY.leaveNote}
@@ -370,6 +374,9 @@ export default function LetIt() {
       {scene === "write" && (
         <section className="stage">
           <div className="tools">
+            <button className="tool" disabled={releasing} onClick={() => setScene("table")}>
+              back
+            </button>
             <button
               className={`tool${mode === "type" ? " active" : ""}`}
               onClick={() => setMode("type")}
@@ -460,6 +467,7 @@ export default function LetIt() {
             disabled={!typedDone}
             onClick={fold}
           >
+            <span className="fold-ico" aria-hidden="true" />
             {COPY.fold}
           </button>
         </section>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
-import { BUCKET, supa, storageHeaders } from "./lib";
+import { BUCKET, TABLE, supa, storageHeaders, tableMissing } from "./lib";
 
 // POST /api/let-it — deposit a note (text and/or drawing) into the pool.
 
@@ -53,19 +53,34 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "nothing to leave" }, { status: 400 });
   }
 
-  const id = randomUUID();
-  const note = { text, drawing, at: new Date().toISOString() };
-  const res = await fetch(`${cfg.url}/storage/v1/object/${BUCKET}/${id}.json`, {
+  // Preferred home: the letit_notes table.
+  const ins = await fetch(`${cfg.url}/rest/v1/${TABLE}`, {
     method: "POST",
-    headers: { ...storageHeaders(cfg.key), "Content-Type": "application/json" },
-    body: JSON.stringify(note),
+    headers: {
+      ...storageHeaders(cfg.key),
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+    },
+    body: JSON.stringify({ text, drawing }),
   });
-
-  if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    console.error("let-it deposit failed:", res.status, detail.slice(0, 200));
-    return NextResponse.json({ error: "could not set it down" }, { status: 502 });
+  if (ins.ok) {
+    const rows = (await ins.json()) as Array<{ id: string }>;
+    return NextResponse.json({ id: rows[0]?.id ?? "" });
   }
 
-  return NextResponse.json({ id });
+  // Fallback while the table doesn't exist yet: the private bucket.
+  if (tableMissing(ins.status)) {
+    const id = randomUUID();
+    const note = { text, drawing, at: new Date().toISOString() };
+    const res = await fetch(`${cfg.url}/storage/v1/object/${BUCKET}/${id}.json`, {
+      method: "POST",
+      headers: { ...storageHeaders(cfg.key), "Content-Type": "application/json" },
+      body: JSON.stringify(note),
+    });
+    if (res.ok) return NextResponse.json({ id });
+  }
+
+  const detail = await ins.text().catch(() => "");
+  console.error("let-it deposit failed:", ins.status, detail.slice(0, 200));
+  return NextResponse.json({ error: "could not set it down" }, { status: 502 });
 }
