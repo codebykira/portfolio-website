@@ -443,7 +443,6 @@ export default function LetIt() {
 
       {scene === "read" && (
         <section className="stage readwrap">
-          <p className="eyebrow">left for you</p>
           <div className="paperbox">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img ref={readImg} src={OPEN[0]} alt="a stranger's note, uncrumpled" />
