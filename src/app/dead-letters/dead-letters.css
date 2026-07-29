@@ -222,7 +222,8 @@
   font-family: inherit;
   font-size: clamp(0.95rem, 0.75rem + 1vw, 1.12rem);
   line-height: 1.75;
-  color: var(--ink);
+  /* fainter ink while you're still writing */
+  color: rgba(43, 39, 33, 0.55);
   caret-color: var(--ribbon);
   padding: 0;
 }
