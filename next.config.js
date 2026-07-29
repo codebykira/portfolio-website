@@ -21,6 +21,11 @@ const nextConfig = {
   env: {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
+  async redirects() {
+    return [
+      { source: '/let-it', destination: '/dead-letters', permanent: true },
+    ];
+  },
   // Ensure static files are served properly
   async headers() {
     return [

@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { IM_Fell_DW_Pica } from "next/font/google";
-import "./let-it.css";
+import "./dead-letters.css";
 
 // IM Fell DW Pica — an old Fell printing type, loaded the Next.js way
 // (next/font self-hosts it; no external <link> needed).
@@ -10,10 +10,10 @@ const pica = IM_Fell_DW_Pica({ weight: "400", style: ["normal", "italic"], subse
 // The paper is real footage: a crumpled ball blooming open (20 frames) and a
 // flat sheet folding closed (14 frames), chroma-keyed to transparency.
 const pad2 = (n: number) => String(n).padStart(2, "0");
-const OPEN = Array.from({ length: 20 }, (_, i) => `/let-it/open_${pad2(i)}.webp`);
-const CLOSE = Array.from({ length: 14 }, (_, i) => `/let-it/close_${pad2(i)}.webp`);
-const SHEET = "/let-it/sheet.webp";
-const BALL = "/let-it/ball.webp";
+const OPEN = Array.from({ length: 20 }, (_, i) => `/dead-letters/open_${pad2(i)}.webp`);
+const CLOSE = Array.from({ length: 14 }, (_, i) => `/dead-letters/close_${pad2(i)}.webp`);
+const SHEET = "/dead-letters/sheet.webp";
+const BALL = "/dead-letters/ball.webp";
 
 // Fallback notes for when the pool can't be reached (or is empty).
 const POOL = [
@@ -56,7 +56,7 @@ const MINE: [number, number, number, number, number, number] = [46, 54, 150, -8,
 
 type Scene = "table" | "write" | "read";
 
-export default function LetIt() {
+export default function DeadLetters() {
   const [scene, setScene] = useState<Scene>("table");
   const [tableLine, setTableLine] = useState("");
   const [deposited, setDeposited] = useState(false);
@@ -81,6 +81,37 @@ export default function LetIt() {
   const lastPool = useRef(-1);
   const timers = useRef<number[]>([]);
   const reduced = useRef(false);
+  const audio = useRef<AudioContext | null>(null);
+
+  /* a soft typewriter tick — synthesized, no audio file */
+  const tick = useCallback((quiet: boolean) => {
+    try {
+      if (!audio.current) {
+        type WK = typeof window & { webkitAudioContext?: typeof AudioContext };
+        const AC = window.AudioContext ?? (window as WK).webkitAudioContext;
+        if (!AC) return;
+        audio.current = new AC();
+      }
+      const ctx = audio.current;
+      if (ctx.state === "suspended") void ctx.resume();
+      const dur = 0.028;
+      const buf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * dur), ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) {
+        d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2.4);
+      }
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.playbackRate.value = 0.75 + Math.random() * 0.5;
+      const g = ctx.createGain();
+      g.gain.value = quiet ? 0.05 : 0.11;
+      src.connect(g);
+      g.connect(ctx.destination);
+      src.start();
+    } catch {
+      /* sound is garnish — never let it break the page */
+    }
+  }, []);
 
   useEffect(() => {
     reduced.current = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -140,7 +171,7 @@ export default function LetIt() {
       done?.();
     };
     el.addEventListener("click", finish);
-    const tick = () => {
+    const step = () => {
       if (cancelled) return;
       if (i >= note.length) {
         finish();
@@ -148,12 +179,13 @@ export default function LetIt() {
       }
       span.textContent = note.slice(0, ++i);
       const ch = note[i - 1];
+      tick(ch === " ");
       const delay =
         26 + Math.random() * 26 + (ch === " " ? 12 : 0) + (".?!,".indexOf(ch) >= 0 ? 150 : 0);
-      timers.current.push(window.setTimeout(tick, delay));
+      timers.current.push(window.setTimeout(step, delay));
     };
-    tick();
-  }, []);
+    step();
+  }, [tick]);
 
   /* ---------- drawing on the paper ---------- */
 
@@ -242,7 +274,7 @@ export default function LetIt() {
     // regardless — a network hiccup shouldn't hold the moment hostage.
     const payload: Note = { text: text.trim(), drawing: captureDrawing() };
     ownNote.current = payload;
-    fetch("/api/let-it", {
+    fetch("/api/dead-letters", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -282,7 +314,7 @@ export default function LetIt() {
     const fetchNote: Promise<Note | null> =
       own && ownNote.current
         ? Promise.resolve(ownNote.current)
-        : fetch(`/api/let-it/random${excludes ? `?exclude=${excludes}` : ""}`)
+        : fetch(`/api/dead-letters/random${excludes ? `?exclude=${excludes}` : ""}`)
             .then((r) => (r.ok ? (r.json() as Promise<Note>) : null))
             .catch(() => null);
 
