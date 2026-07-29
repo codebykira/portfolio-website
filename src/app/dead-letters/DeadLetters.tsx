@@ -85,6 +85,8 @@ export default function DeadLetters() {
 
   const pressBuf = useRef<AudioBuffer | null>(null);
   const pressLoading = useRef(false);
+  const pressPending = useRef(false);
+  const prevLen = useRef(0);
 
   const ensureCtx = useCallback((): AudioContext | null => {
     try {
@@ -111,17 +113,23 @@ export default function DeadLetters() {
       .then((ab) => ctx.decodeAudioData(ab))
       .then((buf) => {
         pressBuf.current = buf;
+        if (pressPending.current) {
+          pressPending.current = false;
+          playRef.current?.();
+        }
       })
       .catch(() => {
         pressLoading.current = false;
       });
   }, [ensureCtx]);
 
+  const playRef = useRef<(() => void) | null>(null);
   const playPress = useCallback(() => {
     try {
       const ctx = ensureCtx();
       if (!ctx) return;
       if (!pressBuf.current) {
+        pressPending.current = true;
         loadPress();
         return;
       }
@@ -137,6 +145,7 @@ export default function DeadLetters() {
       /* sound is garnish — never let it break the page */
     }
   }, [ensureCtx, loadPress]);
+  playRef.current = playPress;
 
   /* a soft typewriter tick — synthesized, for the note reading itself out */
   const tick = useCallback((quiet: boolean) => {
@@ -402,6 +411,7 @@ export default function DeadLetters() {
 
   const openWrite = () => {
     loadPress();
+    prevLen.current = 0;
     setText("");
     setHasDrawn(false);
     setMode("type");
@@ -487,9 +497,11 @@ export default function DeadLetters() {
                 aria-label="your note"
                 value={text}
                 autoFocus
-                onChange={(e) => setText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key.length === 1 || e.key === "Backspace" || e.key === "Enter") playPress();
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (v.length !== prevLen.current) playPress();
+                  prevLen.current = v.length;
+                  setText(v);
                 }}
                 disabled={releasing || mode === "draw"}
                 style={{ pointerEvents: mode === "draw" ? "none" : "auto" }}
