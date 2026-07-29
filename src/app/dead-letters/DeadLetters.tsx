@@ -83,17 +83,66 @@ export default function DeadLetters() {
   const reduced = useRef(false);
   const audio = useRef<AudioContext | null>(null);
 
-  /* a soft typewriter tick — synthesized, no audio file */
-  const tick = useCallback((quiet: boolean) => {
+  const pressBuf = useRef<AudioBuffer | null>(null);
+  const pressLoading = useRef(false);
+
+  const ensureCtx = useCallback((): AudioContext | null => {
     try {
       if (!audio.current) {
         type WK = typeof window & { webkitAudioContext?: typeof AudioContext };
         const AC = window.AudioContext ?? (window as WK).webkitAudioContext;
-        if (!AC) return;
+        if (!AC) return null;
         audio.current = new AC();
       }
-      const ctx = audio.current;
-      if (ctx.state === "suspended") void ctx.resume();
+      if (audio.current.state === "suspended") void audio.current.resume();
+      return audio.current;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  /* the real key-press sample, for when you're writing your letter */
+  const loadPress = useCallback(() => {
+    const ctx = ensureCtx();
+    if (!ctx || pressBuf.current || pressLoading.current) return;
+    pressLoading.current = true;
+    fetch("/dead-letters/key-press.wav")
+      .then((r) => r.arrayBuffer())
+      .then((ab) => ctx.decodeAudioData(ab))
+      .then((buf) => {
+        pressBuf.current = buf;
+      })
+      .catch(() => {
+        pressLoading.current = false;
+      });
+  }, [ensureCtx]);
+
+  const playPress = useCallback(() => {
+    try {
+      const ctx = ensureCtx();
+      if (!ctx) return;
+      if (!pressBuf.current) {
+        loadPress();
+        return;
+      }
+      const src = ctx.createBufferSource();
+      src.buffer = pressBuf.current;
+      src.playbackRate.value = 0.92 + Math.random() * 0.16;
+      const g = ctx.createGain();
+      g.gain.value = 0.75;
+      src.connect(g);
+      g.connect(ctx.destination);
+      src.start();
+    } catch {
+      /* sound is garnish — never let it break the page */
+    }
+  }, [ensureCtx, loadPress]);
+
+  /* a soft typewriter tick — synthesized, for the note reading itself out */
+  const tick = useCallback((quiet: boolean) => {
+    try {
+      const ctx = ensureCtx();
+      if (!ctx) return;
       const dur = 0.028;
       const buf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * dur), ctx.sampleRate);
       const d = buf.getChannelData(0);
@@ -352,6 +401,7 @@ export default function DeadLetters() {
   };
 
   const openWrite = () => {
+    loadPress();
     setText("");
     setHasDrawn(false);
     setMode("type");
@@ -438,6 +488,9 @@ export default function DeadLetters() {
                 value={text}
                 autoFocus
                 onChange={(e) => setText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key.length === 1 || e.key === "Backspace" || e.key === "Enter") playPress();
+                }}
                 disabled={releasing || mode === "draw"}
                 style={{ pointerEvents: mode === "draw" ? "none" : "auto" }}
               />
