@@ -87,6 +87,7 @@ export default function DeadLetters() {
   const pressLoading = useRef(false);
   const pressPending = useRef(false);
   const prevLen = useRef(0);
+  const lastPress = useRef(0);
 
   const ensureCtx = useCallback((): AudioContext | null => {
     try {
@@ -133,11 +134,15 @@ export default function DeadLetters() {
         loadPress();
         return;
       }
+      // rate-limit: fast typing would stack overlapping samples into noise
+      const now = performance.now();
+      if (now - lastPress.current < 55) return;
+      lastPress.current = now;
       const src = ctx.createBufferSource();
       src.buffer = pressBuf.current;
       src.playbackRate.value = 0.92 + Math.random() * 0.16;
       const g = ctx.createGain();
-      g.gain.value = 0.75;
+      g.gain.value = 0.3;
       src.connect(g);
       g.connect(ctx.destination);
       src.start();
