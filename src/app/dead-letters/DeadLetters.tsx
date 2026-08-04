@@ -486,9 +486,6 @@ export default function DeadLetters() {
             </div>
             <div className="writesheet">
           <div className="tools">
-            <button className="tool" disabled={releasing} onClick={() => setScene("table")}>
-              back
-            </button>
             <button
               className={`tool${mode === "type" ? " active" : ""}`}
               onClick={() => setMode("type")}
