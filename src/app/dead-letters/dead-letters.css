@@ -87,13 +87,19 @@
   text-decoration: underline dotted;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.35em;
-  transition: color 0.35s ease, text-decoration-color 0.35s ease;
+  transition: color 0.35s ease, text-decoration-color 0.35s ease, transform 0.25s ease;
 }
 .letit .go:hover:not(:disabled),
-.letit .go:focus-visible { color: #fff; text-decoration-color: var(--ribbon); }
+.letit .go:focus-visible {
+  color: #fff;
+  text-decoration-style: solid;
+  text-decoration-color: var(--ribbon);
+  transform: translateY(-2px);
+}
 .letit .go:disabled { color: var(--cream-faint); cursor: default; opacity: 0.55; }
 
 .letit .quiet {
+  display: inline-block;
   background: none;
   border: 0;
   padding: 0.2rem 0;
@@ -106,10 +112,15 @@
   text-decoration: underline dotted;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.35em;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease, transform 0.25s ease;
 }
 .letit .quiet:hover,
-.letit .quiet:focus-visible { color: var(--cream-dim); }
+.letit .quiet:focus-visible {
+  color: var(--cream);
+  text-decoration-style: solid;
+  text-decoration-color: var(--ribbon);
+  transform: translateY(-2px);
+}
 
 /* fold it away: centered under the note, a size up */
 .letit .readwrap .quiet {
@@ -143,6 +154,7 @@
   margin-bottom: 0.9rem;
 }
 .letit .tool {
+  display: inline-block;
   background: none;
   border: 0;
   padding: 0.1rem 0.1rem;
@@ -154,10 +166,15 @@
   text-decoration: underline dotted;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.35em;
-  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease, transform 0.25s ease;
 }
 .letit .tool:hover,
-.letit .tool:focus-visible { color: var(--cream-dim); }
+.letit .tool:focus-visible {
+  color: var(--cream);
+  text-decoration-style: solid;
+  text-decoration-color: var(--ribbon);
+  transform: translateY(-2px);
+}
 .letit .tool.active {
   color: var(--cream);
   text-decoration-style: solid;
