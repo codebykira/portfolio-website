@@ -37,6 +37,7 @@ const COPY = {
   leaveAnother: "leave another",
   placeholder: "the thing you haven't said.",
   release: "crumple it and let go",
+  readPile: "read what others let go",
   fold: "fold it away",
 };
 
@@ -483,6 +484,9 @@ export default function DeadLetters() {
               <h1>{COPY.name}</h1>
               <p className="sub">{COPY.tableTitle}</p>
               <p>{COPY.tableSub}</p>
+              <button className="slab" onClick={() => setScene("table")}>
+                {COPY.readPile}
+              </button>
             </div>
             <div className="writesheet">
           <div className="tools">

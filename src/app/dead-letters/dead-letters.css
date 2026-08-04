@@ -1,5 +1,11 @@
-/* let it. — a black table under a low light. Typewriter face, red-ribbon accent.
-   The paper is real footage: chroma-keyed crumple / uncrumple sequences. */
+/* Dead Letters — a black table under a low light. Typewriter face, red-ribbon
+   accent. The paper is real footage: chroma-keyed crumple / uncrumple. */
+
+/* the whole page is black on this route — no white edges, no overscroll flash */
+html:has(.letit),
+body:has(.letit) {
+  background: #000;
+}
 
 .letit {
   --cream: #efe8d2;
@@ -12,7 +18,7 @@
   background-color: #0c0c0c;
   background-image: radial-gradient(
     115% 90% at 50% 18%,
-    #1e1e1e 0%,
+    #171717 0%,
     #0c0c0c 42%,
     #060606 76%,
     #000 100%
@@ -395,4 +401,27 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
     gap: 3.5rem;
   }
+}
+
+
+/* the torn-label slab button — read what others let go */
+.letit .slab {
+  display: inline-block;
+  margin-top: 1.6rem;
+  padding: 0.85rem 1.7rem;
+  background: #2c2c2a;
+  border: 0;
+  font-family: var(--font-elite), "Courier New", monospace;
+  font-size: 1.02rem;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+  cursor: pointer;
+  clip-path: polygon(2% 14%, 7% 0%, 96% 4%, 100% 34%, 98% 86%, 89% 100%, 3% 97%, 0% 72%);
+  transition: background 0.3s ease, transform 0.25s ease, color 0.3s ease;
+}
+.letit .slab:hover,
+.letit .slab:focus-visible {
+  background: #3a3a37;
+  color: #fff;
+  transform: translateY(-2px) rotate(-0.6deg);
 }
