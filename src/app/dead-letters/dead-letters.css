@@ -35,6 +35,7 @@
   animation: letit-rise 1s cubic-bezier(0.2, 0.7, 0.25, 1) both;
 }
 .letit .stage.wide { max-width: 46rem; }
+.letit .stage.xwide { max-width: 66rem; }
 
 @keyframes letit-rise {
   from { opacity: 0; transform: translateY(12px); }
@@ -71,40 +72,40 @@
 }
 .letit p.tight { margin-bottom: 0; }
 
-/* typewriter-bracket buttons */
+/* controls: Special Elite, dotted underline */
 .letit .go {
   display: inline-block;
   margin-top: 1.7rem;
   background: none;
   border: 0;
-  padding: 0.1rem 0.2rem;
-  font-family: inherit;
-  font-size: 0.98rem;
+  padding: 0.1rem 0.15rem;
+  font-family: var(--font-elite), "Courier New", monospace;
+  font-size: 0.95rem;
   color: var(--cream);
   cursor: pointer;
   letter-spacing: 0.02em;
-  transition: color 0.35s ease;
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
+  transition: color 0.35s ease, text-decoration-color 0.35s ease;
 }
-.letit .go::before { content: "[ "; color: var(--cream-faint); transition: color 0.35s ease; }
-.letit .go::after { content: " ]"; color: var(--cream-faint); transition: color 0.35s ease; }
 .letit .go:hover:not(:disabled),
-.letit .go:focus-visible { color: #fff; }
-.letit .go:hover:not(:disabled)::before,
-.letit .go:hover:not(:disabled)::after,
-.letit .go:focus-visible::before,
-.letit .go:focus-visible::after { color: var(--ribbon); }
+.letit .go:focus-visible { color: #fff; text-decoration-color: var(--ribbon); }
 .letit .go:disabled { color: var(--cream-faint); cursor: default; opacity: 0.55; }
 
 .letit .quiet {
   background: none;
   border: 0;
   padding: 0.2rem 0;
-  font-family: inherit;
+  font-family: var(--font-elite), "Courier New", monospace;
   font-size: 0.8rem;
   letter-spacing: 0.05em;
   color: var(--cream-faint);
   cursor: pointer;
   margin-top: 2.4rem;
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
   transition: color 0.3s ease;
 }
 .letit .quiet:hover,
@@ -145,20 +146,23 @@
   background: none;
   border: 0;
   padding: 0.1rem 0.1rem;
-  font-family: inherit;
+  font-family: var(--font-elite), "Courier New", monospace;
   font-size: 0.78rem;
   letter-spacing: 0.05em;
   color: var(--cream-faint);
   cursor: pointer;
-  transition: color 0.3s ease;
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
 }
-.letit .tool::before { content: "[ "; }
-.letit .tool::after { content: " ]"; }
 .letit .tool:hover,
 .letit .tool:focus-visible { color: var(--cream-dim); }
-.letit .tool.active { color: var(--cream); }
-.letit .tool.active::before,
-.letit .tool.active::after { color: var(--ribbon); }
+.letit .tool.active {
+  color: var(--cream);
+  text-decoration-style: solid;
+  text-decoration-color: var(--ribbon);
+}
 
 /* the drawing layer on the paper. Explicit width/height matter: a canvas is a
    replaced element, so `inset` alone won't stretch it — its intrinsic size
@@ -351,4 +355,27 @@
   .letit .stage,
   .letit .ball.mine { animation-duration: 0.01s !important; }
   .letit .typed .caret { animation: none; }
+}
+
+
+/* ---------- the writing view: title left, sheet right ---------- */
+.letit .writegrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.2rem;
+  align-items: center;
+}
+.letit .writeintro h1 {
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+  margin-bottom: 0.6rem;
+}
+.letit .writeintro .sub {
+  font-size: 1.12rem;
+  margin-bottom: 0.35rem;
+}
+@media (min-width: 940px) {
+  .letit .writegrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
+    gap: 3.5rem;
+  }
 }

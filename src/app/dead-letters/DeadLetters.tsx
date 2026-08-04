@@ -1,11 +1,13 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { IM_Fell_DW_Pica } from "next/font/google";
+import { IM_Fell_DW_Pica, Special_Elite } from "next/font/google";
 import "./dead-letters.css";
 
 // IM Fell DW Pica — an old Fell printing type, loaded the Next.js way
 // (next/font self-hosts it; no external <link> needed).
 const pica = IM_Fell_DW_Pica({ weight: "400", style: ["normal", "italic"], subsets: ["latin"] });
+// Special Elite carries the buttons/controls.
+const elite = Special_Elite({ weight: "400", subsets: ["latin"], variable: "--font-elite" });
 
 // The paper is real footage: a crumpled ball blooming open (20 frames) and a
 // flat sheet folding closed (14 frames), chroma-keyed to transparency.
@@ -27,6 +29,7 @@ const POOL = [
 ];
 
 const COPY = {
+  name: "Dead Letters",
   tableTitle: "A place to let it go.",
   tableSub: "Write what you can't say out loud. No one will know it was you.",
   tableLanded: "Yours just landed. Nobody can tell which one it is — including you.",
@@ -57,7 +60,7 @@ const MINE: [number, number, number, number, number, number] = [46, 54, 150, -8,
 type Scene = "table" | "write" | "read";
 
 export default function DeadLetters() {
-  const [scene, setScene] = useState<Scene>("table");
+  const [scene, setScene] = useState<Scene>("write");
   const [tableLine, setTableLine] = useState("");
   const [deposited, setDeposited] = useState(false);
   const [text, setText] = useState("");
@@ -185,6 +188,11 @@ export default function DeadLetters() {
     });
     const t = timers.current;
     return () => t.forEach(clearTimeout);
+  }, []);
+
+  useEffect(() => {
+    loadPress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* play a frame sequence into an <img> — the motion curve is the footage's own.
@@ -426,7 +434,7 @@ export default function DeadLetters() {
   const remaining = 240 - text.length;
 
   return (
-    <main className={`letit ${pica.className}`}>
+    <main className={`letit ${pica.className} ${elite.variable}`}>
       {scene === "table" && (
         <section className="stage wide">
           <div className="tabletext">
@@ -469,7 +477,14 @@ export default function DeadLetters() {
       )}
 
       {scene === "write" && (
-        <section className="stage">
+        <section className="stage xwide">
+          <div className="writegrid">
+            <div className="writeintro">
+              <h1>{COPY.name}</h1>
+              <p className="sub">{COPY.tableTitle}</p>
+              <p>{COPY.tableSub}</p>
+            </div>
+            <div className="writesheet">
           <div className="tools">
             <button className="tool" disabled={releasing} onClick={() => setScene("table")}>
               back
@@ -546,6 +561,8 @@ export default function DeadLetters() {
             >
               {COPY.release}
             </button>
+          </div>
+            </div>
           </div>
         </section>
       )}
