@@ -10,8 +10,7 @@ const Story = () => {
       {/* Content */}
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Story Text */}
-        <div className="lg:w-1/2 h-auto text-white/70
-          bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8 shadow-sm space-y-6">
+        <div className="lg:w-1/2 flex flex-col justify-center text-white/70 space-y-6">
 
           <div className="flex items-center gap-2">
 

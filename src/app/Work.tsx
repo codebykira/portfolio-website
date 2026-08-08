@@ -2,10 +2,10 @@
 import React from "react";
 import ProjectShowcase from "../components/project-showcase";
 import ChristmasCardEmbed from "../components/christmas-card-embed";
+import ResumeBuilderEmbed from "../components/resume-builder-embed";
 
 // Live demo of the Christmas card site.
 const CHRISTMAS_CARD_DEMO_URL = "https://christmas-cards-web.vercel.app/";
-
 
 interface WorkProps {
   onProjectEnter: () => void;
@@ -16,50 +16,50 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
   return (
       <div
         id="work"
-        className="min-h-screen mx-auto flex justify-center items-center flex-col"
+        className="min-h-screen w-full flex justify-center items-center flex-col"
       >
 
-      <div className="space-y-6 flex flex-col items-center ">
+      <div className="w-full max-w-5xl px-4 space-y-6 flex flex-col">
         <div
-          className="cursor-pointer"
+          className="w-full cursor-pointer"
           onClick={() => window.location.href = '/atrios'}
         >
           <ProjectShowcase
             title="Atrios"
             description={[
-              "The best products you use came from a friend, not an ad. Atrios is built on that instinct: you think about what your friends would actually want, curate a few, and get rewarded for the care. They discover things worth their time. We're building the version that does.",
-              "I shape the Atrios experience. I designed every screen and write the code behind them, backend to frontend. From the tastemaker's first onboarding question to the email that lands when a meeting books, it's one continuous surface, and I hold all of it. The best products feel like someone cared, and that's the part I don't compromise on.",
+              "The best products you use came from a friend, not an ad. Atrios is built on that instinct: you think about what your friends would actually want, curate a few, and get rewarded for the care. We're building the version that does, backed by a16z.",
+              "I shape the Atrios experience. I designed every screen and write the code behind them, backend to frontend. Every screen, every line, every detail that makes it feel less like software.",
             ]}
             images={[
               {
-                src: "/atrios-companies-v2.png",
-                alt: "Atrios companies marketplace",
-                width: 3024,
-                height: 1654
-              }
+                src: "/atrios-network-v2.png",
+                alt: "Atrios — introductions for your network",
+                width: 3006,
+                height: 1652,
+              },
             ]}
             logo={{
               src: "/atrios-icon.png",
               alt: "Atrios Logo",
               width: 530,
-              height: 506
+              height: 506,
             }}
             gradientColor="#F3E6C4"
-            widthClass="w-[800px] max-w-full"
-            heightClass="h-[45vh]"
+            heightClass="h-[72vh]"
             revealOnHover
+            mediaOffset
           />
         </div>
 
         <div
-          className="cursor-pointer"
+          className="w-full cursor-pointer"
           onClick={() => window.location.href = '/blind-hangouts'}
         >
           <ProjectShowcase
             title="Blind Hangouts"
             description={[
               "The people you want to see most are usually the ones you see least. Not because you don't care, but because caring costs coordination.",
-              "I founded Blind Hangouts to take the coordination off your plate. It learns what you and your friends like to do, finds a time that works for everyone, and books the plan. There's always a small surprise in it too.",
+              "I founded Blind Hangouts, backed by Founders Inc, to take the coordination off your plate. It learns what you and your friends like to do, finds a time that works for everyone, and books the plan. There's always a small surprise in it too.",
             ]}
             images={[
               {
@@ -76,35 +76,19 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
               height: 48
             }}
             gradientColor="#F7EED7"
-            heightClass="h-auto"
-            stacked
-            imageScale={1.3}
-            mediaAspect="16/6"
-          />
-        </div>
-
-        <div
-          className="cursor-pointer"
-          onClick={() => window.open(CHRISTMAS_CARD_DEMO_URL, "_blank", "noopener,noreferrer")}
-        >
-          <ProjectShowcase
-            title="Christmas Card"
-            description={[
-              "An interactive 3D Christmas card you can personalize with a message and photos, then share as a link.",
-            ]}
-            media={<ChristmasCardEmbed />}
-            gradientColor="#C0392B"
-            widthClass="w-[360px] max-w-full"
-            heightClass="h-[42vh]"
+            heightClass="h-[72vh]"
             revealOnHover
+            mediaCenter
           />
         </div>
 
-        <div>
+        <div className="w-full">
           <ProjectShowcase
             title="Waverly"
             description={[
-              "AI social platform for effortless community creation and discovery, reaching 10K users and featured by BBC News, Betakit, and Collision Conference."
+              "Waverly was my first real job in a startup. Employee #2, Betaworks-backed, an AI social platform for finding your people. We got to 10K users and were covered by BBC News, BetaKit, and Collision.",
+              "My job was growth. What I actually did was fall in love with building. I kept asking why people weren't coming back, and every answer lived inside the product, so eventually I was in there designing and writing it. Everything I do now started there.",
+              "We were trying to make recommendations out of language, before ChatGPT, before the models could really do it. We were right about language being the thing. I've been building on that bet ever since.",
             ]}
             images={[
               {
@@ -127,42 +111,47 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
               height: 48
             }}
             gradientColor="#FEBA4F"
-            tags={[
-              { emoji: "🚀", label: "Founding Team" },
-              { emoji: "🧠", label: "Product Strategy" },
-              { emoji: "📈", label: "Growth" },
-              { emoji: "💻", label: "Web Developer" },
-
-            ]}
+            heightClass="h-[72vh]"
+            revealOnHover
+            mediaCenter
+            mediaWidth="70%"
+            logoBgColor="#3D00BD"
           />
         </div>
 
-        <div>
-          <ProjectShowcase
-            title="Linkflo"
-            description={[
-              "Built an AI that improves GP–LP matchmaking at Included VC",
-            ]}
-            images={[
-              {
-                src: "/linkflo.png",
-                alt: "Linkflo Screenshot 1",
-                width: 1700,
-                height: 1500
-              }
-            ]}
-            logo={{
-              src: "/linkflo-logo.jpg",
-              alt: "Linkflo Logo",
-              width: 48,
-              height: 48
-            }}
-            tags={[
-              { emoji: "🎨", label: "Product Design" },
-              { emoji: "💻", label: "Web Developer" },
+        {/* Christmas card + résumé builder, side by side at half width each. */}
+        <div className="w-full flex flex-col md:flex-row gap-6">
+          <div
+            className="w-full md:w-1/2 cursor-pointer"
+            onClick={() => window.open(CHRISTMAS_CARD_DEMO_URL, "_blank", "noopener,noreferrer")}
+          >
+            <ProjectShowcase
+              title="Christmas Card"
+              description={[
+                "An interactive 3D Christmas card you can personalize with a message and photos, then share as a link.",
+              ]}
+              media={<ChristmasCardEmbed />}
+              gradientColor="#C0392B"
+              heightClass="h-[42vh]"
+              revealOnHover
+            />
+          </div>
 
-            ]}
-          />
+          <div
+            className="w-full md:w-1/2 cursor-pointer"
+            onClick={() => window.location.href = '/resume'}
+          >
+            <ProjectShowcase
+              title="Résumé Builder"
+              description={[
+                "Drop in any résumé — PDF or DOCX — and watch it get parsed and re-rendered in a clean, ATS-friendly template in seconds.",
+              ]}
+              media={<ResumeBuilderEmbed />}
+              gradientColor="#7733FF"
+              heightClass="h-[42vh]"
+              revealOnHover
+            />
+          </div>
         </div>
       </div>
     </div>
