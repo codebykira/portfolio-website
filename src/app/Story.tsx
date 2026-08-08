@@ -34,11 +34,11 @@ const Story = () => {
           </div>
           <div ref={containerRef} style={{ position: 'relative' }}>
             <VariableProximity
-              label={`I've always been interested in how people connect and how technology can make those moments easier. 
+              label={`I paint. Mostly portraits, often of strangers, which means spending a while looking closely at someone and trying to get them right.
 
-I started in finance, but curiosity led me into emerging tech, from blockchain at the Blockchain Research Institute to the founding team at Waverly, backed by Betaworks and Mozilla. That journey inspired me to pursue a Master's in Computer Science at UPenn.
+That's more or less what I do at work too. I keep building products about how people find each other. An AI that plans your social life, a platform for finding your people, a marketplace that runs on who knows whom. Same question every time, different shape.
 
-I love building products that bring people together. At Founders Inc, I created Blind Hangouts, an AI that plans your social life, which grew to hundreds on the waitlist and 20k+ views on Instagram.`}
+I got here sideways: finance, then the founding team at Waverly, then a CS master's at Penn so I could build things instead of describing them. Now I design the screens and write the code. Painting teaches you what to leave out, and product works the same way: most details don't matter, and the few that do, matter enormously.`}
               className={'variable-proximity-demo'}
               fromFontVariationSettings="'wght' 400, 'opsz' 9"
               toFontVariationSettings="'wght' 1000, 'opsz' 40"
