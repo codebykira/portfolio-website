@@ -26,11 +26,13 @@ const nextConfig = {
       { source: '/let-it', destination: '/dead-letters', permanent: true },
     ];
   },
-  // Ensure static files are served properly
+  // Cache assets in production only. In development this would cache the dev JS
+  // chunks (which have stable URLs), making edits appear stale in the browser.
   async headers() {
+    if (process.env.NODE_ENV !== 'production') return [];
     return [
       {
-        source: '/(.*)',
+        source: '/((?!_next/).*)',
         headers: [
           {
             key: 'Cache-Control',

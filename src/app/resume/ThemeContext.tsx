@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 
 /* ============================================================
    THEME REGISTRY — add a new company style here + a CSS block in resume.css
@@ -35,16 +35,21 @@ export function useResumeTheme(): ResumeThemeCtx {
  */
 export function ResumeThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<ThemeId>("claude");
+  // Embedded previews (?embed=1) share this origin's localStorage, so they must
+  // not read or write the visitor's saved style — they just honor ?theme=.
+  const embedRef = useRef(false);
 
   // Load the saved (or ?theme=) style once, and mark <html> for resume styling.
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    embedRef.current = params.get("embed") === "1";
     let saved: ThemeId = "claude";
-    // A ?theme= override (used by the server-side PDF render) wins over the
-    // persisted choice so the exported PDF matches the picked style.
-    const urlTheme = new URLSearchParams(window.location.search).get("theme");
+    // A ?theme= override (used by the server-side PDF render and embeds) wins
+    // over the persisted choice so the render matches the picked style.
+    const urlTheme = params.get("theme");
     if (urlTheme && THEMES.some((t) => t.id === urlTheme)) {
       saved = urlTheme as ThemeId;
-    } else {
+    } else if (!embedRef.current) {
       try {
         const stored = localStorage.getItem("resume-theme");
         if (stored && THEMES.some((t) => t.id === stored)) saved = stored as ThemeId;
@@ -60,9 +65,10 @@ export function ResumeThemeProvider({ children }: { children: React.ReactNode })
     };
   }, []);
 
-  // Reflect the active style on <html> and persist it.
+  // Reflect the active style on <html>, and persist it (unless embedded).
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    if (embedRef.current) return;
     try {
       localStorage.setItem("resume-theme", theme);
     } catch {

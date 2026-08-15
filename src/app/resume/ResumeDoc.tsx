@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Link as LinkIcon,
@@ -11,15 +11,17 @@ import {
 } from "@phosphor-icons/react";
 import type { Resume } from "./resumeData";
 import { THEMES, type ThemeId, useResumeTheme } from "./ThemeContext";
+import ResumeUpload from "./ResumeUpload";
 import "./resume.css";
 
 /* Per-role variant → PDF endpoint + download filename + nav routing */
-export type Variant = "product" | "design" | "ai";
+export type Variant = "product" | "design" | "ai" | "fullstack";
 
 const VARIANTS: Record<Variant, { fileBase: string; path: string }> = {
   product: { fileBase: "Kira-Cheung-Resume", path: "/resume" },
   design: { fileBase: "Kira-Cheung-Design-Engineer-Resume", path: "/resume/design" },
   ai: { fileBase: "Kira-Cheung-AI-Deployment-Engineer-Resume", path: "/resume/ai" },
+  fullstack: { fileBase: "Kira-Cheung-Full-Stack-Engineer-Resume", path: "/resume" },
 };
 
 const VERSION_LINKS: { variant: Variant; label: string }[] = [
@@ -34,22 +36,108 @@ const NAME_MARKS: Partial<Record<ThemeId, string>> = {
   notion: "/notion-face.png",
 };
 
+/* Build a schema.org Person from the resume data so AI/crawlers scanning the
+   live page get a clean, unambiguous profile instead of inferring from prose.
+   Derived per-variant so title/employer/skills always match what's shown. */
+function buildStructuredData(data: Resume): Record<string, unknown> {
+  const emailHref = data.contact.find((c) => c.href?.startsWith("mailto:"))?.href;
+  const websiteHref = data.contact.find((c) => c.href?.startsWith("http"))?.href;
+  const socialHrefs = data.contact
+    .filter((c) => c.href?.startsWith("http") && c.href !== websiteHref)
+    .map((c) => c.href as string);
+  const current = data.experience[0];
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: data.name,
+    description: data.summary,
+    ...(current ? { jobTitle: current.role } : {}),
+    ...(websiteHref ? { url: websiteHref } : {}),
+    ...(emailHref ? { email: emailHref.replace("mailto:", "") } : {}),
+    address: { "@type": "PostalAddress", addressLocality: "Brooklyn", addressRegion: "NY" },
+    ...(socialHrefs.length ? { sameAs: socialHrefs } : {}),
+    ...(current ? { worksFor: { "@type": "Organization", name: current.org } } : {}),
+    alumniOf: data.education.map((e) => ({
+      "@type": "CollegeOrUniversity",
+      name: e.org,
+    })),
+    knowsAbout: data.skills.flatMap((g) => g.items),
+  };
+}
+
 function SectionTitle({ title, icon: SectionIcon }: { title: string; icon: Icon }) {
   return (
     <div className="section-title-row">
       <span className="section-title-pill">
         <SectionIcon className="section-icon" size={15} weight="regular" aria-hidden />
-        <span className="section-title">{title}</span>
+        <h2 className="section-title">{title}</h2>
       </span>
       <span className="rule" />
     </div>
   );
 }
 
-export default function ResumeDoc({ data, variant }: { data: Resume; variant: Variant }) {
+export default function ResumeDoc({
+  data,
+  variant,
+  chromeless = false,
+  editable = false,
+  onEdit,
+}: {
+  data: Resume;
+  variant: Variant;
+  chromeless?: boolean;
+  editable?: boolean;
+  onEdit?: (path: string, value: string) => void;
+}) {
   // Company "Style" is owned by the resume layout so it survives role switches.
   const { theme, setTheme } = useResumeTheme();
+
+  // When `editable`, every text field becomes contentEditable and commits on
+  // blur (not per-keystroke, so the caret is never disrupted mid-typing).
+  const editProps = (path: string) =>
+    editable
+      ? {
+          contentEditable: true,
+          suppressContentEditableWarning: true,
+          spellCheck: false,
+          onBlur: (e: React.FocusEvent<HTMLElement>) =>
+            onEdit?.(path, e.currentTarget.textContent ?? ""),
+        }
+      : {};
   const [zoom, setZoom] = useState(1);
+
+  // On the "plain" style, visitors can upload their own résumé to see it
+  // rendered in this template. The parsed result overrides the shown data.
+  const [override, setOverride] = useState<Resume | null>(null);
+  const activeData = override ?? data;
+  const isUpload = override !== null;
+
+  // On the "plain" style, before anything is uploaded, we blur Kira's résumé
+  // behind a centered "drop your résumé" prompt.
+  const showUploadPrompt = theme === "plain" && !isUpload && !chromeless;
+
+  // `chromeless` (embedded in the canvas Preview) or `?embed=1` hides the
+  // toolbar + upload affordance and renders just the styled sheet.
+
+  // Embedded preview (?embed=1): no toolbar, and the whole sheet auto-fits the
+  // frame so it can be dropped into a card as a live, responsive thumbnail.
+  const [embed, setEmbed] = useState(false);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("embed") !== "1") return;
+    setEmbed(true);
+    const fit = () => {
+      const sheetW = 8.5 * 96;
+      const sheetH = 11 * 96;
+      const availW = window.innerWidth - 24;
+      const availH = window.innerHeight - 24;
+      setZoom(Math.min(availW / sheetW, availH / sheetH));
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
 
   // Fit the whole Letter page (8.5in x 11in) within the current viewport.
   const fitToScreen = () => {
@@ -64,6 +152,12 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
   const [saving, setSaving] = useState(false);
   // Download a real, styled PDF rendered server-side by headless Chrome.
   const savePdf = async () => {
+    // An uploaded résumé lives only in the browser, so the server can't
+    // re-render it — print the on-screen sheet instead.
+    if (isUpload) {
+      window.print();
+      return;
+    }
     if (saving) return;
     setSaving(true);
     try {
@@ -89,6 +183,12 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
 
   return (
     <>
+      {/* Machine-readable profile for AI/ATS scanners reading the live page. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildStructuredData(activeData)) }}
+      />
+
       {/* Google Fonts — React 19 hoists these into <head> */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -97,8 +197,13 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
         rel="stylesheet"
       />
 
-      <div className="resume-root">
-        <div className="toolbar">
+      <div
+        className={`resume-root${embed ? " resume-root--embed" : ""}${
+          chromeless ? " resume-root--bare" : ""
+        }`}
+      >
+        {!embed && !chromeless && (
+        <div className="toolbar" role="toolbar" aria-label="Résumé display controls">
           <span className="label">Version</span>
           <div style={{ display: "flex", gap: 8 }}>
             {VERSION_LINKS.map((v) => (
@@ -131,26 +236,46 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
             {saving ? "Saving…" : "Save PDF"}
           </button>
         </div>
+        )}
 
-        <main className="sheet" style={{ zoom }}>
+        {/* The résumé itself is a self-contained <article> so a scanner has a
+            clean boundary and reads straight through, skipping the toolbar. */}
+        <main>
+          <article
+            className={`sheet${showUploadPrompt ? " sheet-prompting" : ""}`}
+            aria-label={
+              isUpload
+                ? `Uploaded résumé of ${activeData.name}`
+                : `Résumé of ${activeData.name} — ${variant} version`
+            }
+            style={{ zoom }}
+          >
+          {/* Plain style only: hover the sheet to upload & restyle a résumé. */}
+          {theme === "plain" && !chromeless && (
+            <ResumeUpload
+              onParsed={setOverride}
+              hasOverride={isUpload}
+              onReset={() => setOverride(null)}
+            />
+          )}
           <header>
             <div className="name-row">
               {NAME_MARKS[theme] ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img className="name-mark" src={NAME_MARKS[theme]} alt="" aria-hidden />
               ) : null}
-              <h1 className="name">{data.name}</h1>
+              <h1 className="name" {...editProps("name")}>{activeData.name}</h1>
             </div>
             <div className="contact">
-              {data.contact.map((c, i) => {
+              {activeData.contact.map((c, i) => {
                 const IconCmp = c.icon;
                 const inner = (
                   <>
                     <IconCmp size={12} weight="fill" aria-hidden />
-                    {c.text}
+                    <span {...editProps(`contact.${i}`)}>{c.text}</span>
                   </>
                 );
-                return c.href ? (
+                return c.href && !editable ? (
                   <a key={i} href={c.href} target="_blank" rel="noopener noreferrer">
                     {inner}
                   </a>
@@ -159,23 +284,30 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
                 );
               })}
             </div>
-            <p className="summary" dangerouslySetInnerHTML={{ __html: data.summary }} />
+            {/* Editable: plain text. Otherwise Kira's summary may carry <em>. */}
+            {editable ? (
+              <p className="summary" {...editProps("summary")}>{activeData.summary}</p>
+            ) : isUpload ? (
+              <p className="summary">{activeData.summary}</p>
+            ) : (
+              <p className="summary" dangerouslySetInnerHTML={{ __html: activeData.summary }} />
+            )}
           </header>
 
           <section>
             <SectionTitle title="Experience" icon={Briefcase} />
-            {data.experience.map((e, i) => (
+            {activeData.experience.map((e, i) => (
               <div className="entry" key={i}>
                 <div className="entry-head">
-                  <div className="org-line">
-                    <span className="org">{e.org}</span>
-                    <span className="role">, {e.role}</span>
-                  </div>
-                  <span className="entry-date">{e.date}</span>
+                  <h3 className="org-line">
+                    <span className="org" {...editProps(`exp.${i}.org`)}>{e.org}</span>
+                    <span className="role">, <span {...editProps(`exp.${i}.role`)}>{e.role}</span></span>
+                  </h3>
+                  <span className="entry-date" {...editProps(`exp.${i}.date`)}>{e.date}</span>
                 </div>
                 <div className="tagline">
-                  {e.tagline}
-                  {e.link ? (
+                  <span {...editProps(`exp.${i}.tagline`)}>{e.tagline}</span>
+                  {e.link && !editable ? (
                     <a href={e.link.href} target="_blank" rel="noopener noreferrer">
                       <LinkIcon size={10} weight="bold" aria-hidden />
                       {e.link.text}
@@ -186,7 +318,7 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
                   {e.points.map((p, j) => (
                     <li key={j}>
                       <span className="marker" />
-                      <span>{p}</span>
+                      <span {...editProps(`exp.${i}.pt.${j}`)}>{p}</span>
                     </li>
                   ))}
                 </ul>
@@ -194,23 +326,24 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
             ))}
           </section>
 
+          {activeData.education.length > 0 && (
           <section>
             <SectionTitle title="Education" icon={GraduationCap} />
-            {data.education.map((e, i) => (
+            {activeData.education.map((e, i) => (
               <div className="entry" key={i}>
                 <div className="entry-head">
-                  <div className="org-line">
-                    <span className="org">{e.org}</span>
-                  </div>
-                  <span className="entry-date">{e.date}</span>
+                  <h3 className="org-line">
+                    <span className="org" {...editProps(`edu.${i}.org`)}>{e.org}</span>
+                  </h3>
+                  <span className="entry-date" {...editProps(`edu.${i}.date`)}>{e.date}</span>
                 </div>
-                <div className="edu-detail">{e.detail}</div>
+                <div className="edu-detail" {...editProps(`edu.${i}.detail`)}>{e.detail}</div>
                 {e.points.length ? (
                   <ul className="points">
                     {e.points.map((p, j) => (
                       <li key={j}>
                         <span className="marker" />
-                        <span>{p}</span>
+                        <span {...editProps(`edu.${i}.pt.${j}`)}>{p}</span>
                       </li>
                     ))}
                   </ul>
@@ -218,41 +351,51 @@ export default function ResumeDoc({ data, variant }: { data: Resume; variant: Va
               </div>
             ))}
           </section>
+          )}
 
+          {activeData.awards.length > 0 && (
           <section>
             <SectionTitle title="Awards & Leaderships" icon={Trophy} />
-            {data.awards.map((a, i) => (
+            {activeData.awards.map((a, i) => (
               <div className="award" key={i}>
                 <span className="marker" />
                 <span className="award-text">
-                  <b>{a.title}:</b> {a.detail}
+                  <b {...editProps(`award.${i}.title`)}>{a.title}</b>:{" "}
+                  <span {...editProps(`award.${i}.detail`)}>{a.detail}</span>
                 </span>
-                <span className="entry-date">{a.date}</span>
+                <span className="entry-date" {...editProps(`award.${i}.date`)}>{a.date}</span>
               </div>
             ))}
           </section>
+          )}
 
+          {activeData.skills.length > 0 && (
           <section>
             <SectionTitle title="Skills" icon={Wrench} />
             <div className="skills-flow">
-              {data.skills.map((g, i) => (
+              {activeData.skills.map((g, i) => (
                 <React.Fragment key={i}>
                   {/* Label + first item are glued (nowrap) so the group label
                       never gets stranded alone at the end of a line. */}
                   <span className="group-lead">
-                    <span className="group-label">{g.group}:</span>&nbsp;{g.items[0]}
+                    <span className="group-label">
+                      <span {...editProps(`skill.${i}.group`)}>{g.group}</span>:
+                    </span>
+                    {" "}<span {...editProps(`skill.${i}.item.0`)}>{g.items[0]}</span>
                   </span>
                   {g.items.slice(1).map((item, j) => (
                     <React.Fragment key={j}>
                       <span className="sep">·</span>
-                      {item}
+                      <span {...editProps(`skill.${i}.item.${j + 1}`)}>{item}</span>
                     </React.Fragment>
                   ))}
-                  {i < data.skills.length - 1 ? <>&nbsp; </> : null}
+                  {i < activeData.skills.length - 1 ? <>&nbsp; </> : null}
                 </React.Fragment>
               ))}
             </div>
           </section>
+          )}
+          </article>
         </main>
       </div>
     </>

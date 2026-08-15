@@ -15,10 +15,13 @@ const LOCAL_CHROME =
       : "/usr/bin/google-chrome";
 
 // Which resume version to render → source path + download filename base.
+// Full Stack renders via the auth-free /resume/print page (the live /resume is
+// an auth-gated canvas headless Chrome can't reach).
 const VARIANTS = {
   product: { path: "/resume", fileBase: "Kira-Cheung-Resume" },
   design: { path: "/resume/design", fileBase: "Kira-Cheung-Design-Engineer-Resume" },
   ai: { path: "/resume/ai", fileBase: "Kira-Cheung-AI-Deployment-Engineer-Resume" },
+  fullstack: { path: "/resume/print", fileBase: "Kira-Cheung-Full-Stack-Engineer-Resume" },
 } as const;
 
 export async function GET(request: Request) {
@@ -27,14 +30,19 @@ export async function GET(request: Request) {
   const origin = url.origin;
   const variantParam = url.searchParams.get("variant");
   const variant =
-    variantParam === "design" || variantParam === "ai" ? variantParam : "product";
+    variantParam === "design" || variantParam === "ai" || variantParam === "fullstack"
+      ? variantParam
+      : "product";
   const { path, fileBase } = VARIANTS[variant];
 
   // Forward the chosen style so the render matches the on-screen selection
   // (headless Chrome has no access to the user's localStorage theme).
   const themeParam = url.searchParams.get("theme");
   const theme = ["claude", "notion", "openai", "plain"].includes(themeParam ?? "") ? themeParam : null;
-  const target = `${origin}${path}${theme ? `?theme=${theme}` : ""}`;
+  const targetUrl = new URL(`${origin}${path}`);
+  if (variant === "fullstack") targetUrl.searchParams.set("variant", "fullstack");
+  if (theme) targetUrl.searchParams.set("theme", theme);
+  const target = targetUrl.toString();
 
   let browser;
   try {
