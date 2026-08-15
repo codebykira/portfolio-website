@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import ProjectShowcase from "../components/project-showcase";
+import ProjectHoverCard from "../components/project-hover-card";
 import ChristmasCardEmbed from "../components/christmas-card-embed";
 import ResumeBuilderEmbed from "../components/resume-builder-embed";
 
@@ -125,15 +126,12 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
             className="w-full md:w-1/2 cursor-pointer"
             onClick={() => window.open(CHRISTMAS_CARD_DEMO_URL, "_blank", "noopener,noreferrer")}
           >
-            <ProjectShowcase
+            <ProjectHoverCard
               title="Christmas Card"
               description={[
                 "An interactive 3D Christmas card you can personalize with a message and photos, then share as a link.",
               ]}
               media={<ChristmasCardEmbed />}
-              gradientColor="#C0392B"
-              heightClass="h-[42vh]"
-              revealOnHover
             />
           </div>
 
@@ -141,15 +139,12 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
             className="w-full md:w-1/2 cursor-pointer"
             onClick={() => window.location.href = '/resume'}
           >
-            <ProjectShowcase
+            <ProjectHoverCard
               title="Résumé Builder"
               description={[
-                "Drop in any résumé — PDF or DOCX — and watch it get parsed and re-rendered in a clean, ATS-friendly template in seconds.",
+                "Drop in any résumé, PDF or DOCX, and watch it get parsed and re-rendered in a clean, ATS-friendly template in seconds.",
               ]}
               media={<ResumeBuilderEmbed />}
-              gradientColor="#7733FF"
-              heightClass="h-[42vh]"
-              revealOnHover
             />
           </div>
         </div>

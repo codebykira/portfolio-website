@@ -116,8 +116,10 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
                   backgroundSize: "14px 14px",
                 }}
               />
+              {/* Lifts and grows a touch on hover, anchored at the bottom so
+                  the screenshot rises out of the card rather than drifting. */}
               <div
-                className={`absolute bottom-0 max-w-none ${
+                className={`absolute bottom-0 max-w-none origin-bottom transition-transform duration-500 ease-out group-hover:-translate-y-4 group-hover:scale-[1.03] ${
                   mediaCenter ? "left-1/2 -translate-x-1/2" : "-right-12"
                 }`}
                 style={{ width: mediaWidth ?? (mediaCenter ? "130%" : "97%") }}
@@ -164,7 +166,9 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
 
         {/* Hover overlay: logo + title + description + tags */}
         <div className="absolute inset-0 flex flex-col justify-end gap-3 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
-          <div className="flex items-center gap-3">
+          {/* Negative margin pulls the description up to the title without
+              closing the gaps between paragraphs and tags. */}
+          <div className="-mb-2 flex items-center gap-3">
             {logo && (
               <div
                 className="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-white/15 bg-black/25 backdrop-blur-sm"
