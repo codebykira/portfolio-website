@@ -38,11 +38,15 @@ function read(): CanvasState {
   }
 }
 
-/** Local-first canvas state. Hydrates from localStorage on mount and writes back
- *  on every change, so anonymous visitors keep their work with no account. */
+/** Local-first canvas state. Anonymous visitors keep their work in localStorage
+ *  with no account. Once signed in, the DB is the single source of truth, so the
+ *  caller disables the local cache (see `disableLocal`) to avoid a stale
+ *  localStorage copy ever competing with the account copy. */
 export function useCanvas() {
   const [state, setState] = useState<CanvasState>(EMPTY);
   const [hydrated, setHydrated] = useState(false);
+  // Off = signed in: never read from or write to localStorage.
+  const localEnabled = useRef(true);
 
   useEffect(() => {
     setState(read());
@@ -50,13 +54,24 @@ export function useCanvas() {
   }, []);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || !localEnabled.current) return;
     try {
       window.localStorage.setItem(KEY, JSON.stringify(state));
     } catch {
       /* storage full / unavailable */
     }
   }, [state, hydrated]);
+
+  /** Called once the user is known to be signed in: the account copy owns the
+   *  data from here on, so drop the local cache entirely. */
+  const disableLocal = useCallback(() => {
+    localEnabled.current = false;
+    try {
+      window.localStorage.removeItem(KEY);
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   const patch = useCallback((p: Partial<CanvasState>) => setState((s) => ({ ...s, ...p })), []);
 
@@ -76,7 +91,7 @@ export function useCanvas() {
     }
   }, []);
 
-  return { state, hydrated, patch, start, reset, setState };
+  return { state, hydrated, patch, start, reset, setState, disableLocal };
 }
 
 /** Fires once `startedAt` is older than `seconds`. Used to nudge anonymous users

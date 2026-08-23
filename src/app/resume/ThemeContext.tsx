@@ -8,6 +8,7 @@ export const THEMES = [
   { id: "claude", label: "Claude" },
   { id: "notion", label: "Notion" },
   { id: "openai", label: "OpenAI" },
+  { id: "wispr", label: "Wispr" },
   { id: "plain", label: "Plain" },
 ] as const;
 

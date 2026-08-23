@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
-import { BUCKET, TABLE, supa, storageHeaders, tableMissing } from "./lib";
+import { BUCKET, TABLE, supa, storageHeaders, tableMissing, projectDown, reach } from "./lib";
 
 // POST /api/let-it — deposit a note (text and/or drawing) into the pool.
 
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Preferred home: the letit_notes table.
-  const ins = await fetch(`${cfg.url}/rest/v1/${TABLE}`, {
+  const ins = await reach(`${cfg.url}/rest/v1/${TABLE}`, {
     method: "POST",
     headers: {
       ...storageHeaders(cfg.key),
@@ -63,6 +63,9 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({ text, drawing }),
   });
+  if (!ins || projectDown(ins.status)) {
+    return NextResponse.json({ error: "the table is out of reach" }, { status: 503 });
+  }
   if (ins.ok) {
     const rows = (await ins.json()) as Array<{ id: string }>;
     return NextResponse.json({ id: rows[0]?.id ?? "" });
@@ -72,12 +75,12 @@ export async function POST(req: NextRequest) {
   if (tableMissing(ins.status)) {
     const id = randomUUID();
     const note = { text, drawing, at: new Date().toISOString() };
-    const res = await fetch(`${cfg.url}/storage/v1/object/${BUCKET}/${id}.json`, {
+    const res = await reach(`${cfg.url}/storage/v1/object/${BUCKET}/${id}.json`, {
       method: "POST",
       headers: { ...storageHeaders(cfg.key), "Content-Type": "application/json" },
       body: JSON.stringify(note),
     });
-    if (res.ok) return NextResponse.json({ id });
+    if (res?.ok) return NextResponse.json({ id });
   }
 
   const detail = await ins.text().catch(() => "");

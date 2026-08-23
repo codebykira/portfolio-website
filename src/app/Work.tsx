@@ -20,7 +20,7 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
         className="min-h-screen w-full flex justify-center items-center flex-col"
       >
 
-      <div className="w-full max-w-5xl px-4 space-y-6 flex flex-col">
+      <div className="w-full max-w-6xl px-4 space-y-6 flex flex-col">
         <div
           className="w-full cursor-pointer"
           onClick={() => window.location.href = '/atrios'}

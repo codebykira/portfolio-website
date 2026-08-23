@@ -193,7 +193,7 @@ export default function ResumeDoc({
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Inconsolata:wght@500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Inconsolata:wght@500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Figtree:wght@400;500;600;700&family=EB+Garamond:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
         rel="stylesheet"
       />
 
@@ -372,24 +372,22 @@ export default function ResumeDoc({
           {activeData.skills.length > 0 && (
           <section>
             <SectionTitle title="Skills" icon={Wrench} />
+            {/* One continuous paragraph: every group + item flows together and
+                wraps item-by-item to fill the full width. */}
             <div className="skills-flow">
               {activeData.skills.map((g, i) => (
                 <React.Fragment key={i}>
-                  {/* Label + first item are glued (nowrap) so the group label
-                      never gets stranded alone at the end of a line. */}
-                  <span className="group-lead">
-                    <span className="group-label">
-                      <span {...editProps(`skill.${i}.group`)}>{g.group}</span>:
-                    </span>
-                    {" "}<span {...editProps(`skill.${i}.item.0`)}>{g.items[0]}</span>
-                  </span>
+                  <span className="group-label">
+                    <span {...editProps(`skill.${i}.group`)}>{g.group}</span>:
+                  </span>{" "}
+                  <span {...editProps(`skill.${i}.item.0`)}>{g.items[0]}</span>
                   {g.items.slice(1).map((item, j) => (
                     <React.Fragment key={j}>
-                      <span className="sep">·</span>
+                      {" "}<span className="sep">·</span>{" "}
                       <span {...editProps(`skill.${i}.item.${j + 1}`)}>{item}</span>
                     </React.Fragment>
                   ))}
-                  {i < activeData.skills.length - 1 ? <>&nbsp; </> : null}
+                  {i < activeData.skills.length - 1 ? <>{" "}<span className="sep">·</span>{" "}</> : null}
                 </React.Fragment>
               ))}
             </div>

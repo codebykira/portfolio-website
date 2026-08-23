@@ -43,3 +43,7 @@ next-env.d.ts
 # local image-processing venv (rembg/playwright)
 .bgvenv/
 .shot.py
+
+# blender renders
+/blender/out/
+/blender/scenes/
