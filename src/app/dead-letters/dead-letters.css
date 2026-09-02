@@ -41,7 +41,19 @@ body:has(.letit) {
   animation: letit-rise 1s cubic-bezier(0.2, 0.7, 0.25, 1) both;
 }
 .letit .stage.wide { max-width: 46rem; }
-.letit .stage.xwide { max-width: 66rem; }
+.letit .stage.xwide { max-width: min(94vw, 78rem); }
+
+/* While the letter is in the forefront the masthead recedes with the table —
+   blurred and dimmed rather than given a band of its own. That lets the paper
+   sit in the true centre of the page instead of below a reserved header. */
+/* Whenever a sheet is in the forefront — yours or a stranger's — the masthead
+   recedes with the table behind it. Only on the table itself is it in focus. */
+.letit[data-scene="write"] .writeintro,
+.letit[data-scene="read"] .writeintro {
+  filter: blur(3px);
+  opacity: 0.45;
+}
+.letit .writeintro { transition: filter 0.5s ease, opacity 0.5s ease; }
 
 @keyframes letit-rise {
   from { opacity: 0; transform: translateY(12px); }
@@ -115,17 +127,13 @@ body:has(.letit) {
   color: var(--cream-faint);
   cursor: pointer;
   margin-top: 2.4rem;
-  text-decoration: underline dotted;
-  text-decoration-thickness: 1px;
+  text-decoration: none;
   text-underline-offset: 0.35em;
   transition: color 0.3s ease, text-decoration-color 0.3s ease, transform 0.25s ease;
 }
 .letit .quiet:hover,
 .letit .quiet:focus-visible {
   color: var(--cream);
-  text-decoration-style: solid;
-  text-decoration-color: var(--ribbon);
-  transform: translateY(-2px);
 }
 
 /* fold it away: centered under the note, a size up */
@@ -137,16 +145,6 @@ body:has(.letit) {
 
 /* the little origami mark on "fold it away" — masked so it takes the
    button's colour, hover state included */
-.letit .fold-ico {
-  display: inline-block;
-  width: 1.25em;
-  height: 1.25em;
-  background: currentColor;
-  -webkit-mask: url(/dead-letters/origami.png) center / contain no-repeat;
-  mask: url(/dead-letters/origami.png) center / contain no-repeat;
-  vertical-align: -0.3em;
-  margin-right: 0.5em;
-}
 
 .letit :focus-visible { outline: 2px solid var(--cream); outline-offset: 4px; border-radius: 2px; }
 .letit textarea:focus-visible,
@@ -159,6 +157,53 @@ body:has(.letit) {
   gap: 1rem;
   margin-bottom: 0.9rem;
 }
+/* Sits under the letter, the same width as it, and says only what to do.
+   Deliberately faint: it is an instruction, not part of the note. */
+.letit .squeeze-note {
+  display: block;
+  width: min(88vw, 500px);
+  margin: 0.9rem auto 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  text-align: center;
+  font-family: var(--font-elite), "Courier New", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--cream-faint);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.25s ease;
+}
+.letit .squeeze-note:hover,
+.letit .squeeze-note:focus-visible { opacity: 0.8; }
+.letit .squeeze-note:focus-visible { outline: 2px solid var(--ribbon); outline-offset: 3px; }
+
+/* The sharpie. Picked up or put down — that is the whole mode switch, so it
+   does not need a label beside it. */
+.letit .pencil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--cream-faint);
+  cursor: pointer;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.letit .pencil svg { width: 1.15rem; height: 1.15rem; }
+.letit .pencil:hover,
+.letit .pencil:focus-visible { color: var(--cream); }
+/* In hand: tipped up and inked red, so the state is legible at a glance. */
+.letit .pencil.active {
+  color: var(--ribbon);
+  transform: rotate(-12deg);
+}
+.letit .pencil:focus-visible { outline: 2px solid var(--ribbon); outline-offset: 3px; }
+
 .letit .tool {
   display: inline-block;
   background: none;
@@ -177,9 +222,6 @@ body:has(.letit) {
 .letit .tool:hover,
 .letit .tool:focus-visible {
   color: var(--cream);
-  text-decoration-style: solid;
-  text-decoration-color: var(--ribbon);
-  transform: translateY(-2px);
 }
 .letit .tool.active {
   color: var(--cream);
@@ -215,6 +257,75 @@ body:has(.letit) {
 }
 
 /* ---------- the paper (footage + overlay) ---------- */
+/* The table: one layer, fixed to the viewport, present in every state. Its
+   geometry never changes — only how sharp it is and whether you can touch it —
+   so a crumple never shifts as you move between writing and reading. */
+.letit .stage { position: relative; }
+
+.letit .table-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+}
+/* The table fills the view. A narrow band at the bottom read as a shelf; paper
+   left on a desk spreads out, and the depth cues only work with room to lie in. */
+/* The heap sits in the middle of the view rather than along the bottom edge —
+   a pile on a table, not a strip on a shelf. */
+.letit .table-layer .pile {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: min(88vw, 60rem);
+  height: min(56vh, 31rem);
+}
+/* Out of focus while you write or read; sharp and touchable on the table. */
+.letit[data-scene="write"] .table-layer { filter: blur(4px) brightness(0.4); }
+.letit[data-scene="read"] .table-layer { filter: blur(7px) brightness(0.22); opacity: 0.8; }
+.letit[data-scene="table"] .table-layer { pointer-events: auto; }
+
+/* The masthead is fixed to the viewport for the same reason: it must not move
+   a pixel when the scene changes. */
+.letit .writeintro {
+  position: fixed;
+  top: clamp(1.4rem, 3vh, 2.8rem);
+  left: clamp(1.2rem, 3vw, 2.8rem);
+  z-index: 3;
+  max-width: 20rem;
+  text-align: left;
+  pointer-events: none;
+}
+
+.letit .writegrid { position: relative; z-index: 1; }
+
+/* The crumple in flight. Positioned in viewport space so it shares coordinates
+   with the fixed table layer it is landing on; everything else about it is set
+   frame by frame from JS. */
+.letit .throwball {
+  position: fixed;
+  z-index: 4;
+  pointer-events: none;
+  will-change: left, top, width, transform;
+}
+
+/* Shown only when hand tracking actually fails, so the cause is visible
+   rather than the control just looking inert. */
+.letit .hand-detail {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-elite), "Courier New", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--ribbon);
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letit .throwball { animation-duration: 0.001ms; }
+}
+
 .letit .paperbox {
   position: relative;
   width: min(88vw, 500px);
@@ -239,6 +350,39 @@ body:has(.letit) {
   transition: opacity 0.3s ease;
 }
 
+/* A suggestion in the left margin, not writing on the paper. Set upright
+   rather than italic — this is an aside offered to you, not a flourish. Sits
+   under the masthead, clear of the sheet in the middle of the page. */
+.letit .dl-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 20rem;
+  justify-self: start;
+}
+
+.letit .dl-prompt-head {
+  font-family: var(--font-elite), "Courier New", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  opacity: 0.75;
+}
+
+.letit .dl-prompt-line {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--cream-dim);
+}
+
+.letit .dl-prompt-tools {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.15rem;
+}
+
 .letit textarea {
   flex: 1;
   width: 100%;
@@ -249,12 +393,12 @@ body:has(.letit) {
   font-family: inherit;
   font-size: clamp(0.95rem, 0.75rem + 1vw, 1.12rem);
   line-height: 1.75;
-  /* fainter ink while you're still writing */
-  color: rgba(43, 39, 33, 0.55);
+  /* readable while you write, without going to full black on the paper */
+  color: rgba(10, 10, 10, 0.9);
   caret-color: var(--ribbon);
   padding: 0;
 }
-.letit textarea::placeholder { color: rgba(43, 39, 33, 0.38); }
+.letit textarea::placeholder { color: rgba(43, 39, 33, 0.26); }
 
 .letit .meter {
   display: flex;
@@ -263,7 +407,7 @@ body:has(.letit) {
   margin-top: 0.5rem;
   font-size: 0.68rem;
   letter-spacing: 0.06em;
-  color: rgba(43, 39, 33, 0.52);
+  color: rgba(43, 39, 33, 0.4);
   font-variant-numeric: tabular-nums;
 }
 .letit .meter .low { color: var(--ribbon); }
@@ -322,24 +466,34 @@ body:has(.letit) {
   will-change: transform;
 }
 .letit .ball img {
+  transition: filter 0.28s ease;
   width: 100%;
   height: 100%;
   display: block;
   user-select: none;
   -webkit-user-drag: none;
-  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.5)) brightness(var(--bri, 1));
+  /* Two shadows, because one cannot do both jobs. The tight dark one is
+     contact — it is what makes a crumple sit ON the table rather than float
+     above it. The broad soft one is ambient, and separates each ball from
+     whatever lies behind it. Both scale with --bri, which already encodes
+     depth: nearer paper casts longer and softer, buried paper barely at all. */
+  filter:
+    drop-shadow(0 calc(1px + var(--bri, 1) * 3px) calc(1px + var(--bri, 1) * 2px)
+      rgba(0, 0, 0, 0.75))
+    drop-shadow(0 calc(6px + var(--bri, 1) * 10px) calc(8px + var(--bri, 1) * 13px)
+      rgba(0, 0, 0, 0.55))
+    brightness(var(--bri, 1));
 }
-.letit .ball:hover,
-.letit .ball:focus-visible {
-  transform: rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)) translateY(-8px);
+.letit .ball:hover img,
+.letit .ball:focus-visible img {
+  filter:
+    drop-shadow(0 calc(1px + var(--bri, 1) * 3px) calc(1px + var(--bri, 1) * 2px)
+      rgba(0, 0, 0, 0.75))
+    drop-shadow(0 calc(6px + var(--bri, 1) * 10px) calc(8px + var(--bri, 1) * 13px)
+      rgba(0, 0, 0, 0.55))
+    brightness(calc(var(--bri, 1) * 1.28));
 }
-.letit .ball.mine { animation: letit-toss 1.15s cubic-bezier(0.3, 1.35, 0.4, 1) both; }
-@keyframes letit-toss {
-  0% { transform: translateY(-56vh) rotate(150deg) scaleX(var(--flip, 1)); }
-  70% { transform: translateY(0) rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)); }
-  84% { transform: translateY(-10px) rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)); }
-  100% { transform: translateY(0) rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)); }
-}
+.letit .ball.mine { --bri: 1.06; }
 .letit .ball.shake { animation: letit-refuse 0.45s ease; }
 @keyframes letit-refuse {
   0%, 100% { margin-left: 0; }
@@ -375,36 +529,141 @@ body:has(.letit) {
 .letit .fadeable { transition: opacity 0.8s ease; }
 
 @media (prefers-reduced-motion: reduce) {
-  .letit .stage,
-  .letit .ball.mine { animation-duration: 0.01s !important; }
   .letit .typed .caret { animation: none; }
 }
 
 
 /* ---------- the writing view: title left, sheet right ---------- */
+
+/* The paper sits to the right, clear of the masthead in the top-left corner. */
+/* Suggestion left, paper right. Below the breakpoint there is no room for two
+   columns, so they stack with the suggestion first — it is read before you
+   write either way. */
 .letit .writegrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.2rem;
+  justify-items: center;
+  gap: 2rem;
   align-items: center;
+}
+@media (min-width: 760px) {
+  .letit .writegrid {
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    gap: 3.5rem;
+    justify-items: stretch;
+  }
+  /* `justify-self` alone is not enough: .paperbox carries `margin: 0 auto`,
+     which re-centres the sheet inside whatever width the column gives it. */
+  .letit .writegrid .writesheet {
+    justify-self: end;
+    width: min(88vw, 500px);
+  }
+  .letit .writegrid .writesheet .paperbox { margin: 0 0 0 auto; }
+  /* Pinned by column rather than by source order: when the suggestion is not
+     rendered, the sheet would otherwise fall into the first column and sit on
+     the left. */
+  .letit .writegrid .dl-prompt { grid-column: 1; }
+  .letit .writegrid .writesheet { grid-column: 2; }
+  .letit .writegrid .writesheet .tools { justify-content: flex-end; }
+  .letit .writegrid .squeeze-note { margin-right: 0; }
+}
+
+
+/* Handed off: the flying crumple has taken over from the sheet, so the sheet
+   must go at once — otherwise the same piece of paper is on screen twice. */
+.letit .writesheet.handed-off { opacity: 0; transition: none; }
+
+/* Set down, on the way to the pile. */
+.letit .writesheet { transition: opacity 0.42s ease, transform 0.42s ease; }
+.letit .writesheet.setting-aside {
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
 }
 .letit .writeintro h1 {
   font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
-  margin-bottom: 0.6rem;
+  /* The line beneath belongs to the title, so it sits close under it. */
+  margin: 0 0 0.15rem;
 }
+/* Quieter than the name above it: this is an aside, not a subtitle. */
 .letit .writeintro .sub {
-  font-size: 1.12rem;
-  margin-bottom: 0.35rem;
+  font-size: 1.02rem;
+  line-height: 1.45;
+  margin: 0 0 0.35rem;
+  opacity: 0.55;
 }
 @media (min-width: 940px) {
   .letit .writegrid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
+    grid-template-columns: minmax(0, 620px);
     gap: 3.5rem;
   }
 }
 
 
 /* the torn-label slab button — read what others let go */
+/* Opposite the masthead, in the page's own button voice: the same torn edge as
+   .slab, scaled down so it sits in the corner without shouting. Only shown when
+   you are not already at the paper. */
+.letit .write-cta {
+  position: fixed;
+  top: clamp(1.4rem, 3vh, 2.8rem);
+  right: clamp(1.2rem, 3vw, 2.8rem);
+  z-index: 4;
+  padding: 0.55rem 1.1rem;
+  background: #2c2c2a;
+  border: 0;
+  font-family: var(--font-elite), "Courier New", monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+  cursor: pointer;
+  clip-path: polygon(2% 14%, 7% 0%, 96% 4%, 100% 34%, 98% 86%, 89% 100%, 3% 97%, 0% 72%);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.letit .write-cta:hover,
+.letit .write-cta:focus-visible {
+  background: #3a3a37;
+  color: #fff;
+}
+.letit .write-cta:focus-visible { outline: 2px solid var(--ribbon); outline-offset: 3px; }
+
+/* One button, one look. "write a letter" sets it: the torn slab in the
+   typewriter face. Everything clickable that carries a word uses it, so the
+   page never has two competing ideas of what a button is.
+   Declared after the older rules so it wins without !important. */
+.letit .write-cta,
+.letit .tool,
+.letit .quiet {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #2c2c2a;
+  border: 0;
+  font-family: var(--font-elite), "Courier New", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  color: var(--cream);
+  cursor: pointer;
+  text-decoration: none;
+  transform: none;
+  clip-path: polygon(2% 14%, 7% 0%, 96% 4%, 100% 34%, 98% 86%, 89% 100%, 3% 97%, 0% 72%);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.letit .write-cta:hover,
+.letit .write-cta:focus-visible,
+.letit .tool:hover,
+.letit .tool:focus-visible,
+.letit .quiet:hover,
+.letit .quiet:focus-visible {
+  background: #3a3a37;
+  color: #fff;
+  text-decoration: none;
+  transform: none;
+}
+/* In use — the sharpie's marks can be cleared, the camera is watching. */
+.letit .tool.active { background: var(--ribbon); color: #fff; }
+.letit .tool:disabled { opacity: 0.4; cursor: default; }
+.letit .quiet { margin-top: 2rem; }
+
 .letit .slab {
   display: inline-block;
   margin-top: 1.6rem;

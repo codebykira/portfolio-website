@@ -35,6 +35,8 @@ export type Award = { title: string; date: string; detail: string };
 
 export type SkillGroup = { group: string; items: string[] };
 
+export type CustomSection = { title: string; entries: Experience[] };
+
 export type Resume = {
   name: string;
   contact: ContactItem[];
@@ -43,6 +45,7 @@ export type Resume = {
   education: Education[];
   awards: Award[];
   skills: SkillGroup[];
+  sections?: CustomSection[];
 };
 
 const CONTACT: ContactItem[] = [

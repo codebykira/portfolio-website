@@ -120,7 +120,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
                   the screenshot rises out of the card rather than drifting. */}
               <div
                 className={`absolute bottom-0 max-w-none origin-bottom transition-transform duration-500 ease-out group-hover:-translate-y-4 group-hover:scale-[1.03] ${
-                  mediaCenter ? "left-1/2 -translate-x-1/2" : "-right-12"
+                  mediaCenter ? "left-1/2 -translate-x-1/2" : "-right-24"
                 }`}
                 style={{ width: mediaWidth ?? (mediaCenter ? "130%" : "97%") }}
               >

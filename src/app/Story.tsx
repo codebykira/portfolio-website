@@ -110,6 +110,17 @@ const Story = () => {
           backgroundPosition: "center",
         }}
       >
+        {/* Faint graph-paper grid, over the paper texture but under
+            everything else. */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(122, 104, 76, 0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(122, 104, 76, 0.10) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+
         {CARDS.map((card) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img

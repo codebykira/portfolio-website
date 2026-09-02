@@ -52,6 +52,7 @@ const COMPANY_THEMES: { theme: string; pattern: RegExp }[] = [
   { theme: "openai", pattern: /\bopenai\b/i },
   { theme: "notion", pattern: /\bnotion(\.so|hq)?\b/i },
   { theme: "wispr", pattern: /\bwispr\b|wisprflow|wispr\s*flow/i },
+  { theme: "netflix", pattern: /\bnetflix\b/i },
 ];
 
 /** Returns the theme id for a recognized company, or null. Scans the given

@@ -30,7 +30,7 @@ export default function Home() {
       <ClientOnly>
         <DeskHero />
       </ClientOnly>
-      <div className="max-w-6xl mx-auto flex flex-col gap-6 justify-center">
+      <div className="max-w-7xl mx-auto flex flex-col gap-6 justify-center">
 
         {/* Blurb bridging the hero into the work — section-header font (Playfair).
             Only the text fades in on scroll; the sticker stays full-opacity. */}

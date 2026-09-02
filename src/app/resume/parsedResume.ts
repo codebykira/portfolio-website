@@ -79,6 +79,23 @@ export const parsedResumeSchema = z.object({
       }),
     )
     .describe("Skills grouped by category."),
+  sections: z
+    .array(
+      z.object({
+        title: z.string().describe("Custom section heading, e.g. 'Projects'."),
+        entries: z.array(
+          z.object({
+            org: z.string(),
+            role: z.string(),
+            date: z.string(),
+            tagline: z.string(),
+            points: z.array(z.string()),
+          }),
+        ),
+      }),
+    )
+    .optional()
+    .describe("Extra custom-titled sections, rendered after Experience (before Education). Optional."),
 });
 
 export type ParsedResume = z.infer<typeof parsedResumeSchema>;

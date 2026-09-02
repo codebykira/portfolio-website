@@ -7,6 +7,7 @@ import {
   GraduationCap,
   Trophy,
   Wrench,
+  Sparkle,
   type Icon,
 } from "@phosphor-icons/react";
 import type { Resume } from "./resumeData";
@@ -34,6 +35,7 @@ const VERSION_LINKS: { variant: Variant; label: string }[] = [
 const NAME_MARKS: Partial<Record<ThemeId, string>> = {
   claude: "/claude-mark.svg",
   notion: "/notion-face.png",
+  netflix: "/netflix-mark.svg",
 };
 
 /* Build a schema.org Person from the resume data so AI/crawlers scanning the
@@ -325,6 +327,47 @@ export default function ResumeDoc({
               </div>
             ))}
           </section>
+
+          {/* Custom sections (e.g. "Interaction work without a screen", "Also"),
+              rendered read-only after Experience, before Education. */}
+          {activeData.sections?.map((s, si) => (
+            <section key={`sec-${si}`}>
+              <SectionTitle title={s.title} icon={Sparkle} />
+              {s.entries.map((e, i) => (
+                <div className="entry" key={i}>
+                  {(e.org || e.role || e.date) && (
+                    <div className="entry-head">
+                      <h3 className="org-line">
+                        {e.org && <span className="org">{e.org}</span>}
+                        {e.role && (
+                          <span className="role">
+                            {e.org ? ", " : ""}
+                            {e.role}
+                          </span>
+                        )}
+                      </h3>
+                      {e.date && <span className="entry-date">{e.date}</span>}
+                    </div>
+                  )}
+                  {e.tagline && (
+                    <div className="tagline">
+                      <span>{e.tagline}</span>
+                    </div>
+                  )}
+                  {e.points.length > 0 && (
+                    <ul className="points">
+                      {e.points.map((p, j) => (
+                        <li key={j}>
+                          <span className="marker" />
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </section>
+          ))}
 
           {activeData.education.length > 0 && (
           <section>

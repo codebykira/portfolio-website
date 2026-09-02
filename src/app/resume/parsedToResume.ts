@@ -43,5 +43,15 @@ export function parsedToResume(parsed: ParsedResume): Resume {
     education: parsed.education,
     awards: parsed.awards,
     skills: parsed.skills,
+    sections: parsed.sections?.map((s) => ({
+      title: s.title,
+      entries: s.entries.map((e) => ({
+        org: e.org,
+        role: e.role,
+        date: e.date,
+        tagline: e.tagline,
+        points: e.points,
+      })),
+    })),
   };
 }

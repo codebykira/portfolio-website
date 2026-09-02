@@ -1,11 +1,28 @@
 {
   "version": 2,
   "builds": [
-    { "src": "package.json", "use": "@vercel/next" }
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
   ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/api/.*", "dest": "/api" },
-    { "src": "/(.*)", "dest": "/$1" }
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/api/.*",
+      "dest": "/api"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/dead-letters/count",
+      "schedule": "0 6 * * *"
+    }
   ]
 }

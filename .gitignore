@@ -47,3 +47,7 @@ next-env.d.ts
 # blender renders
 /blender/out/
 /blender/scenes/
+
+# hand-tracking assets, provisioned by scripts/setup-handtracking.mjs
+/public/mediapipe/
+/public/models/

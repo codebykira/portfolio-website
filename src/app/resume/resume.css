@@ -33,10 +33,11 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
    signal to trim, per the fixed-page rule. */
 .resume-root .sheet {
   position: relative;
-  width: 8.5in; height: 11in; max-width: 8.5in;
+  /* min-height (not fixed height) + no clip: a résumé that fits stays one
+     Letter page; a longer one flows onto additional pages instead of clipping. */
+  width: 8.5in; min-height: 11in; max-width: 8.5in;
   margin: 24px auto 64px;
   padding: 0.45in 0.55in;
-  overflow: hidden;
 }
 
 /* Embedded preview (?embed=1): no toolbar; center the auto-fit sheet in frame. */
@@ -185,7 +186,7 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
    type:   EB Garamond (display, tight tracking) · Figtree (body) · IBM Plex Mono (dates)
    ============================================================ */
 [data-theme="wispr"] .resume-root .sheet {
-  background: #FFFFEB; color: #1A1A1A;
+  background: #FFFFFF; color: #1A1A1A;
   border: 1px solid #E4E4D0; border-radius: 20px;
   font-family: 'Figtree', sans-serif;
   font-weight: 400; font-size: 8.5pt; line-height: 1.5;
@@ -207,13 +208,51 @@ html[data-resume] { -webkit-print-color-adjust: exact; print-color-adjust: exact
 [data-theme="wispr"] .resume-root .entry-date { font-family: 'IBM Plex Mono', monospace; font-weight: 400; font-size: 7.5pt; color: #71716E; }
 [data-theme="wispr"] .resume-root .tagline { font-size: 8.5pt; color: #71716E; }
 [data-theme="wispr"] .resume-root .tagline a { color: #4D4A42; border-bottom: 1px solid #E4E4D0; text-decoration: none; }
-[data-theme="wispr"] .resume-root ul.points li .marker { width: 4px; height: 4px; border-radius: 9999px; background: #FF6C4C; margin-top: 5px; }
-[data-theme="wispr"] .resume-root .award .marker { width: 4px; height: 4px; border-radius: 9999px; background: #FF6C4C; margin-top: 5px; }
+[data-theme="wispr"] .resume-root ul.points li .marker { width: 4px; height: 4px; border-radius: 9999px; background: #034F46; margin-top: 5px; }
+[data-theme="wispr"] .resume-root .award .marker { width: 4px; height: 4px; border-radius: 9999px; background: #034F46; margin-top: 5px; }
 [data-theme="wispr"] .resume-root .award b { font-weight: 600; }
 [data-theme="wispr"] .resume-root .skills-flow { font-size: 8.5pt; color: #4D4A42; }
 [data-theme="wispr"] .resume-root .skills-flow .group-label { font-weight: 600; color: #1A1A1A; }
 [data-theme="wispr"] .resume-root .skills-flow .sep { color: #C8C8B8; }
 [data-theme="wispr"] .resume-root .edu-detail { font-size: 8.5pt; }
+
+/* ============================================================
+   THEME: NETFLIX — "Netflix"
+   colors: ink #141414 · muted #565656 · hairline #E5E5E5 · surface #FFF
+           accent Netflix red #E50914 (mark, section icons, markers, links)
+   type:   Inter — heavy name, bold section titles
+   mark:   the Netflix "N" (/netflix-mark.svg) before the name
+   ============================================================ */
+[data-theme="netflix"] .resume-root .sheet {
+  background: #FFFFFF; color: #141414;
+  border: 1px solid #E5E5E5; border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; font-size: 8.5pt; line-height: 1.5;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+[data-theme="netflix"] .resume-root .name { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 24pt; letter-spacing: -.02em; color: #141414; }
+[data-theme="netflix"] .resume-root .name-mark { width: 19px; height: 19px; align-self: center; transform: translateY(1px); display: inline-block; }
+[data-theme="netflix"] .resume-root .contact { font-size: 8.5pt; color: #565656; }
+[data-theme="netflix"] .resume-root .contact a { color: #565656; border-bottom: 1px solid #E5E5E5; }
+[data-theme="netflix"] .resume-root .contact a:hover { border-bottom-color: #E50914; }
+[data-theme="netflix"] .resume-root .summary { font-size: 8.5pt; color: #444444; }
+[data-theme="netflix"] .resume-root section { margin-top: 10px; }
+[data-theme="netflix"] .resume-root .section-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 12pt; letter-spacing: -.01em; color: #141414; }
+[data-theme="netflix"] .resume-root .section-title-row .rule { background: #E5E5E5; }
+[data-theme="netflix"] .resume-root .section-icon { color: #E50914; }
+[data-theme="netflix"] .resume-root .entry { margin-top: 8px; }
+[data-theme="netflix"] .resume-root .org { font-weight: 700; font-size: 8.5pt; }
+[data-theme="netflix"] .resume-root .role { font-weight: 400; font-size: 8.5pt; color: #141414; }
+[data-theme="netflix"] .resume-root .entry-date { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8pt; color: #565656; }
+[data-theme="netflix"] .resume-root .tagline { font-size: 8.5pt; color: #565656; }
+[data-theme="netflix"] .resume-root .tagline a { color: #565656; border-bottom: 1px solid #E5E5E5; text-decoration: none; }
+[data-theme="netflix"] .resume-root ul.points li .marker { width: 4px; height: 4px; border-radius: 9999px; background: #E50914; margin-top: 5px; }
+[data-theme="netflix"] .resume-root .award .marker { width: 4px; height: 4px; border-radius: 9999px; background: #E50914; margin-top: 5px; }
+[data-theme="netflix"] .resume-root .award b { font-weight: 700; }
+[data-theme="netflix"] .resume-root .skills-flow { font-size: 8.5pt; color: #444444; }
+[data-theme="netflix"] .resume-root .skills-flow .group-label { font-weight: 700; color: #141414; }
+[data-theme="netflix"] .resume-root .skills-flow .sep { color: #C8C8C8; }
+[data-theme="netflix"] .resume-root .edu-detail { font-size: 8.5pt; }
 
 /* ============================================================
    THEME: NOTION — "Notion Clean"

@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "next build && touch out/.nojekyll && git add out/ && git commit -m \"Deploy\" && git subtree push --prefix out origin gh-pages"
+    "deploy": "next build && touch out/.nojekyll && git add out/ && git commit -m \"Deploy\" && git subtree push --prefix out origin gh-pages",
+    "predev": "node scripts/setup-handtracking.mjs",
+    "prebuild": "node scripts/setup-handtracking.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.16",
     "@heroicons/react": "^2.2.0",
+    "@mediapipe/tasks-vision": "^1.0.1",
     "@phosphor-icons/react": "^2.1.10",
     "@react-hook/mouse-position": "^4.1.3",
     "@react-three/cannon": "^6.6.0",

@@ -1,175 +1,358 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { Nanum_Myeongjo } from "next/font/google";
+import { Instrument_Serif } from "next/font/google";
 import localFont from "next/font/local";
 import { ArrowLeft } from "lucide-react";
-import Grainient from "../../components/grainient/Grainient";
+import { BLOCKS, type Block, type ImageSpec } from "./blocks";
+import { DIAGRAMS, Annotation } from "./Diagrams";
+import { COLOR, TYPE, EMPHASIS_WEIGHT } from "./tokens";
 import "./atrios.css";
 
-// Atrios brand fonts: Myeongjo (serif) for display, Aspekta (sans) for body.
-const myeongjo = Nanum_Myeongjo({
-  weight: ["400", "700"],
+// Instrument Serif throughout the essay; Burgues Script only for initials.
+const instrument = Instrument_Serif({
+  weight: "400",
   subsets: ["latin"],
 });
 
+// Aspekta, the product's own sans, for the small tags under the logo.
 const aspekta = localFont({
   src: "../../../public/fonts/AspektaVF.woff2",
   display: "swap",
 });
 
-// Atrios palette (matches the invite page Grainient + cream tokens)
-const CREAM = "#FCF7E9";
+// Burgues Script, used only for the initial capital of a title.
+const burgues = localFont({
+  src: "../../../public/fonts/BurguesScript-Regular.otf",
+  display: "swap",
+});
+
+/** Sets a title's first character in Burgues Script, the rest in Playfair. */
+function Initial({ text }: { text: string }) {
+  return (
+    <>
+      <span className={burgues.className} style={{ fontSize: "1.7em", lineHeight: 0.7 }}>
+        {text.charAt(0)}
+      </span>
+      {text.slice(1)}
+    </>
+  );
+}
+
+
+/** A diagram drawn in code, sitting directly on the page's paper. */
+function Figure({ name, caption }: { name: keyof typeof DIAGRAMS; caption: string }) {
+  const Drawing = DIAGRAMS[name];
+  return (
+    // Wider than the reading column, but never wider than the viewport minus
+    // its gutters — otherwise the right-hand end of a flow is clipped.
+    <figure className="relative left-1/2 my-14 w-[min(920px,calc(100vw-4rem))] -translate-x-1/2">
+      <Drawing />
+      {caption && (
+        <figcaption className={`pt-2 ${TYPE.caption}`} style={{ color: COLOR.muted }}>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+/** A screenshot, set in the wide figure column like the diagrams. */
+function Shot({ src, alt, width, height, caption, size }: { src: string; alt: string; width: number; height: number; caption?: string; size?: "small" }) {
+  const frame =
+    size === "small"
+      ? "mx-auto my-10 w-full max-w-md"
+      : "relative left-1/2 my-14 w-[min(920px,calc(100vw-4rem))] -translate-x-1/2";
+  return (
+    <figure className={frame}>
+      <div className="overflow-hidden rounded-xl border shadow-[0_18px_50px_rgba(90,70,40,0.18)]" style={{ borderColor: COLOR.rule }}>
+        <Image src={src} alt={alt} width={width} height={height} className="h-auto w-full" />
+      </div>
+      {caption && (
+        <figcaption className={`pt-2 ${TYPE.caption}`} style={{ color: COLOR.muted }}>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+/** React does not always write the muted attribute into the DOM, and without
+ *  it browsers refuse to autoplay. Setting the properties by hand and calling
+ *  play() makes the loop reliable, and onEnded is a fallback for browsers that
+ *  drop the loop flag. */
+function LoopingVideo({ src, poster }: { src: string; poster: string }) {
+  const ref = React.useRef<HTMLVideoElement>(null);
+  React.useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    v.loop = true;
+    v.play().catch(() => {});
+  }, []);
+  return (
+    <video
+      ref={ref}
+      src={src}
+      poster={poster}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      onEnded={(e) => {
+        const v = e.currentTarget;
+        v.currentTime = 0;
+        v.play().catch(() => {});
+      }}
+      className="h-full w-full object-cover"
+    />
+  );
+}
+
+/** A muted, looping screen recording with a handwritten note pointing at it. */
+function Clip({ src, poster, width, height, note, caption }: { src: string; poster: string; width: number; height: number; note?: string; caption?: string }) {
+  return (
+    <figure className="relative left-1/2 my-14 w-[min(920px,calc(100vw-4rem))] -translate-x-1/2">
+      {note && (
+        <div className="mb-1 flex justify-end pr-6">
+          <Annotation text={note} />
+        </div>
+      )}
+      <div className="overflow-hidden rounded-xl border shadow-[0_18px_50px_rgba(90,70,40,0.18)]" style={{ borderColor: COLOR.rule, aspectRatio: `${width} / ${height}` }}>
+        <LoopingVideo src={src} poster={poster} />
+      </div>
+      {caption && (
+        <figcaption className={`pt-2 ${TYPE.caption}`} style={{ color: COLOR.muted }}>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+/** A screenshot beside a diagram, vertically centred on each other. */
+function ShotFigure({ image, figure, caption, stat, wide }: { image: ImageSpec; figure: keyof typeof DIAGRAMS; caption?: string; stat?: string; wide?: boolean }) {
+  const Drawing = DIAGRAMS[figure];
+  // `wide` gives the diagram the larger share, for two-column flows.
+  const cols = "sm:grid-cols-[3fr_2fr]";
+  return (
+    <figure className="relative left-1/2 my-14 w-[min(920px,calc(100vw-4rem))] -translate-x-1/2">
+      <div className={`grid items-center gap-8 ${cols}`}>
+        <div>
+          <div className="overflow-hidden rounded-xl border shadow-[0_18px_50px_rgba(90,70,40,0.18)]" style={{ borderColor: COLOR.rule }}>
+            <Image src={image.src} alt={image.alt} width={image.width} height={image.height} className="h-auto w-full" />
+          </div>
+          {stat && (
+            <p className={`pt-3 text-center ${TYPE.body}`} style={{ color: COLOR.ink, fontWeight: EMPHASIS_WEIGHT }}>
+              {stat}
+            </p>
+          )}
+        </div>
+        <div className={wide ? "w-full max-w-[400px] justify-self-center" : "w-full"}>
+          <Drawing />
+        </div>
+      </div>
+      {caption && (
+        <figcaption className={`pt-2 ${TYPE.caption}`} style={{ color: COLOR.muted }}>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+/** Two screenshots side by side, in the wide figure column. */
+function ShotPair({ images, caption }: { images: [ImageSpec, ImageSpec]; caption?: string }) {
+  return (
+    <figure className="relative left-1/2 my-14 w-[min(920px,calc(100vw-4rem))] -translate-x-1/2">
+      <div className="grid gap-4 sm:grid-cols-2">
+        {images.map((img) => (
+          <div key={img.src} className="overflow-hidden rounded-xl border shadow-[0_18px_50px_rgba(90,70,40,0.18)]" style={{ borderColor: COLOR.rule }}>
+            <Image src={img.src} alt={img.alt} width={img.width} height={img.height} className="h-auto w-full" />
+          </div>
+        ))}
+      </div>
+      {caption && (
+        <figcaption className={`pt-2 ${TYPE.caption}`} style={{ color: COLOR.muted }}>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+/** An empty frame waiting for artwork. Deliberately visible, so an unfilled
+ *  slot reads as unfinished rather than as a design choice. */
+function Slot({ label, hint, ratio = "16 / 10" }: { label: string; hint: string; ratio?: string }) {
+  return (
+    <figure className="my-12">
+      <div
+        className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed px-6 text-center"
+        style={{ aspectRatio: ratio, borderColor: COLOR.slotBorder, background: COLOR.slotFill }}
+      >
+        <span className={TYPE.slotLabel} style={{ color: COLOR.ink }}>
+          {label}
+        </span>
+        <span className={`max-w-sm ${TYPE.caption}`} style={{ color: COLOR.muted }}>
+          {hint}
+        </span>
+      </div>
+    </figure>
+  );
+}
+
+/** Two frames side by side for a before/after pair. */
+function SlotPair({ label, beforeHint, afterHint }: { label: string; beforeHint: string; afterHint: string }) {
+  return (
+    <figure className="my-12">
+      <div className="grid gap-4 sm:grid-cols-2">
+        {[beforeHint, afterHint].map((hint) => (
+          <div
+            key={hint}
+            className="flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed px-4 text-center"
+            style={{ aspectRatio: "4 / 3", borderColor: COLOR.slotBorder, background: COLOR.slotFill }}
+          >
+            <span className="text-base" style={{ color: COLOR.ink }}>
+              {hint}
+            </span>
+          </div>
+        ))}
+      </div>
+      <figcaption className={`pt-2 ${TYPE.caption}`} style={{ color: COLOR.muted }}>
+        {label}
+      </figcaption>
+    </figure>
+  );
+}
+
+function renderBlock(block: Block, i: number) {
+  switch (block.kind) {
+    case "h2":
+      return (
+        <h2
+          key={i}
+          className={`pt-10 ${TYPE.h2} ${instrument.className}`}
+          style={{ color: COLOR.ink }}
+        >
+          <Initial text={block.text} />
+        </h2>
+      );
+    case "h3":
+      return (
+        <h3 key={i} className={`pt-6 ${TYPE.h3} ${instrument.className}`} style={{ color: COLOR.ink }}>
+          <Initial text={block.text} />
+        </h3>
+      );
+    case "lede":
+      // Same size as body copy; the opening is set apart by ink, not scale.
+      return (
+        <p key={i} className={TYPE.body} style={{ color: COLOR.ink }}>
+          {block.text}
+        </p>
+      );
+    case "p":
+      return (
+        <p key={i} className={TYPE.body} style={{ color: COLOR.body }}>
+          {block.text}
+        </p>
+      );
+    case "pull":
+      // Emphasis carried by the handwriting face at weight, not by a rule.
+      return (
+        <p
+          key={i}
+          className={`my-7 ${TYPE.emphasis}`}
+          style={{ color: COLOR.ink, fontWeight: EMPHASIS_WEIGHT }}
+        >
+          {block.text}
+        </p>
+      );
+    case "aside":
+      return (
+        <p key={i} className={`ml-auto max-w-sm ${TYPE.caption} leading-relaxed`} style={{ color: COLOR.muted }}>
+          {block.text}
+        </p>
+      );
+    case "stat":
+      return (
+        <p
+          key={i}
+          className={`mx-auto -mt-11 mb-10 max-w-xl text-center ${TYPE.body}`}
+          style={{ color: COLOR.ink, fontWeight: EMPHASIS_WEIGHT }}
+        >
+          {block.text}
+        </p>
+      );
+    case "rule":
+      return <hr key={i} className="my-12 border-0 border-t" style={{ borderColor: COLOR.rule }} />;
+    case "figure":
+      return <Figure key={i} name={block.name} caption={block.caption} />;
+    case "image":
+      return <Shot key={i} {...block} />;
+    case "video":
+      return <Clip key={i} {...block} />;
+    case "imageFigure":
+      return <ShotFigure key={i} {...block} />;
+    case "imagePair":
+      return <ShotPair key={i} {...block} />;
+    case "slot":
+      return <Slot key={i} {...block} />;
+    case "slotPair":
+      return <SlotPair key={i} {...block} />;
+  }
+}
 
 export default function AtriosPage() {
   return (
-    <div className={`atrios-page relative min-h-screen ${aspekta.className}`}>
-      {/* Static grainient background (Atrios invite colors), fixed behind content */}
-      <div className="fixed inset-0 -z-10">
-        <Grainient
-          color1="#05483A"
-          color2="#0E2723"
-          color3="#021714"
-          timeSpeed={0}
-          colorBalance={0.32}
-          warpStrength={1}
-          warpFrequency={5}
-          warpSpeed={0}
+    <div
+      className={`atrios-page relative min-h-screen ${instrument.className}`}
+      style={{ background: COLOR.paper }}
+    >
+      <div className="mx-auto max-w-3xl space-y-5 px-8 pb-16 pt-20">
+        <Image
+          src="/atrios-logo.png"
+          alt="Atrios"
+          width={146}
+          height={49}
+          priority
+          className="h-9 w-auto object-contain"
         />
-      </div>
-
-      {/* Header Section */}
-      <div className="pt-16">
-        <div className="max-w-4xl mx-auto px-8">
-          {/* Logo top-left (matches /blind-hangouts) */}
-          <div className="flex items-center mb-12">
-            <Image
-              src="/atrios-logo-light.png"
-              alt="Atrios"
-              width={146}
-              height={49}
-              priority
-              className="h-9 w-auto object-contain"
-            />
-          </div>
-
-          {/* Product screenshot — above the title */}
-          <div className="mb-12 overflow-hidden rounded-xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-            <Image
-              src="/atrios-companies.png"
-              alt="The Atrios companies marketplace I designed, with a company card hover state"
-              width={2400}
-              height={1273}
-              className="w-full h-auto"
-            />
-          </div>
-
-          {/* Hero Content */}
-          <div className="text-center">
-            <h2
-              className={`text-3xl font-bold ${myeongjo.className}`}
-              style={{ color: CREAM }}
+        <ul className={`flex flex-wrap gap-2 pb-6 pt-1 text-sm ${aspekta.className}`} aria-label="Role">
+          {["2025 to present", "Founding team", "Head of Product"].map((tag) => (
+            <li
+              key={tag}
+              className="rounded-md border px-2.5 py-1"
+              style={{ borderColor: COLOR.rule, color: COLOR.muted, fontWeight: 450 }}
             >
-              Turning trust into a product.
-            </h2>
-            <p style={{ color: "rgba(252, 247, 233, 0.7)" }}>
-              Warm introductions, booked straight into a company&apos;s calendar.
-            </p>
-            <p style={{ color: "rgba(252, 247, 233, 0.7)" }}>
-              No cold outreach. Just trust, made real.
-            </p>
-          </div>
+              {tag}
+            </li>
+          ))}
+        </ul>
 
-        </div>
-      </div>
+        {BLOCKS.map(renderBlock)}
 
-      {/* Content Sections */}
-      <div
-        className="max-w-3xl mx-auto px-8 lg:px-20 space-y-6 lg:space-y-4 my-20 "
-        style={{ color: CREAM }}
-      >
+        {/* Still to write (the draft's [NEEDS YOU] notes, kept off the page):
+            — The story: the first refusal is written. Name the others, and
+              what each one was refusing.
+            — Onboarding: the experiment log. What changed, what happened,
+              whether it stayed, including the rollbacks.
+            — Incentives: the CEO's actual objection, what he was protecting,
+              and what finally moved him.
+            — What changed: separate what you observed from what people told
+              you, given they are polite to the person who designed it.
+            — What I don't know: the failure condition, with a date, written
+              now rather than after the data.
+            — Speed: what caused the half-day deploy, what it is now, and what
+              you stopped trying because of it. */}
 
-        {/* 1 — What I inherited */}
-
-        <p>I joined a product that almost nobody was using.</p>
-        <p>
-          Ten thousand dollars in revenue. A right idea that hadn&apos;t found its shape yet.
-        </p>
-        <p>
-          Atrios is built on the oldest move in business: someone you trust says you should meet this person. A warm introduction. We had a network of well-connected people — tastemakers — who could open their world, introducing friends to products they actually needed, and turning each intro into a booked meeting on a company&apos;s calendar. No cold outreach. Just trust, turned into a product.
-        </p>
-
-        {/* 2 — Founding ownership */}
-
-        <p>
-          The idea was right. The product wasn&apos;t. I took the whole thing, and rebuilt it.
-        </p>
-        <p>
-          Within a month, every screen, every flow, every email was gone and remade — until the product told the truth about the one thing we were actually trying to do.
-        </p>
-
-        {/* 3 — The core product question */}
-
-        <p>
-          What does someone need before they&apos;ll put their name on an introduction?
-        </p>
-
-        <p>
-          Because that&apos;s the quiet thing about this product. When a tastemaker makes an intro, they&apos;re not clicking a button. They&apos;re spending their reputation. They&apos;re saying trust me to two people at once. If the product made that feel heavy, or confusing, or risky, they just wouldn&apos;t do it. And for a while, they weren&apos;t.
-        </p>
-
-        {/* 4 — Diagnosis: built the data, found the truth */}
-
-        <p>
-          So I built our analytics from nothing. Instrumented every step. And the funnel showed me something quiet and sad: one in a hundred people who signed up ever made an introduction. We were losing them at the door and calling it something else.
-        </p>
-
-        {/* 5 — The reframe: design for the ten-second trust decision */}
-
-        <p>
-          That changed how I designed everything after. I stopped thinking in features and started thinking about one person, alone with their screen, deciding in ten seconds whether to trust us. Every screen had to earn that. If someone couldn&apos;t instantly see who they could help, what they&apos;d get, and why it mattered, it had failed.
-        </p>
-
-        {/* 6 — The cut */}
-
-        <p>So I cut.</p>
-
-        <p>
-          My CEO&apos;s bet had been to sync every tastemaker&apos;s LinkedIn connections into our product, so we could recommend exactly who to intro. It made sense on paper. In practice, LinkedIn makes you request your connection list as a CSV that takes a full day to arrive — and then you re-upload it to us. We were asking people to wait 24 hours before they could see what the product even did. That was the door. That was where we were losing them.
-        </p>
-        <p>
-          I killed the whole flow. In its place, one question: which of your close friends would be a great fit for the companies we&apos;re introducing? No sync. No CSV. No wait. Just the question the product was really about.
-        </p>
-
-        {/* 7 — Craft + leadership */}
-
-        <p>
-          I rewrote the emails word by word. I built the systems underneath so the whole thing held together. And I got the team to care about it the way I did — we spent a full afternoon arguing over one line in the invite email. Conversions doubled the week we shipped the new one.
-        </p>
-
-        {/* 8 — The outcome */}
-
-        <p>Three months in, it worked.</p>
-
-        <p>
-          Ten thousand became one million in ARR. Real introductions, into real calendars, for real.
-        </p>
-        <p>
-          I designed every screen they touch. I built the systems under them. But what I&apos;m proudest of isn&apos;t any single thing I shipped.
-        </p>
-
-        <p>
-          I took something almost no one used, and made it something people trust with their name.
-        </p>
-
-        {/* Navigation back */}
-        <div className="pt-16 lg:pt-40 pb-8">
+        <div className="pb-8 pt-16 lg:pt-32">
           <button
             onClick={() => window.history.back()}
-            className="flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-white/10"
-            style={{ color: "rgba(252, 247, 233, 0.6)" }}
+            className="flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-black/5"
+            style={{ color: COLOR.muted }}
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="h-4 w-4" />
             Back to Portfolio
           </button>
         </div>

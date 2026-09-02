@@ -1,0 +1,25 @@
+const puppeteer=require("puppeteer-core");const fs=require("fs");
+const CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const jobs=[
+  {label:"Product Manager, ChatGPT and Codex App Ecosystem", theme:"openai", out:"Kira-Cheung-PM-ChatGPT-Codex-OpenAI.pdf", tag:"openai"},
+  {label:"Product Manager, Netflix", theme:"netflix", out:"Kira-Cheung-Product-Manager-Netflix.pdf", tag:"netflix"},
+];
+(async()=>{
+  const rows=await (await fetch(`${process.env.SB_URL}/rest/v1/resumes?select=composed&title=neq.__canvas__`,{headers:{apikey:process.env.SB_KEY,Authorization:`Bearer ${process.env.SB_KEY}`}})).json();
+  const b=await puppeteer.launch({executablePath:CHROME,headless:true,args:["--no-sandbox"]});
+  for(const j of jobs){
+    const doc=rows.find(r=>r.composed&&r.composed.label===j.label);
+    const p=await b.newPage();
+    await p.evaluateOnNewDocument(x=>{window.__RESUME_DATA__=x;},{resume:doc.composed.resume,variant:"product"});
+    await p.goto(`http://localhost:3100/resume/print?theme=${j.theme}`,{waitUntil:"networkidle0",timeout:45000});
+    await new Promise(r=>setTimeout(r,1200));
+    const mark=await p.evaluate(()=>{const m=document.querySelector('.name-mark');return m?m.getAttribute('src'):'none';});
+    await p.evaluate("document.querySelectorAll('nextjs-portal,[data-nextjs-toast],[data-next-badge-root]').forEach(e=>e.remove())");
+    await p.emulateMediaType("print");
+    const pdf=await p.pdf({printBackground:true,preferCSSPageSize:true});
+    fs.writeFileSync(process.env.HOME+"/Downloads/"+j.out,pdf);
+    console.log(j.tag,"bytes",pdf.length,"mark",mark);
+    await p.close();
+  }
+  await b.close();console.log("DONE");
+})().catch(e=>{console.error("FAIL:",e.message);process.exit(1);});

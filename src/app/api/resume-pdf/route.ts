@@ -33,7 +33,7 @@ export async function GET(request: Request) {
   const variantParam = url.searchParams.get("variant");
   const variant: Variant = variantParam && variantParam in VARIANTS ? (variantParam as Variant) : "fullstack";
   const themeParam = url.searchParams.get("theme");
-  const theme = ["claude", "notion", "openai", "wispr", "plain"].includes(themeParam ?? "") ? themeParam! : "claude";
+  const theme = ["claude", "notion", "openai", "wispr", "netflix", "plain"].includes(themeParam ?? "") ? themeParam! : "claude";
   // Optional: export a saved tailored job document (its own `resumes` row) by id.
   const docId = url.searchParams.get("doc");
 

@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import ProjectShowcase from "../components/project-showcase";
 import ProjectHoverCard from "../components/project-hover-card";
 import ChristmasCardEmbed from "../components/christmas-card-embed";
@@ -20,11 +21,8 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
         className="min-h-screen w-full flex justify-center items-center flex-col"
       >
 
-      <div className="w-full max-w-6xl px-4 space-y-6 flex flex-col">
-        <div
-          className="w-full cursor-pointer"
-          onClick={() => window.location.href = '/atrios'}
-        >
+      <div className="w-full max-w-7xl px-4 space-y-6 flex flex-col">
+        <Link href="/atrios" className="block w-full cursor-pointer">
           <ProjectShowcase
             title="Atrios"
             description={[
@@ -49,13 +47,11 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
             heightClass="h-[72vh]"
             revealOnHover
             mediaOffset
+            mediaWidth="118%"
           />
-        </div>
+        </Link>
 
-        <div
-          className="w-full cursor-pointer"
-          onClick={() => window.location.href = '/blind-hangouts'}
-        >
+        <Link href="/blind-hangouts" className="block w-full cursor-pointer">
           <ProjectShowcase
             title="Blind Hangouts"
             description={[
@@ -81,7 +77,7 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
             revealOnHover
             mediaCenter
           />
-        </div>
+        </Link>
 
         <div className="w-full">
           <ProjectShowcase
@@ -135,10 +131,7 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
             />
           </div>
 
-          <div
-            className="w-full md:w-1/2 cursor-pointer"
-            onClick={() => window.location.href = '/resume'}
-          >
+          <Link href="/resume" className="block w-full md:w-1/2 cursor-pointer">
             <ProjectHoverCard
               title="Résumé Builder"
               description={[
@@ -146,7 +139,7 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
               ]}
               media={<ResumeBuilderEmbed />}
             />
-          </div>
+          </Link>
         </div>
       </div>
     </div>
