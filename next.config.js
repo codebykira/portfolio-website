@@ -24,6 +24,9 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/let-it', destination: '/dead-letters', permanent: true },
+      // Catch the shorthand/typo spellings of the grok ideation doc.
+      { source: '/grokbok', destination: '/grokbot', permanent: false },
+      { source: '/grok', destination: '/grokbot', permanent: false },
     ];
   },
   // Cache assets in production only. In development this would cache the dev JS
