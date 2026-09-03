@@ -80,41 +80,22 @@ function TagMock() {
         <div className="gb-pane">
           <p className="gb-pane-label gb-mono"># apartment-hunt · Kira, Sam</p>
 
-          <div className={`gb-msg ${on(1)}`}>
-            <div className="gb-av k">KC</div>
-            <div>
-              <div className="gb-who">
-                Kira <span>2:04 PM</span>
-              </div>
-              <div className="gb-txt">
-                ok the Sunset place is back on the market, $2.9k
-              </div>
+          <div className={`gb-sys gb-mono ${on(1)}`}>Today 2:04 PM</div>
+
+          <div className={`gb-line me ${on(1)}`}>
+            <div className="gb-bubble">the Sunset place is back, $2.9k</div>
+          </div>
+
+          <div className={`gb-line ${on(2)}`}>
+            <div className="gb-name">Sam</div>
+            <div className="gb-bubble">
+              no parking one right? can we get comps
             </div>
           </div>
 
-          <div className={`gb-msg ${on(2)}`}>
-            <div className="gb-av s">SD</div>
-            <div>
-              <div className="gb-who">
-                Sam <span>2:05 PM</span>
-              </div>
-              <div className="gb-txt">
-                that&rsquo;s the one with no parking right? can we get a comp
-                check
-              </div>
-            </div>
-          </div>
-
-          <div className={`gb-msg ${on(3)}`}>
-            <div className="gb-av k">KC</div>
-            <div>
-              <div className="gb-who">
-                Kira <span>2:05 PM</span>
-              </div>
-              <div className="gb-txt">
-                <strong>@grok</strong> pull comps for 2BRs near Sunset under
-                $3k, last 60 days
-              </div>
+          <div className={`gb-line me ${on(3)}`}>
+            <div className="gb-bubble">
+              <strong>@grok</strong> comps for 2BRs near Sunset under $3k
             </div>
           </div>
 
@@ -131,9 +112,8 @@ function TagMock() {
             <div className="gb-block-body">
               {delivered ? (
                 <>
-                  Found 14 comps. Median $2,780 — the Sunset listing is ~4%
-                  over, mostly explained by the in-unit laundry. Full table in
-                  thread.
+                  14 comps. Median $2,780 — Sunset is 4% over, mostly the
+                  laundry. Table in thread.
                 </>
               ) : (
                 <span className="gb-typing" aria-label="working">
@@ -154,32 +134,26 @@ function TagMock() {
             </div>
           </div>
 
-          <div className={`gb-msg ${on(9)}`}>
-            <div className="gb-av s">SD</div>
-            <div>
-              <div className="gb-who">
-                Sam <span>2:11 PM</span>
-              </div>
-              <div className="gb-txt">
-                4% over feels fine honestly. laundry is worth it
-              </div>
+          <div className={`gb-line ${on(9)}`}>
+            <div className="gb-name">Sam</div>
+            <div className="gb-bubble">
+              4% over is fine, laundry is worth it
             </div>
+          </div>
+
+          <div className="gb-composerbar">
+            <b>+</b> Message #apartment-hunt
           </div>
         </div>
 
         <div className="gb-pane">
           <p className="gb-pane-label gb-mono">Thread · comp check</p>
 
-          <div className={`gb-msg ${on(5)}`}>
-            <div className="gb-av bot">G</div>
-            <div>
-              <div className="gb-who">
-                grok <span>2:06 PM</span>
-              </div>
-              <div className="gb-txt">
-                Pulling listings from the last 60 days — I&rsquo;ll screen-share
-                while I filter.
-              </div>
+          <div className={`gb-line ${on(5)}`}>
+            <div className="gb-name">grok</div>
+            <div className="gb-bubble">
+              Pulling the last 60 days. Screen&rsquo;s live if you want to
+              watch.
             </div>
           </div>
 
@@ -187,36 +161,23 @@ function TagMock() {
             ▣ grok&rsquo;s screen — live
           </div>
 
-          <div className={`gb-msg ${on(7)}`}>
-            <div className="gb-av s">SD</div>
-            <div>
-              <div className="gb-who">
-                Sam <span>2:08 PM</span>
-              </div>
-              <div className="gb-txt">
-                exclude anything below the park, we ruled that area out
-              </div>
-            </div>
+          <div className={`gb-line ${on(7)}`}>
+            <div className="gb-name">Sam</div>
+            <div className="gb-bubble">skip anything below the park</div>
           </div>
 
-          <div className={`gb-msg ${on(8)}`}>
-            <div className="gb-av bot">G</div>
-            <div>
-              <div className="gb-who">
-                grok <span>2:09 PM</span>
-              </div>
-              <div className="gb-txt">
-                Done — that drops 3 comps, median moves to $2,780. Posting the
-                summary back to the channel.
-              </div>
+          <div className={`gb-line ${on(8)}`}>
+            <div className="gb-name">grok</div>
+            <div className="gb-bubble">
+              Dropped 3 — median $2,780. Saved{" "}
+              <span className="gb-code">/workspace/comps.csv</span>. Posting
+              the summary back.
             </div>
           </div>
         </div>
       </div>
       <p className="gb-caption gb-mono">
-        Left: the channel stays human-paced; the block is the bot&rsquo;s entire
-        footprint. Right: the thread is the session — full back-and-forth, the
-        bot&rsquo;s live screen, and any human present can step in and steer.
+        The channel gets one block. The thread holds the work.
       </p>
     </div>
   );
@@ -460,8 +421,7 @@ function ComposerMock() {
               {stage === "group" && (
                 <>
                   <p className="gb-invitehint gb-mono">
-                    humans and bots are the same kind of addressee — an email
-                    is just an addressee who gets a link
+                    an email is an addressee that gets a link
                   </p>
                   {draft.includes("@") && (
                     <button
@@ -488,21 +448,13 @@ function ComposerMock() {
 
               {stage === "started" && (
                 <>
-                  <p className="gb-sysline gb-mono">
-                    {people.join(", ")} invited by email — they open a link,
-                    no install
+                  <p className="gb-sys gb-mono">
+                    {people.join(", ")} invited — joins as a guest until they
+                    make a profile
                   </p>
-                  <div className="gb-msg on gb-step">
-                    <div className="gb-av bot">NB</div>
-                    <div>
-                      <div className="gb-who">
-                        New Bot <span>now</span>
-                      </div>
-                      <div className="gb-txt">
-                        Hey everyone. I&rsquo;m here when you tag me —
-                        otherwise this room is yours.
-                      </div>
-                    </div>
+                  <div className="gb-line gb-step on">
+                    <div className="gb-name">New Bot</div>
+                    <div className="gb-bubble">Hey. What&rsquo;s up?</div>
                   </div>
                 </>
               )}
@@ -524,7 +476,7 @@ function Model({
 }: {
   letter: string;
   title: string;
-  tagline: string;
+  tagline?: string;
   glyph: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -537,7 +489,7 @@ function Model({
         <div>
           <span className="gb-model-letter gb-mono">{letter}</span>
           <h3 className="gb-h3 gb-display">{title}</h3>
-          <p className="gb-tagline">{tagline}</p>
+          {tagline && <p className="gb-tagline">{tagline}</p>}
           {children}
         </div>
       </div>
@@ -568,14 +520,6 @@ export default function GrokbotDoc() {
       <div className="gb-col">
         <header className="gb-masthead">
           <Blob />
-          <motion.p
-            className="gb-eyebrow gb-mono"
-            initial={reduced ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            Ideation · grok
-          </motion.p>
           <motion.h1
             className="gb-h1 gb-display"
             initial={reduced ? false : { opacity: 0, y: 28 }}
@@ -590,8 +534,7 @@ export default function GrokbotDoc() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
           >
-            What happens when grok leaves the desktop, gets a URL, and a second
-            human walks into the room.
+            Notes on grok for the web, with more than one person in the room.
           </motion.p>
           <motion.p
             className="gb-byline gb-mono"
@@ -605,62 +548,30 @@ export default function GrokbotDoc() {
 
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">Where this starts</p>
-            <h2 className="gb-h2 gb-display">
-              Grok today is a private conversation
-            </h2>
+            <p className="gb-kicker gb-mono">01 · Define</p>
+            <h2 className="gb-h2 gb-display">Today: one person, one bot</h2>
             <p>
-              The desktop app is built around a simple shape: a sidebar of
-              bots, and each bot is a DM. A bot has its own screen you can
-              watch, Routines that run it on a schedule, and plugins that give
-              it hands. Everything about it assumes{" "}
-              <strong>one human, one machine</strong> — the bot&rsquo;s screen
-              is a window on your Mac, its credentials are your credentials,
-              and nobody else can see any of it.
+              Grok is a desktop app. Each bot is a DM with its own screen,
+              routines, and plugins. Only you see any of it.
             </p>
             <p>
-              Moving to the web changes two things, and only one of them is
-              technical. The technical one: the bot&rsquo;s screen and runtime
-              have to live on a server instead of your laptop. The interesting
-              one:{" "}
-              <strong>
-                a web page has a URL, and a URL can be opened by someone who
-                isn&rsquo;t you.
-              </strong>{" "}
-              The moment that&rsquo;s true, &ldquo;chat app with bots&rdquo;
-              stops being the right frame, and we have to decide what a bot{" "}
-              <em>is</em> when there&rsquo;s more than one human present.
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="gb-pullline gb-display">
-              The core design question: when a second human enters, what is the
-              bot&rsquo;s relationship to the room?
-            </p>
-          </Reveal>
-          <Reveal>
-            <p>
-              This doc explores four answers, borrowing shamelessly from how
-              Claude shows up in multiplayer surfaces (the Slack tag, shared
-              sessions, artifacts with links). The first model — the Tag — is
-              the one I want to push on hardest, so it gets a deep dive after
-              the survey.
+              A web page has a link, and links get shared. So: what is the
+              bot when two people are in the room?
             </p>
           </Reveal>
         </section>
 
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">The survey</p>
+            <p className="gb-kicker gb-mono">02 · Diverge</p>
             <h2 className="gb-h2 gb-display">
-              Four shapes for a bot among humans
+              Four ways to put a bot in a room
             </h2>
           </Reveal>
 
           <Model
             letter="MODEL A"
-            title="The Tag — a block in the channel"
-            tagline="The channel belongs to the humans. The bot enters as an object in the conversation."
+            title="The Tag"
             glyph={
               <svg viewBox="0 0 64 64" aria-hidden="true">
                 <rect
@@ -692,31 +603,16 @@ export default function GrokbotDoc() {
             }
           >
             <p>
-              This is the Claude-tag format. People talk in a shared channel
-              like they normally would. When someone wants grok, they drop a{" "}
-              <strong>bot block</strong> into the flow — via{" "}
-              <span className="gb-chip-inline gb-mono">@grok</span>, a slash
-              command, or a &ldquo;+&rdquo; attach — with a prompt on it. The
-              block sits inline like a message-sized appliance: it shows the
-              ask, a status chip, and the result summary. Anyone in the channel
-              can poke it. Anything deeper than one exchange{" "}
-              <strong>forks into a thread</strong> anchored to the block, and
-              the thread is where the real session lives — the back-and-forth,
-              the bot&rsquo;s screen, the messy middle. The channel only ever
-              sees the block&rsquo;s tidy surface.
-            </p>
-            <p>
-              Why it&rsquo;s attractive: it keeps human conversation primary,
-              gives the bot a bounded footprint, and reuses a social pattern
-              (threads) everyone already understands as &ldquo;go deeper
-              without spamming the room.&rdquo;
+              A normal group chat. You{" "}
+              <span className="gb-chip-inline gb-mono">@grok</span> it, it
+              posts one block with the result. Deeper work happens in a
+              thread on that block.
             </p>
           </Model>
 
           <Model
             letter="MODEL B"
-            title="The Room — invite humans into the bot's space"
-            tagline="The bot's DM becomes a room, and you add people to it."
+            title="The Room"
             glyph={
               <svg viewBox="0 0 64 64" aria-hidden="true">
                 <rect
@@ -747,25 +643,15 @@ export default function GrokbotDoc() {
             }
           >
             <p>
-              The straightest port of the desktop app. Each bot already has a
-              space: the chat plus its screen pane plus its Routines. Make that
-              space joinable — &ldquo;add Sam to Job App bot&rdquo; — and
-              everyone in it sees the same conversation and the same screen,
-              live. It&rsquo;s bot-first: the humans are guests in the
-              bot&rsquo;s room rather than the other way around.
-            </p>
-            <p>
-              This is great for the <em>pair-watching</em> case (&ldquo;come
-              look at what it&rsquo;s doing to my resume&rdquo;) and terrible
-              as the default social space — nobody wants their team channel to
-              live inside a bot. It&rsquo;s a mode, not a home.
+              Invite people into the bot&rsquo;s chat. Everyone sees the same
+              conversation and the same screen. Good for watching together,
+              not a home.
             </p>
           </Model>
 
           <Model
             letter="MODEL C"
-            title="The Teammate — the bot is a member"
-            tagline="Full citizenship: the bot has a face in the roster and can speak anywhere."
+            title="The Teammate"
             glyph={
               <svg viewBox="0 0 64 64" aria-hidden="true">
                 <rect
@@ -799,26 +685,14 @@ export default function GrokbotDoc() {
             }
           >
             <p>
-              The Slack-bot lineage. Grok gets an identity in the workspace: it
-              appears in the member list, you can DM it, add it to channels,
-              and it can post <em>unprompted</em> — a Routine fires and drops
-              its morning digest into{" "}
-              <span className="gb-chip-inline gb-mono">#standup</span> like a
-              colleague would. Mention it anywhere and it answers in place.
-            </p>
-            <p>
-              Maximum power, maximum noise risk. Every open question in this
-              doc (whose credentials? who can steer it? when may it speak?)
-              gets harder when the bot can act anywhere. Probably the end
-              state, not the starting point — and notably, the Tag is a strict
-              subset of it, which suggests a sequencing.
+              The bot is a full member. It has a name, joins channels, and
+              posts on its own schedule. Most powerful, most noisy. Later.
             </p>
           </Model>
 
           <Model
             letter="MODEL D"
-            title="The Link — sessions you can hand to someone"
-            tagline="Stay single-player; make everything shareable by URL."
+            title="The Link"
             glyph={
               <svg viewBox="0 0 64 64" aria-hidden="true">
                 <rect
@@ -846,19 +720,56 @@ export default function GrokbotDoc() {
             }
           >
             <p>
-              The most conservative move: keep grok&rsquo;s
-              one-human-one-bot shape, but since we&rsquo;re on the web now,
-              every session, every artifact the bot produces, and every
-              bot&rsquo;s live screen gets a link. Multiplayer happens by{" "}
-              <em>handoff</em> — &ldquo;here&rsquo;s my thread with the bot,
-              take a look&rdquo; — with view or take-over permissions, rather
-              than by shared presence.
+              Keep it single player, but every chat gets a share link.
+              Boring, and it&rsquo;s the plumbing the other three need.
             </p>
+          </Model>
+
+          <Model
+            letter="MODEL E"
+            title="The Side Chat"
+            glyph={
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect
+                  className="draw"
+                  x="4"
+                  y="4"
+                  width="40"
+                  height="40"
+                  rx="10"
+                  fill="none"
+                  stroke="#2a2a2e"
+                  strokeWidth="2"
+                />
+                <rect x="12" y="14" width="24" height="5" rx="2.5" fill="#6c6c73" />
+                <rect x="12" y="24" width="18" height="5" rx="2.5" fill="#6c6c73" />
+                <rect
+                  className="draw"
+                  x="34"
+                  y="36"
+                  width="26"
+                  height="22"
+                  rx="8"
+                  fill="#0f2916"
+                  stroke="#34c95e"
+                  strokeWidth="2"
+                />
+                <path
+                  className="draw"
+                  d="M34 47 h-12 m0 0 l5 -5 m-5 5 l5 5"
+                  stroke="#34c95e"
+                  strokeWidth="2.5"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            }
+          >
             <p>
-              Underwhelming as a headline, but it&rsquo;s the plumbing every
-              other model needs anyway: an addressable session is exactly what
-              a thread (A), a room (B), or a teammate&rsquo;s working memory
-              (C) is made of.
+              Step out and chat with the bot alone. When you land on
+              something, post one conclusion back to the room. Draft in
+              private, publish in public.
             </p>
           </Model>
         </section>
@@ -867,14 +778,9 @@ export default function GrokbotDoc() {
       <div className="gb-wide">
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">Side by side</p>
-            <h2 className="gb-h2 gb-display">
-              Same bot, four social contracts
-            </h2>
-            <p>
-              The axes that actually differentiate them — not features, but
-              who&rsquo;s in charge of what:
-            </p>
+            <p className="gb-kicker gb-mono">03 · Converge</p>
+            <h2 className="gb-h2 gb-display">Side by side</h2>
+            <p>What actually differs:</p>
           </Reveal>
           <Reveal delay={0.05}>
             <div className="gb-tablewrap">
@@ -886,6 +792,7 @@ export default function GrokbotDoc() {
                     <th>B · Room</th>
                     <th>C · Teammate</th>
                     <th>D · Link</th>
+                    <th>E · Side Chat</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -898,6 +805,7 @@ export default function GrokbotDoc() {
                     <td>The bot; humans are guests</td>
                     <td>Shared; bot is a peer</td>
                     <td>One human</td>
+                    <td>One human + the bot</td>
                   </tr>
                   <tr>
                     <td className="axis">Unit of bot work</td>
@@ -905,18 +813,17 @@ export default function GrokbotDoc() {
                     <td>The room&rsquo;s one long session</td>
                     <td>Ambient; many overlapping asks</td>
                     <td>A session</td>
+                    <td>A private session</td>
                   </tr>
                   <tr>
                     <td className="axis">What the bot can read</td>
-                    <td>
-                      Its thread + the block&rsquo;s prompt; channel history
-                      only if invited
-                    </td>
+                    <td>Its thread only, unless invited</td>
                     <td>Everything in the room</td>
                     <td>
                       <span className="gb-risk">Potentially everything</span>
                     </td>
                     <td>Owner&rsquo;s session only</td>
+                    <td>The side chat only</td>
                   </tr>
                   <tr>
                     <td className="axis">Whose credentials</td>
@@ -928,6 +835,7 @@ export default function GrokbotDoc() {
                       </span>
                     </td>
                     <td>The owner&rsquo;s</td>
+                    <td>Your own</td>
                   </tr>
                   <tr>
                     <td className="axis">Noise profile</td>
@@ -940,6 +848,7 @@ export default function GrokbotDoc() {
                       <span className="gb-risk">High</span> — can post anywhere
                     </td>
                     <td>None</td>
+                    <td>None until you publish</td>
                   </tr>
                   <tr>
                     <td className="axis">Routines become</td>
@@ -947,6 +856,7 @@ export default function GrokbotDoc() {
                     <td>Events inside the room</td>
                     <td>Unprompted posts as a member</td>
                     <td>Same as desktop, plus a link</td>
+                    <td>Personal only</td>
                   </tr>
                   <tr>
                     <td className="axis">Build cost on top of D</td>
@@ -956,27 +866,25 @@ export default function GrokbotDoc() {
                     <td>
                       <span className="gb-win">Baseline</span>
                     </td>
+                    <td>A + a publish button</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <p className="gb-caption gb-mono">
-              Reading of the table: D is the substrate, A is the best first
-              multiplayer surface, B is a feature of A (&ldquo;watch this
-              thread&rsquo;s screen together&rdquo;), C is where it all
-              matures.
+              D is the plumbing. A is the first surface. B and E are features
+              of A. C comes later.
             </p>
           </Reveal>
         </section>
 
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">Deep dive · Model A</p>
-            <h2 className="gb-h2 gb-display">Anatomy of the Tag</h2>
+            <p className="gb-kicker gb-mono">04 · Prototype</p>
+            <h2 className="gb-h2 gb-display">The Tag, up close</h2>
             <p>
-              Here&rsquo;s the moment that has to feel right: two humans
-              mid-conversation, one of them summons grok, and the work forks
-              into a thread without breaking the channel&rsquo;s rhythm.
+              Two people talking, one asks the bot, the work forks into a
+              thread:
             </p>
           </Reveal>
 
@@ -984,21 +892,17 @@ export default function GrokbotDoc() {
 
           <div className="gb-col" style={{ marginLeft: 0 }}>
             <Reveal>
-              <h3 className="gb-h3 gb-display">The rules that make it work</h3>
+              <h3 className="gb-h3 gb-display">The rules</h3>
             </Reveal>
             <Reveal delay={0.05}>
               <div className="gb-rules">
                 <div className="gb-rule">
                   <span className="gb-rule-num gb-mono">01</span>
                   <div>
-                    <b>The block is the summary; the thread is the work.</b>
+                    <b>One block per ask.</b>
                     <p>
-                      The bot never posts more than one block per ask into the
-                      channel, and it edits that block in place as status
-                      changes (queued → working → delivered). All of its actual
-                      output volume lives in the thread. This single rule is
-                      what keeps Model A from becoming Model C&rsquo;s noise
-                      problem.
+                      The bot edits it in place: queued → working → delivered.
+                      Everything else stays in the thread.
                     </p>
                   </div>
                 </div>
@@ -1007,55 +911,36 @@ export default function GrokbotDoc() {
                   <div>
                     <b>A thread is a session.</b>
                     <p>
-                      Opening the thread is opening the bot&rsquo;s session:
-                      its context, its screen, its scratch artifacts. This maps
-                      one-to-one onto the desktop app&rsquo;s mental model (a
-                      chat with a bot that has a screen) and onto Model
-                      D&rsquo;s plumbing (an addressable session). The thread
-                      is literally a shared, embedded grok DM.
+                      Opening it opens the bot&rsquo;s context, screen, and
+                      files. Same thing as a desktop DM, just shared.
                     </p>
                   </div>
                 </div>
                 <div className="gb-rule">
                   <span className="gb-rule-num gb-mono">03</span>
                   <div>
-                    <b>Anyone present may steer; the summoner owns it.</b>
+                    <b>Anyone can steer. The asker owns it.</b>
                     <p>
-                      Any channel member can reply in the thread and the bot
-                      treats it as direction — that&rsquo;s the point of
-                      multiplayer. But the block belongs to whoever summoned
-                      it: their credentials, their plugins, their kill switch.
-                      If Sam&rsquo;s steering needs Sam&rsquo;s reach (his
-                      calendar, his email), the bot asks Sam to connect,
-                      in-thread, rather than borrowing Kira&rsquo;s.
+                      Logins and the stop button stay with whoever asked.
                     </p>
                   </div>
                 </div>
                 <div className="gb-rule">
                   <span className="gb-rule-num gb-mono">04</span>
                   <div>
-                    <b>The bot reads the thread, not the room.</b>
+                    <b>It reads the thread, not the room.</b>
                     <p>
-                      Default context is the prompt on the block plus the
-                      thread below it. Pulling in channel history is an
-                      explicit act — &ldquo;use the last 50 messages&rdquo; —
-                      visible to everyone as a chip on the block. People say
-                      things in channels they didn&rsquo;t say to a bot; the
-                      boundary should be legible, not inferred.
+                      Channel history gets shared on purpose, or not at all.
                     </p>
                   </div>
                 </div>
                 <div className="gb-rule">
                   <span className="gb-rule-num gb-mono">05</span>
                   <div>
-                    <b>Conflicting steering is surfaced, not averaged.</b>
+                    <b>Conflicts get asked, not averaged.</b>
                     <p>
-                      Two humans, one bot, opposite instructions
-                      (&ldquo;include the park area&rdquo; / &ldquo;exclude
-                      it&rdquo;) — the bot names the conflict in the thread and
-                      asks, instead of silently obeying the latest message. A
-                      bot that just does whatever was said last becomes a proxy
-                      war.
+                      Two people, opposite asks — the bot says so and asks,
+                      instead of obeying the last message.
                     </p>
                   </div>
                 </div>
@@ -1063,13 +948,7 @@ export default function GrokbotDoc() {
                   <span className="gb-rule-num gb-mono">06</span>
                   <div>
                     <b>Routines post blocks.</b>
-                    <p>
-                      A scheduled Routine is just a block that summons itself:
-                      &ldquo;every weekday 9am, post the new-listings digest to
-                      #apartment-hunt.&rdquo; Same anatomy, same thread
-                      affordance, same one-block footprint — recurring work
-                      inherits the whole model for free.
-                    </p>
+                    <p>A schedule is a block that posts itself.</p>
                   </div>
                 </div>
               </div>
@@ -1078,20 +957,10 @@ export default function GrokbotDoc() {
 
           <div className="gb-col" style={{ marginLeft: 0 }}>
             <Reveal>
-              <h3 className="gb-h3 gb-display">
-                How the second human gets in
-              </h3>
+              <h3 className="gb-h3 gb-display">Adding a person</h3>
               <p>
-                The desktop composer already treats the To: field as
-                &ldquo;search or create Bots.&rdquo; The web version extends
-                the same field one step:{" "}
-                <strong>
-                  a person&rsquo;s email is just another kind of addressee.
-                </strong>{" "}
-                Hit +, choose &ldquo;Create group chat,&rdquo; and the To:
-                field takes bots and emails side by side — the invited human
-                gets a link and lands in the room in their browser, no
-                install. This one is a working sketch — click through it:
+                An email is just another addressee. They get a link, it opens
+                in the browser. Click through it:
               </p>
             </Reveal>
           </div>
@@ -1099,106 +968,92 @@ export default function GrokbotDoc() {
           <Reveal delay={0.05}>
             <ComposerMock />
             <p className="gb-caption gb-mono">
-              The invite is Model D&rsquo;s link plumbing wearing Model
-              A&rsquo;s clothes: a room is created, the email carries its URL,
-              and presence starts when the link is opened.
+              The invite is a link to the room.
             </p>
           </Reveal>
+
+          <div className="gb-col" style={{ marginLeft: 0 }}>
+            <Reveal>
+              <h3 className="gb-h3 gb-display">Email → guest → profile</h3>
+              <p>The invite raises an identity question, same as Google Docs:</p>
+              <div className="gb-map">
+                <div className="gb-maprow">
+                  <span className="from">Invited</span>
+                  <span className="arrow">→</span>
+                  <span className="to">The chip is an email.</span>
+                </div>
+                <div className="gb-maprow">
+                  <span className="from">Opens the link</span>
+                  <span className="arrow">→</span>
+                  <span className="to">
+                    Picks a name, joins as a guest. Can talk and steer.
+                  </span>
+                </div>
+                <div className="gb-maprow">
+                  <span className="from">Makes a profile</span>
+                  <span className="arrow">→</span>
+                  <span className="to">
+                    The email turns into a name everywhere. Only a profile can
+                    connect logins or own a block.
+                  </span>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </section>
       </div>
 
       <div className="gb-col">
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">Regardless of model</p>
+            <p className="gb-kicker gb-mono">05 · Constraints</p>
             <h2 className="gb-h2 gb-display">The hard problems</h2>
           </Reveal>
 
           <Reveal>
             <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">
-                Multi-principal: who is the bot working for?
-              </h3>
-              <p>
-                Desktop grok has one principal. In a channel it has several,
-                with different intents, different permissions, and occasionally
-                different interests. This is the deepest change and it leaks
-                into everything below.
-              </p>
+              <h3 className="gb-h3 gb-display">Who is it working for?</h3>
               <p className="gb-stance">
-                <b>Stance:</b> per-task principal (the summoner), with everyone
-                else as advisors the bot listens to but doesn&rsquo;t obey
-                against the summoner. Ambiguity gets asked about, out loud, in
-                the thread.
+                <b>Call:</b> whoever asked. Everyone else is input. When
+                unclear, it asks in the thread.
               </p>
             </div>
           </Reveal>
 
           <Reveal>
             <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">Credentials and reach</h3>
-              <p>
-                On desktop, the bot&rsquo;s plugins are your logins. On the
-                web, &ldquo;grok, check the shared calendar&rdquo; might need
-                Kira&rsquo;s Google auth, Sam&rsquo;s, or a workspace-level
-                connection — and the difference is invisible unless we design
-                it to be visible.
-              </p>
+              <h3 className="gb-h3 gb-display">Whose logins?</h3>
               <p className="gb-stance">
-                <b>Stance:</b> credentials never pool. Each connection belongs
-                to a person, the block shows whose reach it&rsquo;s using, and
-                the bot requests connections from the specific person whose
-                data it needs.
+                <b>Call:</b> logins never pool. The bot asks the person whose
+                account it needs.
               </p>
             </div>
           </Reveal>
 
           <Reveal>
             <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">Memory boundaries</h3>
-              <p>
-                Should the bot remember across threads? Across channels? What
-                Kira told it privately must not surface in a channel with Sam.
-                Multiplayer turns memory from a convenience feature into a
-                confidentiality feature.
-              </p>
+              <h3 className="gb-h3 gb-display">What does it remember?</h3>
               <p className="gb-stance">
-                <b>Stance:</b> memory is scoped to the container it was learned
-                in (DM memory stays in DMs; channel memory stays in that
-                channel), with promotion to shared memory as an explicit,
-                logged act.
+                <b>Call:</b> memory stays where it was learned. DMs stay in
+                DMs. Side chats stay private.
               </p>
             </div>
           </Reveal>
 
           <Reveal>
             <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">Concurrency on one session</h3>
-              <p>
-                Two humans typing into one thread while the bot is mid-run: do
-                messages queue, interrupt, or branch? Desktop never had to
-                answer this.
-              </p>
+              <h3 className="gb-h3 gb-display">Two people, one run</h3>
               <p className="gb-stance">
-                <b>Stance:</b> steal Google-Docs intuition, not git intuition —
-                one live run, new messages queue visibly against it, and anyone
-                can hit the (equally visible) interrupt.
+                <b>Call:</b> new messages queue, visibly. Anyone can hit stop.
               </p>
             </div>
           </Reveal>
 
           <Reveal>
             <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">Cost attribution</h3>
-              <p>
-                Bot runtime costs real money. When Sam steers a bot Kira
-                summoned on a workspace Sam pays for, whose meter runs?
-              </p>
+              <h3 className="gb-h3 gb-display">Who pays?</h3>
               <p className="gb-stance">
-                <b>Stance:</b> bill the container (the channel&rsquo;s
-                workspace), not the individual — matching how the social model
-                already assigns ownership — but show per-block cost so heavy
-                use is legible.
+                <b>Call:</b> the workspace. Each block shows its cost.
               </p>
             </div>
           </Reveal>
@@ -1206,111 +1061,65 @@ export default function GrokbotDoc() {
 
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">Getting there</p>
-            <h2 className="gb-h2 gb-display">
-              From desktop concepts to web primitives
-            </h2>
-            <p>
-              Everything the desktop app already has maps cleanly, which is a
-              good sign the model is right:
-            </p>
+            <p className="gb-kicker gb-mono">06 · Map</p>
+            <h2 className="gb-h2 gb-display">Desktop → web</h2>
+            <p>Everything maps:</p>
           </Reveal>
           <Reveal delay={0.05}>
             <div className="gb-map">
               <div className="gb-maprow">
                 <span className="from">A bot&rsquo;s DM</span>
                 <span className="arrow">→</span>
-                <span className="to">
-                  A hosted session with a URL (Model D — the foundation
-                  everything sits on)
-                </span>
+                <span className="to">A hosted session with a URL</span>
               </div>
               <div className="gb-maprow">
                 <span className="from">The bot&rsquo;s screen</span>
                 <span className="arrow">→</span>
-                <span className="to">
-                  A streamed pane from the bot&rsquo;s server-side VM,
-                  embeddable in a thread or room
-                </span>
+                <span className="to">A live pane streamed from a server</span>
               </div>
               <div className="gb-maprow">
                 <span className="from">Routines</span>
                 <span className="arrow">→</span>
-                <span className="to">
-                  Server-side schedules that post blocks into a chosen channel
-                </span>
+                <span className="to">Server schedules that post blocks</span>
               </div>
               <div className="gb-maprow">
                 <span className="from">Plugins</span>
                 <span className="arrow">→</span>
-                <span className="to">
-                  Per-person OAuth connections, requested in-thread when the
-                  bot needs someone&rsquo;s reach
-                </span>
+                <span className="to">Per-person logins, asked for in-thread</span>
               </div>
               <div className="gb-maprow">
                 <span className="from">The sidebar of bots</span>
                 <span className="arrow">→</span>
-                <span className="to">
-                  A sidebar of channels and DMs, where bots appear as blocks
-                  rather than rooms
-                </span>
+                <span className="to">A sidebar of chats; bots appear as blocks</span>
               </div>
             </div>
-            <p>
-              <strong>Proposed sequence:</strong> build D&rsquo;s plumbing
-              (hosted sessions, links, view/take-over permissions) → ship A as
-              the first genuinely multiplayer surface (channels, the block,
-              threads-as-sessions) → fold in B as a feature of A (co-watching a
-              thread&rsquo;s screen) → grow toward C only once the speak-rules
-              and identity questions have real answers.
-            </p>
+            <p>Build order: D → A → B and E → C.</p>
           </Reveal>
         </section>
 
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">Unresolved</p>
-            <h2 className="gb-h2 gb-display">Open questions to ideate on next</h2>
+            <p className="gb-kicker gb-mono">07 · Iterate</p>
+            <h2 className="gb-h2 gb-display">Open questions</h2>
             <ul className="gb-openq">
+              <li>Is the block a message or a mini app?</li>
+              <li>Can a thread be pinned and become a room?</li>
+              <li>Two bots in one channel?</li>
+              <li>Can someone join a single thread by link?</li>
               <li>
-                <strong>Is the block a message or an app?</strong> A
-                message-shaped block is calm but caps interactivity; an
-                app-shaped block (inputs, tabs, live charts) is powerful but
-                starts competing with the channel. Where&rsquo;s the line — and
-                does it move per bot?
+                Does a guest&rsquo;s side chat survive if they never make a
+                profile?
               </li>
               <li>
-                <strong>Can a thread outlive its channel moment?</strong>{" "}
-                Long-running work (a week-long apartment search) wants to be
-                pinned, revisited, maybe promoted to its own space — which
-                quietly turns a Tag into a Room. Is that a feature or a leak?
-              </li>
-              <li>
-                <strong>Multiple bots in one channel:</strong> can Job App and
-                grok both hold blocks in the same conversation? Can one
-                bot&rsquo;s block cite another&rsquo;s thread?
-              </li>
-              <li>
-                <strong>Guest humans:</strong> what does the Tag look like for
-                someone link-invited into a single thread who isn&rsquo;t a
-                member of the channel — the multiplayer equivalent of D&rsquo;s
-                handoff?
-              </li>
-              <li>
-                <strong>The empty-workspace problem:</strong> the desktop app
-                starts useful with one human and one bot. A channel-first web
-                app starts empty until a second human shows up. What&rsquo;s
-                the single-player day-one experience that doesn&rsquo;t feel
-                like a worse desktop app?
+                What does day one look like before the second person shows up?
               </li>
             </ul>
           </Reveal>
         </section>
 
         <footer className="gb-footer gb-mono">
-          <span>grok multiplayer · ideation draft v1</span>
-          <span>Next: sketch the block&rsquo;s states as real frames</span>
+          <span>grok multiplayer · draft v1</span>
+          <span>next: block states as real frames</span>
         </footer>
       </div>
     </main>
