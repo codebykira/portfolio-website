@@ -28,10 +28,47 @@ function Reveal({
   );
 }
 
+// Shared eye-tracking: sets --ex/--ey on the element so its eyes lean
+// toward the cursor. Every bot face on the page uses this.
+function useEyeFollow<T extends HTMLElement>(reach = 5) {
+  const ref = useRef<T>(null);
+  const reduced = useReducedMotion();
+  useEffect(() => {
+    if (reduced) return;
+    let raf = 0;
+    const onMove = (e: MouseEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const el = ref.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        if (r.width === 0) return;
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        const d = Math.hypot(dx, dy) || 1;
+        const m = Math.min(d / 60, 1) * reach;
+        el.style.setProperty("--ex", `${(dx / d) * m}px`);
+        el.style.setProperty("--ey", `${(dy / d) * m * 0.8}px`);
+      });
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [reduced, reach]);
+  return ref;
+}
+
 // Bot avatar: the app's blob with dash eyes.
 function BlobAv({ color, sm }: { color: "g" | "j"; sm?: boolean }) {
+  const ref = useEyeFollow<HTMLSpanElement>(2.5);
   return (
-    <span className={`gb-blobav ${color}${sm ? " sm" : ""}`} aria-hidden="true">
+    <span
+      ref={ref}
+      className={`gb-blobav ${color}${sm ? " sm" : ""}`}
+      aria-hidden="true"
+    >
       <i />
       <i />
     </span>
@@ -210,32 +247,7 @@ function TagMock() {
 // that translates toward the pointer (the blink animation owns the bar's own
 // transform, so the follow lives on the wrapper).
 function Blob() {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    if (reduced) return;
-    let raf = 0;
-    const onMove = (e: MouseEvent) => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const el = ref.current;
-        if (!el) return;
-        const r = el.getBoundingClientRect();
-        const dx = e.clientX - (r.left + r.width / 2);
-        const dy = e.clientY - (r.top + r.height / 2);
-        const d = Math.hypot(dx, dy) || 1;
-        const reach = Math.min(d / 60, 1) * 8;
-        el.style.setProperty("--ex", `${(dx / d) * reach}px`);
-        el.style.setProperty("--ey", `${(dy / d) * reach * 0.8}px`);
-      });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-    };
-  }, [reduced]);
+  const ref = useEyeFollow<HTMLDivElement>(8);
 
   return (
     <div className="gb-blob" ref={ref} aria-hidden="true">
@@ -715,8 +727,10 @@ function Shape({
   kind: "circle" | "squircle" | "hex" | "pill" | "blob";
   color: string;
 }) {
+  const ref = useEyeFollow<HTMLDivElement>(4.5);
   return (
     <div
+      ref={ref}
       className={`gb-shape ${kind}`}
       style={{ background: color }}
       aria-hidden="true"

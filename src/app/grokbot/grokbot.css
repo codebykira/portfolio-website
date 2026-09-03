@@ -60,8 +60,8 @@ body:has(main.gb) {
 }
 
 .gb ::selection {
-  background: var(--gb-green);
-  color: var(--gb-ground);
+  background: #3f3f45;
+  color: #fff;
 }
 
 .gb-col {
@@ -1565,4 +1565,19 @@ body:has(main.gb) {
 }
 .gb-shape.blob {
   border-radius: 46% 54% 52% 48% / 55% 46% 54% 45%;
+}
+
+/* eyes on every bot face lean toward the cursor (set as --ex/--ey by JS) */
+.gb-shape i,
+.gb-blobav i {
+  transform: translate3d(var(--ex, 0px), var(--ey, 0px), 0);
+  transition: transform 0.15s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gb-shape i,
+  .gb-blobav i {
+    transform: none !important;
+    transition: none;
+  }
 }
