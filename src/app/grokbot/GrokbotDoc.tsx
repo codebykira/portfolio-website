@@ -28,11 +28,38 @@ function Reveal({
   );
 }
 
+// Bot avatar: the app's blob with dash eyes.
+function BlobAv({ color, sm }: { color: "g" | "j"; sm?: boolean }) {
+  return (
+    <span className={`gb-blobav ${color}${sm ? " sm" : ""}`} aria-hidden="true">
+      <i />
+      <i />
+    </span>
+  );
+}
+
+// The bot's screen, shown the way the app shows it: a light thumbnail with a
+// caption underneath.
+function ScreenThumb({ caption }: { caption: string }) {
+  return (
+    <div className="gb-screenwrap">
+      <div className="gb-screen-thumb">
+        <i />
+        <i />
+        <i />
+      </div>
+      <div className="gb-screen-cap">{caption}</div>
+    </div>
+  );
+}
+
 // The channel + thread mockup plays itself like a screen recording the first
 // time it scrolls into view. Step indexes gate each message; the block's chip
 // flips from WORKING to DELIVERED near the end.
-const MOCK_STEPS = 10;
-const STEP_DELAYS = [0, 900, 1800, 2900, 3900, 4700, 5600, 6800, 8000, 9200];
+const MOCK_STEPS = 11;
+const STEP_DELAYS = [
+  0, 900, 1800, 2900, 3900, 4700, 5600, 6600, 7900, 9000, 10200,
+];
 
 function TagMock() {
   const ref = useRef<HTMLDivElement>(null);
@@ -61,7 +88,7 @@ function TagMock() {
   }, [inView, reduced, play, runId]);
 
   const on = (i: number) => `gb-step${step >= i ? " on" : ""}`;
-  const delivered = step >= 8;
+  const delivered = step >= 10;
 
   return (
     <div className="gb-mockwrap" ref={ref}>
@@ -101,7 +128,7 @@ function TagMock() {
 
           <div className={`gb-block ${on(4)}`}>
             <div className="gb-block-head">
-              <div className="gb-av bot">G</div>
+              <BlobAv color="g" sm />
               <div className="gb-block-name">grok · comp check</div>
               {delivered ? (
                 <span className="gb-chip done gb-mono">DELIVERED</span>
@@ -134,7 +161,7 @@ function TagMock() {
             </div>
           </div>
 
-          <div className={`gb-line ${on(9)}`}>
+          <div className={`gb-line ${on(11)}`}>
             <div className="gb-name">Sam</div>
             <div className="gb-bubble">
               4% over is fine, laundry is worth it
@@ -157,8 +184,8 @@ function TagMock() {
             </div>
           </div>
 
-          <div className={`gb-screenpane gb-mono ${on(6)}`}>
-            ▣ grok&rsquo;s screen — live
+          <div className={on(6)}>
+            <ScreenThumb caption="grok's screen" />
           </div>
 
           <div className={`gb-line ${on(7)}`}>
@@ -166,7 +193,25 @@ function TagMock() {
             <div className="gb-bubble">skip anything below the park</div>
           </div>
 
-          <div className={`gb-line ${on(8)}`}>
+          <div className={on(8)}>
+            <div className="gb-attn">
+              <p className="ttl">Needs your attention</p>
+              <p className="bd">
+                One listing site wants a login. Take the screen, then hand it
+                back.
+              </p>
+              <div className="btns">
+                <button type="button" className="gb-btn subtle">
+                  Skip this step
+                </button>
+                <button type="button" className="gb-btn">
+                  I&rsquo;m done, continue
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className={`gb-line ${on(9)}`}>
             <div className="gb-name">grok</div>
             <div className="gb-bubble">
               Dropped 3 — median $2,780. Saved{" "}
@@ -284,7 +329,10 @@ function ComposerMock() {
             className={`gb-cw-row${stage !== "idle" ? " active" : ""}`}
             aria-hidden="true"
           >
-            <div className="gb-av bot" style={{ borderRadius: "50%" }}>
+            <div
+              className="gb-av"
+              style={{ background: "#2c2c2e", color: "#ebebf0" }}
+            >
               +
             </div>
             <div>
@@ -292,7 +340,7 @@ function ComposerMock() {
             </div>
           </div>
           <div className="gb-cw-row">
-            <div className="gb-av j">JA</div>
+            <BlobAv color="j" />
             <div>
               <div className="gb-who">
                 Job App <span>2:18 PM</span>
@@ -301,7 +349,7 @@ function ComposerMock() {
             </div>
           </div>
           <div className="gb-cw-row">
-            <div className="gb-av bot">NB</div>
+            <BlobAv color="g" />
             <div>
               <div className="gb-who">
                 New Bot <span>1:36 PM</span>
@@ -349,9 +397,7 @@ function ComposerMock() {
                 </button>
                 <button type="button" className="gb-menurow">
                   <span className="icon">
-                    <span className="gb-av j" style={{ width: 18, height: 18, fontSize: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      JA
-                    </span>
+                    <BlobAv color="j" sm />
                   </span>
                   Job App
                   <span className="gb-kbd">
@@ -361,9 +407,7 @@ function ComposerMock() {
                 </button>
                 <button type="button" className="gb-menurow">
                   <span className="icon">
-                    <span className="gb-av bot" style={{ width: 18, height: 18, fontSize: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      NB
-                    </span>
+                    <BlobAv color="g" sm />
                   </span>
                   New Bot
                   <span className="gb-kbd">
@@ -380,7 +424,7 @@ function ComposerMock() {
               <div className="gb-to">
                 <span className="gb-to-label">To:</span>
                 <span className="gb-tochip">
-                  <span className="gb-av bot">NB</span>
+                  <BlobAv color="g" sm />
                   New Bot
                 </span>
                 {people.map((email) => (
@@ -494,7 +538,7 @@ function MockTag() {
         </div>
         <div className="gb-block">
           <div className="gb-block-head">
-            <div className="gb-av bot">G</div>
+            <BlobAv color="g" sm />
             <div className="gb-block-name">grok · comp check</div>
             {done ? (
               <span className="gb-chip done gb-mono">DELIVERED</span>
@@ -536,7 +580,7 @@ function MockRoom() {
           <div className="gb-av s">SD</div>
           <span className="lbl gb-mono">2 WATCHING LIVE</span>
         </div>
-        <div className="gb-screenpane gb-mono">▣ shared screen — live</div>
+        <ScreenThumb caption="New Bot's screen — everyone sees this" />
         <div className="gb-line">
           <div className="gb-name">Sam</div>
           <div className="gb-bubble">it&rsquo;s on the wrong tab</div>
@@ -663,7 +707,7 @@ function MockSideChat() {
             <div className="gb-sys gb-mono">posted to #apartment-hunt</div>
             <div className="gb-block">
               <div className="gb-block-head">
-                <div className="gb-av bot">G</div>
+                <BlobAv color="g" sm />
                 <div className="gb-block-name">
                   grok · via Kira&rsquo;s side chat
                 </div>

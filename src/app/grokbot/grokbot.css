@@ -1259,3 +1259,275 @@ body:has(main.gb) {
     transition: none;
   }
 }
+
+/* ---------- app-exact skin for every mock (matches the desktop app:
+   system sans, pure black, gray bubbles, amber attention card) ---------- */
+
+.gb-mock,
+.gb-cw {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    Roboto, sans-serif;
+  background: #000;
+  border-color: #2a2a2c;
+}
+.gb-mock .gb-mono,
+.gb-cw .gb-mono {
+  font-family: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.gb-pane {
+  background: #0c0c0d;
+  border-color: #232325;
+}
+.gb-pane-label {
+  color: #98989d;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.gb-bubble {
+  background: #1c1c1e;
+  color: #ebebf0;
+  font-size: 14px;
+  line-height: 1.45;
+  border-radius: 18px;
+  padding: 10px 14px;
+}
+.gb-line.me .gb-bubble {
+  background: #3a3a3c;
+}
+.gb-name {
+  color: #98989d;
+}
+.gb-sys {
+  color: #98989d;
+  font-size: 12px;
+}
+.gb-code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  background: #2c2c2e;
+  color: #ff6961;
+}
+
+/* the bot block as a neutral app card */
+.gb-block {
+  background: #1c1c1e;
+  border: none;
+  border-radius: 16px;
+  padding: 14px;
+}
+.gb-block-name {
+  font-size: 13px;
+}
+.gb-chip,
+.gb-chip.working,
+.gb-chip.done {
+  background: #2c2c2e;
+}
+.gb-chip.working {
+  color: #e8a33d;
+}
+.gb-chip.done {
+  color: #30d158;
+}
+.gb-thread-link {
+  color: #409cff;
+}
+.gb-ask,
+.gb-composerbar {
+  border-color: #2c2c2e;
+  color: #98989d;
+}
+.gb-ask b,
+.gb-composerbar b {
+  color: #98989d;
+}
+.gb-replies {
+  color: #98989d;
+}
+
+/* the app's two button styles */
+.gb-btn {
+  font-family: inherit;
+  background: #48484a;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 5px 12px;
+  cursor: pointer;
+}
+.gb-btn:hover,
+.gb-btn:focus-visible {
+  background: #57575a;
+  outline: none;
+}
+.gb-btn.subtle {
+  background: transparent;
+  color: #b8b8bd;
+}
+.gb-btn.subtle:hover,
+.gb-btn.subtle:focus-visible {
+  background: transparent;
+  color: #fff;
+}
+
+/* "Needs your attention" card */
+.gb-attn {
+  background: #3b2c12;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin: 2px 0 13px;
+  font-size: 13.5px;
+}
+.gb-attn .ttl {
+  color: #e8a33d;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+.gb-attn .bd {
+  color: #ebebf0;
+  margin: 0 0 10px;
+}
+.gb-attn .btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* the bot's screen as a light thumbnail with caption, like the app */
+.gb-screenwrap {
+  margin: 4px 0 13px;
+}
+.gb-screen-thumb {
+  background: #ececee;
+  border-radius: 10px;
+  height: 110px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.gb-screen-thumb i {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: #d2d2d6;
+}
+.gb-screen-thumb i:nth-child(1) {
+  width: 55%;
+  background: #bfbfc4;
+}
+.gb-screen-thumb i:nth-child(2) {
+  width: 90%;
+}
+.gb-screen-thumb i:nth-child(3) {
+  width: 72%;
+}
+.gb-screen-cap {
+  text-align: center;
+  color: #98989d;
+  font-size: 11.5px;
+  margin-top: 7px;
+}
+
+/* blob avatars with dash eyes, like the app icons */
+.gb-blobav {
+  width: 26px;
+  height: 24px;
+  border-radius: 46% 54% 52% 48% / 55% 46% 54% 45%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: none;
+}
+.gb-blobav.g {
+  background: #32d158;
+}
+.gb-blobav.j {
+  background: #f5a623;
+}
+.gb-blobav i {
+  display: block;
+  width: 2.5px;
+  height: 7px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.72);
+}
+.gb-blobav.sm {
+  width: 19px;
+  height: 18px;
+}
+.gb-blobav.sm i {
+  width: 2px;
+  height: 5px;
+}
+
+/* green one-off controls → the app's grays */
+.gb-sharecard {
+  background: #1c1c1e;
+  border-color: #2c2c2e;
+}
+.gb-share-perm {
+  color: #b8b8bd;
+  border-color: #48484a;
+  letter-spacing: 0;
+}
+.gb-copybtn,
+.gb-publish,
+.gb-startbtn {
+  background: #48484a;
+  border: none;
+  color: #fff;
+  letter-spacing: 0;
+}
+.gb-copybtn:hover,
+.gb-publish:hover,
+.gb-startbtn:hover {
+  background: #57575a;
+  transform: none;
+}
+.gb-invitehint {
+  color: #98989d;
+}
+
+/* composer window bits */
+.gb-cw-search {
+  background: #1c1c1e;
+  border-color: #2c2c2e;
+}
+.gb-cw-row.active {
+  background: #1c1c1e;
+}
+.gb-to-label,
+.gb-to-ph {
+  color: #98989d;
+}
+.gb-tochip {
+  background: #2c2c2e;
+  border-color: #3a3a3c;
+  font-size: 12.5px;
+}
+.gb-toinput {
+  font-size: 14px;
+}
+.gb-menu {
+  background: #2c2c2e;
+  border-color: #3a3a3c;
+}
+.gb-menurow:hover,
+.gb-menurow:focus-visible {
+  background: #48484a;
+}
+.gb-menurow .icon {
+  background: #3a3a3c;
+}
+.gb-kbd i {
+  background: #3a3a3c;
+  border-color: #48484a;
+  color: #d8d8dc;
+}
