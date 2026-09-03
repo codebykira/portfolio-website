@@ -222,6 +222,49 @@ function TagMock() {
   );
 }
 
+// The blob mascot. Its eyes track the cursor: each eye sits in a wrapper
+// that translates toward the pointer (the blink animation owns the bar's own
+// transform, so the follow lives on the wrapper).
+function Blob() {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+
+  useEffect(() => {
+    if (reduced) return;
+    let raf = 0;
+    const onMove = (e: MouseEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const el = ref.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        const d = Math.hypot(dx, dy) || 1;
+        const reach = Math.min(d / 60, 1) * 8;
+        el.style.setProperty("--ex", `${(dx / d) * reach}px`);
+        el.style.setProperty("--ey", `${(dy / d) * reach * 0.8}px`);
+      });
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [reduced]);
+
+  return (
+    <div className="gb-blob" ref={ref} aria-hidden="true">
+      <span className="gb-eye">
+        <i />
+      </span>
+      <span className="gb-eye">
+        <i />
+      </span>
+    </div>
+  );
+}
+
 // Interactive composer sketch: click + to open the To: menu, pick
 // "Create group chat", then add humans by email. Mirrors the desktop app's
 // new-chat flow, extended so bots and people are the same kind of addressee.
@@ -508,10 +551,7 @@ export default function GrokbotDoc() {
     <main className="gb">
       <div className="gb-col">
         <header className="gb-masthead">
-          <div className="gb-blob" aria-hidden="true">
-            <i />
-            <i />
-          </div>
+          <Blob />
           <motion.p
             className="gb-eyebrow gb-mono"
             initial={reduced ? false : { opacity: 0 }}
@@ -615,11 +655,11 @@ export default function GrokbotDoc() {
                   height="56"
                   rx="10"
                   fill="none"
-                  stroke="#242b26"
+                  stroke="#2a2a2e"
                   strokeWidth="2"
                 />
-                <rect x="12" y="13" width="28" height="5" rx="2.5" fill="#5c675f" />
-                <rect x="12" y="23" width="40" height="5" rx="2.5" fill="#5c675f" />
+                <rect x="12" y="13" width="28" height="5" rx="2.5" fill="#6c6c73" />
+                <rect x="12" y="23" width="40" height="5" rx="2.5" fill="#6c6c73" />
                 <rect
                   className="draw"
                   x="12"
@@ -627,11 +667,11 @@ export default function GrokbotDoc() {
                   width="40"
                   height="17"
                   rx="5"
-                  fill="#14291d"
-                  stroke="#3fc983"
+                  fill="#0f2916"
+                  stroke="#34c95e"
                   strokeWidth="2"
                 />
-                <circle cx="20" cy="41.5" r="4" fill="#3fc983" />
+                <circle cx="20" cy="41.5" r="4" fill="#34c95e" />
               </svg>
             }
           >
@@ -671,7 +711,7 @@ export default function GrokbotDoc() {
                   height="56"
                   rx="10"
                   fill="none"
-                  stroke="#242b26"
+                  stroke="#2a2a2e"
                   strokeWidth="2"
                 />
                 <rect
@@ -681,12 +721,12 @@ export default function GrokbotDoc() {
                   width="26"
                   height="40"
                   rx="5"
-                  fill="#14291d"
-                  stroke="#3fc983"
+                  fill="#0f2916"
+                  stroke="#34c95e"
                   strokeWidth="2"
                 />
-                <circle cx="47" cy="23" r="5" fill="#5c675f" />
-                <circle cx="47" cy="40" r="5" fill="#5c675f" />
+                <circle cx="47" cy="23" r="5" fill="#6c6c73" />
+                <circle cx="47" cy="40" r="5" fill="#6c6c73" />
               </svg>
             }
           >
@@ -720,14 +760,14 @@ export default function GrokbotDoc() {
                   height="56"
                   rx="10"
                   fill="none"
-                  stroke="#242b26"
+                  stroke="#2a2a2e"
                   strokeWidth="2"
                 />
-                <circle cx="18" cy="19" r="5" fill="#5c675f" />
-                <circle cx="18" cy="33" r="5" fill="#5c675f" />
-                <rect x="13" y="43" width="10" height="10" rx="3.5" fill="#3fc983" />
-                <rect x="30" y="16" width="22" height="5" rx="2.5" fill="#242b26" />
-                <rect x="30" y="30" width="22" height="5" rx="2.5" fill="#242b26" />
+                <circle cx="18" cy="19" r="5" fill="#6c6c73" />
+                <circle cx="18" cy="33" r="5" fill="#6c6c73" />
+                <rect x="13" y="43" width="10" height="10" rx="3.5" fill="#34c95e" />
+                <rect x="30" y="16" width="22" height="5" rx="2.5" fill="#2a2a2e" />
+                <rect x="30" y="30" width="22" height="5" rx="2.5" fill="#2a2a2e" />
                 <rect
                   className="draw"
                   x="30"
@@ -735,8 +775,8 @@ export default function GrokbotDoc() {
                   width="22"
                   height="7"
                   rx="3.5"
-                  fill="#14291d"
-                  stroke="#3fc983"
+                  fill="#0f2916"
+                  stroke="#34c95e"
                   strokeWidth="1.5"
                 />
               </svg>
@@ -772,20 +812,20 @@ export default function GrokbotDoc() {
                   width="26"
                   height="36"
                   rx="7"
-                  fill="#14291d"
-                  stroke="#3fc983"
+                  fill="#0f2916"
+                  stroke="#34c95e"
                   strokeWidth="2"
                 />
                 <path
                   className="draw"
                   d="M35 32 h14 m0 0 l-5 -5 m5 5 l-5 5"
-                  stroke="#5c675f"
+                  stroke="#6c6c73"
                   strokeWidth="2.5"
                   fill="none"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <circle cx="56" cy="32" r="5" fill="#5c675f" />
+                <circle cx="56" cy="32" r="5" fill="#6c6c73" />
               </svg>
             }
           >

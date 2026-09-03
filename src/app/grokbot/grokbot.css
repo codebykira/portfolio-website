@@ -2,18 +2,20 @@
    multiplayer. Committed dark look matching the app itself. */
 
 .gb {
-  --gb-ground: #0c0f0d;
-  --gb-panel: #131714;
-  --gb-panel2: #171c18;
-  --gb-line: #242b26;
-  --gb-ink: #e8ece8;
-  --gb-muted: #93a096;
-  --gb-faint: #5c675f;
-  --gb-green: #3fc983;
-  --gb-green-dim: #14291d;
-  --gb-green-line: #2e4a3a;
-  --gb-amber: #dfa34c;
-  --gb-amber-dim: #2a2413;
+  /* neutral macOS-dark grays matching the app itself; green/orange are the
+     app's blob colors */
+  --gb-ground: #0b0b0c;
+  --gb-panel: #151517;
+  --gb-panel2: #1e1e21;
+  --gb-line: #2a2a2e;
+  --gb-ink: #f2f2f3;
+  --gb-muted: #9a9aa1;
+  --gb-faint: #6c6c73;
+  --gb-green: #34c95e;
+  --gb-green-dim: #0f2916;
+  --gb-green-line: #27522f;
+  --gb-amber: #f0a13e;
+  --gb-amber-dim: #2b2210;
   --gb-purple: #c4a2e8;
   --gb-blue: #8fbbe8;
 
@@ -117,6 +119,13 @@
   justify-content: center;
   gap: 12px;
 }
+.gb-eye {
+  display: block;
+  /* --ex/--ey are set from JS as the cursor moves; the wrapper follows the
+     pointer while the bar inside keeps its blink transform */
+  transform: translate3d(var(--ex, 0px), var(--ey, 0px), 0);
+  transition: transform 0.15s ease-out;
+}
 .gb-blob i {
   display: block;
   width: 5px;
@@ -126,7 +135,7 @@
   animation: gb-blink 4.6s infinite;
   transform-origin: center;
 }
-.gb-blob i:last-child {
+.gb-eye:last-child i {
   animation-delay: 0.08s;
 }
 @keyframes gb-morph {
@@ -351,7 +360,7 @@
 }
 
 .gb-mock {
-  background: #090b0a;
+  background: #0a0a0b;
   border: 1px solid var(--gb-line);
   border-radius: 16px;
   padding: 18px;
@@ -398,7 +407,7 @@
   justify-content: center;
   font-size: 10px;
   font-weight: 700;
-  color: #0c0f0d;
+  color: #0b0b0c;
 }
 .gb-av.k {
   background: var(--gb-purple);
@@ -422,7 +431,7 @@
   margin-left: 7px;
 }
 .gb-txt {
-  color: #c9cfc9;
+  color: #d4d4d7;
 }
 
 /* messages step in as the sequence plays */
@@ -438,7 +447,7 @@
 
 .gb-block {
   border: 1px solid var(--gb-green-line);
-  background: #101b14;
+  background: var(--gb-green-dim);
   border-radius: 12px;
   padding: 13px;
   margin: 2px 0 13px 38px;
@@ -494,7 +503,7 @@
   color: var(--gb-green);
 }
 .gb-block-body {
-  color: #c9cfc9;
+  color: #d4d4d7;
   margin-bottom: 10px;
   min-height: 1.4em;
 }
@@ -530,7 +539,7 @@
 }
 
 .gb-screenpane {
-  background: #070908;
+  background: #060607;
   border: 1px dashed var(--gb-green-line);
   border-radius: 9px;
   height: 92px;
@@ -550,7 +559,7 @@
   background: linear-gradient(
     100deg,
     transparent 30%,
-    rgba(63, 201, 131, 0.08) 50%,
+    rgba(52, 201, 94, 0.08) 50%,
     transparent 70%
   );
   transform: translateX(-100%);
@@ -606,7 +615,7 @@
 /* ---------- the composer mock (interactive: + → group chat → add people) ---------- */
 
 .gb-cw {
-  background: #090b0a;
+  background: #0a0a0b;
   border: 1px solid var(--gb-line);
   border-radius: 16px;
   overflow: hidden;
@@ -722,10 +731,10 @@
 @keyframes gb-hintpulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(63, 201, 131, 0.55);
+    box-shadow: 0 0 0 0 rgba(52, 201, 94, 0.55);
   }
   60% {
-    box-shadow: 0 0 0 9px rgba(63, 201, 131, 0);
+    box-shadow: 0 0 0 9px rgba(52, 201, 94, 0);
   }
 }
 
@@ -817,11 +826,13 @@
 }
 
 .gb-menu {
-  border: 1px solid var(--gb-line);
-  background: var(--gb-panel);
+  /* the popover floats lighter than the ground, like the app's ⌘-menu */
+  border: 1px solid #3a3a3f;
+  background: #29292d;
   border-radius: 14px;
   padding: 6px;
   max-width: 460px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 .gb-menurow {
   display: flex;
@@ -863,7 +874,7 @@
 }
 .gb-menurow:hover,
 .gb-menurow:focus-visible {
-  background: var(--gb-panel2);
+  background: #414147;
   outline: none;
 }
 .gb-menurow .icon {
@@ -873,8 +884,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gb-panel2);
-  color: var(--gb-muted);
+  background: #3a3a3f;
+  color: #cfcfd4;
   font-size: 13px;
   flex: none;
 }
@@ -885,12 +896,12 @@
 }
 .gb-kbd i {
   font-style: normal;
-  background: var(--gb-panel2);
-  border: 1px solid var(--gb-line);
+  background: #3a3a3f;
+  border: 1px solid #4a4a50;
   border-radius: 5px;
   font-size: 10.5px;
   padding: 1px 6px;
-  color: var(--gb-muted);
+  color: #cfcfd4;
 }
 
 .gb-invitehint {
@@ -927,7 +938,7 @@
   align-self: flex-start;
   margin-top: auto;
   background: var(--gb-green);
-  color: #0c0f0d;
+  color: #0b0b0c;
   border: none;
   border-radius: 999px;
   font-weight: 700;
@@ -1068,6 +1079,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gb-eye {
+    transition: none;
+    transform: none !important;
+  }
   .gb-blob,
   .gb-blob i,
   .gb-screenpane::after,
