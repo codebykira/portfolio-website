@@ -26,7 +26,7 @@ const AWARDS: ParsedResume["awards"] = [
 
 /** Shared job headers; only the bullets differ per role. */
 const meta = {
-  atrios: { org: "Atrios", role: "Head of Product, Tastemaker Experience", date: "Jan 2026 – Present", tagline: "B2B platform where sales teams turn warm introductions into qualified pipeline. Backed by a16z." },
+  atrios: { org: "Atrios", role: "Head of Product", date: "Jan 2026 – Present", tagline: "B2B platform where sales teams turn warm introductions into qualified pipeline. Backed by a16z." },
   blind: { org: "Blind Hangouts", role: "Founder and CEO", date: "Jan 2025 – Jan 2026", tagline: "iOS app with an AI agent that plans your social life. Backed by Founders Inc." },
   waverly: { org: "Waverly", role: "Product and Growth Lead, Founding Team Member", date: "Nov 2021 – Aug 2024", tagline: "Mobile social network for interest-based communities, with AI matching. Backed by Betaworks." },
 };
@@ -37,7 +37,7 @@ const PRODUCT: ParsedResume = {
   summary: "I love to build, and I build with care. Ship production-quality from early prototypes, simplify as products mature, iterate live for retention and fit.",
   experience: [
     { ...meta.atrios, points: [
-      "Killed the original product on arrival and rebuilt the platform from scratch into a two-sided marketplace. Grew it from 0 to 2,000 users and $0 to $1M ARR in five months.",
+      "Took Atrios from prototype to $2M ARR and 8,000 users in 5 months as Head of Product, owning design, product, and the full stack in React, TypeScript, and Node, and setting the component patterns the team builds on.",
       "Cut onboarding from a two-day, multi-page flow to a single 20-second page, dropping abandonment from 95% to 9%.",
       "Designed the two-sided incentive loop that makes the marketplace grow: tastemakers earn for sharing warm intros, companies get sales-cycle intelligence.",
     ] },
@@ -66,8 +66,8 @@ const DESIGN: ParsedResume = {
   summary: "I design and build interfaces end-to-end, from Figma and motion prototypes to production React. I care about craft, feel, and the small details that make a product come alive.",
   experience: [
     { ...meta.atrios, points: [
+      "Took Atrios from prototype to $2M ARR and 8,000 users in 5 months as Head of Product, owning design, product, and the full stack in React, TypeScript, and Node, and setting the component patterns the team builds on.",
       "Own the interface end-to-end: design flows in Figma, build them in React/Next.js, ship to production. Took release cadence from monthly to daily.",
-      "Established the design language and component patterns the team builds on, so every surface stays consistent and on-brand.",
       "Prototype interactions and micro-animations to pin down feel before writing production code — motion, timing, and the loading/empty/error states most people skip.",
     ] },
     { ...meta.blind, points: [
@@ -94,7 +94,8 @@ const AI: ParsedResume = {
   summary: "I build and deploy AI products end-to-end, from LLM pipelines and evals to the infrastructure that ships them. I move fast, measure what matters, and turn models into products people use.",
   experience: [
     { ...meta.atrios, role: "Head of Product", points: [
-      "Shipped an end-to-end rebuild: a marketplace surface with AI-suggested introductions backed by GPT-4.1, LinkedIn sync gated behind a paid-value moment. 0 → 2,000 users and $0 → $1M ARR in five months.",
+      "Took Atrios from prototype to $2M ARR and 8,000 users in 5 months as Head of Product, owning design, product, and the full stack in React, TypeScript, and Node, and setting the component patterns the team builds on.",
+      "Shipped an end-to-end rebuild: a marketplace surface with AI-suggested introductions backed by GPT-4.1, LinkedIn sync gated behind a paid-value moment.",
       "Migrated production off AWS Lambda (100+ functions, no tests) to a cleaner backend. Unblocked daily deploys and added CI + coverage from zero.",
       "Designed a progressive-gating architecture where API-cost-heavy AI recommendations require opt-in sync, cutting onboarding drop-off from 95% to 9% while bounding infra cost.",
     ] },
@@ -125,8 +126,9 @@ const FULLSTACK: ParsedResume = {
   summary:
     "I design, build, and instrument consumer interfaces end to end. Figma, to production React, to the dashboards that say whether it worked. Founding engineer twice over; currently lead a team of three shipping daily. AI products since 2021. React, Next.js, TypeScript, Node.",
   experience: [
-    { ...meta.atrios, role: "Founding Engineer, Product & Design", tagline: "Consumer product on a B2B model: turning warm introductions into qualified pipeline. Backed by a16z.", points: [
-      "Lead 3 engineers and set technical direction across the stack. Took Atrios from prototype to $1M ARR and 2,000 users in five months, and established the design language and component patterns the team ships on.",
+    { ...meta.atrios, role: "Head of Product", tagline: "Consumer product on a B2B model: turning warm introductions into qualified pipeline. Backed by a16z.", points: [
+      "Took Atrios from prototype to $2M ARR and 8,000 users in 5 months as Head of Product, owning design, product, and the full stack in React, TypeScript, and Node, and setting the component patterns the team builds on.",
+      "Lead 3 engineers and set technical direction across the stack.",
       "Collapsed a multi-day manual review into one inline qualification session, cutting time from signup to a user's first booked meeting from 5 days to 7 min.",
       "Built the measurement layer the team decides against: 200+ typed product events feeding funnel, retention, and cohort dashboards reviewed daily — including outlier checks that surface abuse patterns like self-dealt introductions and repeated intake-gate attempts.",
       "Replaced a 100+ AWS Lambda backend that gated every deploy and had zero test coverage with one typed Node service on ECS. Stood up CI, tests, and preview deploys from nothing, taking releases from monthly to daily.",
@@ -141,7 +143,7 @@ const FULLSTACK: ParsedResume = {
     ] },
   ],
   education: [
-    { org: "University of Pennsylvania, Penn Engineering", date: "Sep 2022 – Dec 2024", detail: "Master of Applied Science in Computer Science, focus on Artificial Intelligence (completed alongside, then following, Waverly)", points: [] },
+    { org: "University of Pennsylvania, Penn Engineering", date: "Sep 2022 – Dec 2024", detail: "Master of Applied Science in Computer Science, focus on Artificial Intelligence", points: [] },
     { org: "University of Toronto, Rotman Commerce", date: "Sep 2018 – Apr 2022", detail: "BCom, Finance, minor in Economics (High Distinction)", points: [] },
   ],
   awards: [

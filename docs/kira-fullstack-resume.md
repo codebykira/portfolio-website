@@ -21,11 +21,11 @@ Full-stack engineer who ships products end-to-end — React/Next.js and SwiftUI 
 ### Atrios — Head of Product & Full-Stack Engineer
 *Jan 2026 – Present* · B2B platform where sales teams turn warm introductions into qualified pipeline. Backed by a16z.
 
-- Rebuilt the platform end-to-end: React/Next.js frontend, a Python/FastAPI backend, and Postgres — shipped from prototype to $1M ARR and 2,000 users in five months.
+- Took Atrios from prototype to $2M ARR and 8,000 users in 5 months as Head of Product, owning design, product, and the full stack in React, TypeScript, and Node, and setting the component patterns the team builds on.
   <details><summary>⌄ toggle wording</summary>
 
-  - Owned the full-stack rebuild — Next.js frontend, FastAPI + Postgres backend — taking Atrios from prototype to $1M ARR and 2,000 users in 5 months.
-  - Rearchitected the product across the entire stack (React, FastAPI, Postgres); drove 0 → $1M ARR and 0 → 2,000 users in five months.
+  - Owned the full-stack rebuild — Next.js frontend, FastAPI + Postgres backend — taking Atrios from prototype to $2M ARR and 8,000 users in 5 months.
+  - Rearchitected the product across the entire stack (React, FastAPI, Postgres); drove 0 → $2M ARR and 0 → 8,000 users in five months.
 
   </details>
 

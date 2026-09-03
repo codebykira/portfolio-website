@@ -3,7 +3,9 @@ import puppeteer from "puppeteer-core";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { KIRA_TEMPLATES } from "@/app/resume/canvas/template";
-import type { ParsedResume } from "@/app/resume/parsedResume";
+import { parsedResumeSchema, type ParsedResume } from "@/app/resume/parsedResume";
+import { THEMES } from "@/app/resume/themes";
+import { z } from "zod";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,7 +35,7 @@ export async function GET(request: Request) {
   const variantParam = url.searchParams.get("variant");
   const variant: Variant = variantParam && variantParam in VARIANTS ? (variantParam as Variant) : "fullstack";
   const themeParam = url.searchParams.get("theme");
-  const theme = ["claude", "notion", "openai", "wispr", "netflix", "plain"].includes(themeParam ?? "") ? themeParam! : "claude";
+  const theme = pickTheme(themeParam);
   // Optional: export a saved tailored job document (its own `resumes` row) by id.
   const docId = url.searchParams.get("doc");
 
@@ -74,6 +76,52 @@ export async function GET(request: Request) {
   } catch {
     /* no session or DB unreachable — fall back to the template */
   }
+  return renderPdf({ origin, theme, resume, variant, fileBase, isDev });
+}
+
+/** Any registered theme id; anything else falls back to the default. */
+function pickTheme(t: string | null): string {
+  return THEMES.some((x) => x.id === t) ? (t as string) : "claude";
+}
+
+/** Export exactly what the client is showing: the résumé in the request body,
+ *  in the requested theme. Used by the Export button so unsaved edits and the
+ *  tailored preview export as seen, rather than the last saved copy. Renders
+ *  only what the caller sends, so nothing is read from another user. */
+const postSchema = z.object({
+  resume: parsedResumeSchema,
+  theme: z.string().optional(),
+  variant: z.string().optional(),
+  filename: z.string().max(120).optional(),
+});
+
+export async function POST(request: Request) {
+  const isDev = process.env.NODE_ENV !== "production";
+  const origin = new URL(request.url).origin;
+  const parsed = postSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) return NextResponse.json({ error: parsed.error.message }, { status: 400 });
+  const b = parsed.data;
+  const variant: Variant = b.variant && b.variant in VARIANTS ? (b.variant as Variant) : "fullstack";
+  const slug = (b.filename ?? "").replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "");
+  const fileBase = slug ? `Kira-Cheung-${slug}` : VARIANTS[variant];
+  return renderPdf({ origin, theme: pickTheme(b.theme ?? null), resume: b.resume, variant, fileBase, isDev });
+}
+
+async function renderPdf({
+  origin,
+  theme,
+  resume,
+  variant,
+  fileBase,
+  isDev,
+}: {
+  origin: string;
+  theme: string;
+  resume: ParsedResume | null;
+  variant: Variant;
+  fileBase: string;
+  isDev: boolean;
+}) {
   const target = `${origin}/resume/print?theme=${theme}`;
 
   let browser;

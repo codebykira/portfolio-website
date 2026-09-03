@@ -134,8 +134,10 @@ function Clip({ src, poster, width, height, note, caption }: { src: string; post
 /** A screenshot beside a diagram, vertically centred on each other. */
 function ShotFigure({ image, figure, caption, stat, wide }: { image: ImageSpec; figure: keyof typeof DIAGRAMS; caption?: string; stat?: string; wide?: boolean }) {
   const Drawing = DIAGRAMS[figure];
-  // `wide` gives the diagram the larger share, for two-column flows.
-  const cols = "sm:grid-cols-[3fr_2fr]";
+  // Both diagrams render at the same scale (0.8px per SVG unit): the
+  // two-column flow (632 units) gets 506px, the single column (300 units)
+  // gets 240px, so headings, box text and notes match across figures.
+  const cols = wide ? "sm:grid-cols-[45fr_55fr]" : "sm:grid-cols-[3fr_2fr]";
   return (
     <figure className="relative left-1/2 my-14 w-[min(920px,calc(100vw-4rem))] -translate-x-1/2">
       <div className={`grid items-center gap-8 ${cols}`}>
@@ -149,7 +151,7 @@ function ShotFigure({ image, figure, caption, stat, wide }: { image: ImageSpec; 
             </p>
           )}
         </div>
-        <div className={wide ? "w-full max-w-[400px] justify-self-center" : "w-full"}>
+        <div className={wide ? "w-full max-w-[506px] justify-self-center" : "w-full max-w-[240px] justify-self-center"}>
           <Drawing />
         </div>
       </div>
@@ -262,7 +264,7 @@ function renderBlock(block: Block, i: number) {
       return (
         <p
           key={i}
-          className={`my-7 ${TYPE.emphasis}`}
+          className={`my-7 ${TYPE.body}`}
           style={{ color: COLOR.ink, fontWeight: EMPHASIS_WEIGHT }}
         >
           {block.text}
@@ -307,7 +309,7 @@ export default function AtriosPage() {
   return (
     <div
       className={`atrios-page relative min-h-screen ${instrument.className}`}
-      style={{ background: COLOR.paper }}
+      style={{ backgroundColor: COLOR.paper }}
     >
       <div className="mx-auto max-w-3xl space-y-5 px-8 pb-16 pt-20">
         <Image

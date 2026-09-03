@@ -375,24 +375,28 @@ export function QualificationAfter() {
 /** Figure 5 — paying on the meeting against paying on closed won. */
 export function RewardCycles() {
   return (
-    <svg {...svgProps} viewBox="0 0 992 360" aria-label="Two timelines. Paying on the meeting is fast, small and gameable. Paying on closed won delays the payout by months but ties it to a real outcome">
+    <svg {...svgProps} viewBox="0 0 992 380" aria-label="Two timelines. Old: paid on the meeting, one payout to both the referrer and the friend who took it, fast and gameable. New: small payouts at the intro and the meeting, then a large payout months later when the friend becomes a customer">
       <Heading x={30} y={44}>Old: paid on the meeting</Heading>
       <PenArrow x1={40} y1={96} x2={950} y2={96} seed={91} />
       <PenDot cx={80} cy={96} radius={12} seed={92} fill={COLOR.paper} />
-      <PenDot cx={230} cy={96} radius={13} seed={93} fill={COLOR.amberFill} />
+      <PenDot cx={230} cy={96} radius={16} seed={93} fill={COLOR.amberFill} />
       <Note x={80} y={136} anchor="middle">Intro</Note>
-      <Note x={230} y={136} anchor="middle">Payout</Note>
-      <Note x={560} y={86} anchor="middle">Fast, small, and gameable</Note>
+      <Note x={230} y={136} anchor="middle">Meeting, payout</Note>
+      <Note x={230} y={158} anchor="middle">to referrer and friend</Note>
+      <Note x={590} y={86} anchor="middle">Fast, and gameable. The meeting is the goal.</Note>
 
       <Heading x={30} y={230}>New: paid on closed won</Heading>
       <PenArrow x1={40} y1={282} x2={950} y2={282} seed={94} />
-      <PenDot cx={80} cy={282} radius={12} seed={95} fill={COLOR.paper} />
-      <PenDot cx={230} cy={282} radius={12} seed={96} fill={COLOR.paper} />
-      <PenDot cx={800} cy={282} radius={13} seed={97} fill={COLOR.greenFill} />
+      <PenDot cx={80} cy={282} radius={9} seed={95} fill={COLOR.amberFill} />
+      <PenDot cx={230} cy={282} radius={9} seed={96} fill={COLOR.amberFill} />
+      <PenDot cx={800} cy={282} radius={18} seed={97} fill={COLOR.greenFill} />
       <Note x={80} y={322} anchor="middle">Intro</Note>
+      <Note x={80} y={344} anchor="middle">small payout</Note>
       <Note x={230} y={322} anchor="middle">Meeting</Note>
-      <Note x={800} y={322} anchor="middle">Customer, payout</Note>
-      <Note x={515} y={272} anchor="middle">Months of delay</Note>
+      <Note x={230} y={344} anchor="middle">small payout</Note>
+      <Note x={800} y={322} anchor="middle">Customer</Note>
+      <Note x={800} y={344} anchor="middle">big payout</Note>
+      <Note x={515} y={272} anchor="middle">Months. The customer is the goal.</Note>
     </svg>
   );
 }

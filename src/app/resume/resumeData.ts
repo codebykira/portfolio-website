@@ -108,12 +108,13 @@ export const productResume: Resume = {
   experience: [
     {
       org: "Atrios",
-      role: "Head of Product, Tastemaker Experience",
+      role: "Head of Product",
       date: "Jan 2026 – Present",
       tagline: "B2B platform where sales teams turn warm introductions into qualified pipeline. Backed by a16z.",
       link: { text: "link", href: "https://atrios.com" },
       points: [
-        "Killed the original product on arrival and rebuilt the platform from scratch. The old version forced a LinkedIn CSV upload across a two-day onboarding, then returned seven bad matches. I rebuilt it as a two-sided marketplace: companies on the homepage, AI-suggested intros alongside them, LinkedIn sync moved behind a paid-value moment. Grew it from 0 to 2,000 users and $0 to $1M ARR in five months.",
+        "Took Atrios from prototype to $2M ARR and 8,000 users in 5 months as Head of Product, owning design, product, and the full stack in React, TypeScript, and Node, and setting the component patterns the team builds on.",
+        "Killed the original product on arrival and rebuilt it as a two-sided marketplace. The old version forced a LinkedIn CSV upload across a two-day onboarding, then returned seven bad matches. The new one puts companies on the homepage, AI-suggested intros alongside them, and LinkedIn sync behind a paid-value moment.",
         "Cut onboarding from a two-day, multi-page flow to a single 20-second page, dropping abandonment from 95% to 9%. Chose Unipile for the LinkedIn integration to make it work without runaway infrastructure cost, and set the core model: browsing companies and making intros is free, AI recommendations require sync. The progressive gating drove the growth, not just a cleaner UX.",
         "Designed the two-sided incentive loop that makes the marketplace grow: tastemakers earn for sharing warm intros, their contacts earn for structured feedback on the company, and the company gets sales-cycle intelligence it can't get elsewhere. Every meeting turns into a conversion or an ICP signal, instead of going nowhere.",
         "Ran discovery with the sales teams who buy the product to decide what to build next, and defined the metrics that matter. Built the analytics infrastructure the team runs on, revisited monthly to keep everyone focused on what moves the business, not what's easiest to measure.",
@@ -169,13 +170,13 @@ export const designResume: Resume = {
   experience: [
     {
       org: "Atrios",
-      role: "Head of Product, Tastemaker Experience",
+      role: "Head of Product",
       date: "Jan 2026 – Present",
       tagline: "B2B platform where sales teams turn warm introductions into qualified pipeline. Backed by a16z.",
       link: { text: "link", href: "https://atrios.com" },
       points: [
+        "Took Atrios from prototype to $2M ARR and 8,000 users in 5 months as Head of Product, owning design, product, and the full stack in React, TypeScript, and Node, and setting the component patterns the team builds on.",
         "Own the interface end-to-end: design flows in Figma, build them in React/Next.js, and ship to production. Rebuilt the core marketplace experience into one cohesive, polished system and took release cadence from monthly to daily by migrating off the AWS Lambda architecture that gated every deploy.",
-        "Established the design language and component patterns the team builds on, so every new surface stays consistent and on-brand without slowing anyone down.",
         "Prototype interactions and micro-animations to pin down feel before writing production code, then implement them faithfully — motion, timing, responsive behavior, and the loading, empty, and error states most people skip.",
       ],
     },
@@ -250,7 +251,8 @@ export const deployResume: Resume = {
       tagline: "B2B platform where sales teams turn warm intros into qualified pipeline. Backed by a16z.",
       link: { text: "link", href: "https://atrios.com" },
       points: [
-        "Shipped an end-to-end rebuild on arrival. Replaced a broken LinkedIn-CSV matching flow with a marketplace surface: companies on the homepage, AI-suggested introductions backed by OpenAI's GPT-4.1, LinkedIn sync gated behind a paid-value moment. Took it from effectively 0 users and $0 ARR to 2,000 users and $1M ARR in five months.",
+        "Took Atrios from prototype to $2M ARR and 8,000 users in 5 months as Head of Product, owning design, product, and the full stack in React, TypeScript, and Node, and setting the component patterns the team builds on.",
+        "Shipped an end-to-end rebuild on arrival. Replaced a broken LinkedIn-CSV matching flow with a marketplace surface: companies on the homepage, AI-suggested introductions backed by OpenAI's GPT-4.1, LinkedIn sync gated behind a paid-value moment.",
         "Migrated production infrastructure off AWS Lambda (100+ functions, no test coverage) to a cleaner backend. Unblocked daily deploys from a monthly cadence, added CI and test coverage from zero, and swapped the broken AWS SES email pipeline for Customer.io.",
         "Integrated Unipile as the LinkedIn sync provider to replace CSV upload, then designed a progressive-gating architecture where basic value (browse and intro) is free and API-cost-heavy AI recommendations require opt-in sync. Cut onboarding drop-off from 95% to 9% while keeping infrastructure costs bounded.",
       ],

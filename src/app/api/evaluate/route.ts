@@ -64,8 +64,10 @@ export async function POST(request: Request) {
       prompt: `JOB DESCRIPTION:\n${jdText.slice(0, MAX_JD)}\n\nCANDIDATE ACCOMPLISHMENT BANK:\n${bankText}`,
     });
     result = object;
-  } catch {
-    return NextResponse.json({ error: "Couldn't evaluate. Try again." }, { status: 502 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[evaluate] failed:", msg);
+    return NextResponse.json({ error: `Couldn't evaluate: ${msg.slice(0, 300)}` }, { status: 502 });
   }
 
   await supabase.from("job_evaluations").insert({

@@ -4,16 +4,8 @@ import React, { createContext, useContext, useEffect, useRef, useState } from "r
 /* ============================================================
    THEME REGISTRY — add a new company style here + a CSS block in resume.css
    ============================================================ */
-export const THEMES = [
-  { id: "claude", label: "Claude" },
-  { id: "notion", label: "Notion" },
-  { id: "openai", label: "OpenAI" },
-  { id: "wispr", label: "Wispr" },
-  { id: "netflix", label: "Netflix" },
-  { id: "plain", label: "Plain" },
-] as const;
-
-export type ThemeId = (typeof THEMES)[number]["id"];
+import { THEMES, type ThemeId } from "./themes";
+export { THEMES, type ThemeId };
 
 type ResumeThemeCtx = { theme: ThemeId; setTheme: (t: ThemeId) => void };
 

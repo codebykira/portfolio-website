@@ -2,12 +2,6 @@
 import React from "react";
 import Link from "next/link";
 import ProjectShowcase from "../components/project-showcase";
-import ProjectHoverCard from "../components/project-hover-card";
-import ChristmasCardEmbed from "../components/christmas-card-embed";
-import ResumeBuilderEmbed from "../components/resume-builder-embed";
-
-// Live demo of the Christmas card site.
-const CHRISTMAS_CARD_DEMO_URL = "https://christmas-cards-web.vercel.app/";
 
 interface WorkProps {
   onProjectEnter: () => void;
@@ -22,7 +16,12 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
       >
 
       <div className="w-full max-w-7xl px-4 space-y-6 flex flex-col">
-        <Link href="/atrios" className="block w-full cursor-pointer">
+        <Link
+          href="/atrios"
+          className="block w-full cursor-pointer"
+          onMouseEnter={onProjectEnter}
+          onMouseLeave={onProjectLeave}
+        >
           <ProjectShowcase
             title="Atrios"
             description={[
@@ -51,7 +50,12 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
           />
         </Link>
 
-        <Link href="/blind-hangouts" className="block w-full cursor-pointer">
+        <Link
+          href="/blind-hangouts"
+          className="block w-full cursor-pointer"
+          onMouseEnter={onProjectEnter}
+          onMouseLeave={onProjectLeave}
+        >
           <ProjectShowcase
             title="Blind Hangouts"
             description={[
@@ -116,31 +120,6 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
           />
         </div>
 
-        {/* Christmas card + résumé builder, side by side at half width each. */}
-        <div className="w-full flex flex-col md:flex-row gap-6">
-          <div
-            className="w-full md:w-1/2 cursor-pointer"
-            onClick={() => window.open(CHRISTMAS_CARD_DEMO_URL, "_blank", "noopener,noreferrer")}
-          >
-            <ProjectHoverCard
-              title="Christmas Card"
-              description={[
-                "An interactive 3D Christmas card you can personalize with a message and photos, then share as a link.",
-              ]}
-              media={<ChristmasCardEmbed />}
-            />
-          </div>
-
-          <Link href="/resume" className="block w-full md:w-1/2 cursor-pointer">
-            <ProjectHoverCard
-              title="Résumé Builder"
-              description={[
-                "Drop in any résumé, PDF or DOCX, and watch it get parsed and re-rendered in a clean, ATS-friendly template in seconds.",
-              ]}
-              media={<ResumeBuilderEmbed />}
-            />
-          </Link>
-        </div>
       </div>
     </div>
   );

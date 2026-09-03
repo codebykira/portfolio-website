@@ -102,8 +102,12 @@ export async function POST(request: Request) {
       prompt: `JOB DESCRIPTION:\n${jdSlice}\n\nCANDIDATE RÉSUMÉ:\nSUMMARY: ${base.summary}\n\n${bulletsText}`,
     });
     gapReport = object;
-  } catch {
-    return NextResponse.json({ error: "Couldn't analyze the job. Try again." }, { status: 502 });
+  } catch (err) {
+    // Surface the real cause: without this the 502 hides whether it was a
+    // schema mismatch, an OpenAI error, or a timeout.
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[tailor] gap report failed:", msg);
+    return NextResponse.json({ error: `Couldn't analyze the job: ${msg.slice(0, 300)}` }, { status: 502 });
   }
 
   // 2) Reorder each experience's bullets for this job (permutation only).
@@ -131,8 +135,9 @@ export async function POST(request: Request) {
       });
       tailored.experience[i].points = reordered;
     });
-  } catch {
+  } catch (err) {
     // Reordering failed — return the base order; the gap report still stands.
+    console.error("[tailor] rank failed:", err instanceof Error ? err.message : err);
   }
 
   // Detect the company from the JD so the résumé can render in that company's

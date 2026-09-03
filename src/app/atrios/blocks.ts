@@ -60,7 +60,7 @@ export const BLOCKS: Block[] = [
   },
   {
     kind: "p",
-    text: "I joined when it had around $10,000 in revenue and almost nobody using it. I was on the founding team and did the design, product, and engineering myself. The idea was right. The product was in the way of it.",
+    text: "I joined when it had around $10,000 in revenue and almost nobody using it. I was on the founding team and did the design, product, and engineering myself. The idea was right. The product was in the way of it. 5 months later, it has 8,000 users with $2M in ARR.",
   },
   {
     kind: "p",
@@ -78,7 +78,7 @@ export const BLOCKS: Block[] = [
   {
     kind: "imageFigure",
     image: {
-      src: "/atrios-before-onboarding.jpg",
+      src: "/atrios-onboarding-linkedin.png",
       alt: "Step 3 of 4 of the old onboarding: instructions for requesting a LinkedIn data archive, with a button that says I've requested my archive",
       width: 1006,
       height: 704,
@@ -250,11 +250,11 @@ export const BLOCKS: Block[] = [
   },
   {
     kind: "p",
-    text: "This one is neither. I argued for it for months before it shipped, it is 2 weeks old, and the evidence will not arrive for months more. Sales had to go to vendors and pitch a closed-won incentive. Users had to rethink what the product was for. After months of it, the CEO agreed to try.",
+    text: "This one is neither. I argued for it for months before it shipped, and it is 2 weeks old. Sales had to go to vendors and pitch a closed-won incentive. Users had to rethink what the product was for. After months of it, the CEO agreed to try.",
   },
   {
     kind: "p",
-    text: "We paid $500 for an introduction that led to a meeting. Around 30% of activity was gamed. People asked friends to take a vendor meeting and split the money. Nobody was doing anything the product forbade. They were doing exactly what it paid for.",
+    text: "We paid $500 when an introduction led to a meeting, split between the referrer and the friend who took it. Around 30% of activity was gamed. People asked friends to take a vendor meeting and split the money. Nobody was doing anything the product forbade. They were doing exactly what it paid for.",
   },
   {
     kind: "pull",
@@ -266,7 +266,7 @@ export const BLOCKS: Block[] = [
   },
   {
     kind: "p",
-    text: "The hypothesis was that gaming was an output of the reward, not of the users. If that was right, moving the reward to the outcome would remove it without any enforcement, and the people who left would be the ones the old reward had selected for. So the change was not enforcement. It was moving what we pay on. Rewards moved downstream to closed-won, with product incentives for the friend who becomes a customer. The introducer gets paid when their friend actually becomes a customer.",
+    text: "The hypothesis was that gaming was an output of the reward, not of the users. If that was right, moving the reward to the outcome would remove it without any enforcement, and the people who left would be the ones the old reward had selected for. So the change was not enforcement. It was moving what we pay on. The intro and the meeting still pay, but a small amount, too small to be worth gaming. The big payout moved downstream to closed-won, when the friend becomes a customer, with product incentives for the friend on the same event. People still get an immediate reward for the act, but the number they are aiming at when they make an intro is the one at the end.",
   },
   {
     kind: "p",
@@ -283,7 +283,7 @@ export const BLOCKS: Block[] = [
   {
     kind: "figure",
     name: "incentives",
-    caption: "The gap between the two payout points is the whole argument.",
+    caption: "The size and placement of the payouts is the whole argument.",
   },
 
   { kind: "h3", text: "What it cost" },
@@ -338,5 +338,9 @@ export const BLOCKS: Block[] = [
   {
     kind: "pull",
     text: "You can redesign every screen and get the same people doing the same thing on different pages.",
+  },
+  {
+    kind: "p",
+    text: "So the thing I want to keep doing is the loop itself, at whatever speed the problem allows: find the number that is wrong, write down what would have to be true for it to move, build the smallest thing that tests it, and hold the position long enough to find out. The screens are how you get there. They were never the point.",
   },
 ];

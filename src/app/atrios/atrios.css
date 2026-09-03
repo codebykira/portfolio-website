@@ -16,3 +16,17 @@
 .atrios-page textarea {
   cursor: text;
 }
+
+/* Graph-paper grid behind the essay: ink hairlines on the paper, faint
+   enough to sit under the diagrams. Scrolls with the page so it reads as
+   the paper's own ruling rather than a fixed backdrop. The colour is the
+   `rule` token at a lower alpha. */
+.atrios-page {
+  --grid-line: rgba(59, 51, 39, 0.07);
+  --grid-size: 32px;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: center top;
+}

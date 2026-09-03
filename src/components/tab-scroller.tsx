@@ -13,7 +13,7 @@ const Navigation = () => {
   useEffect(() => {
 
     const handleScroll = () => {
-      const sections = ["home", "work", "writing", "story", "connect"];
+      const sections = ["home", "work", "projects", "story", "connect"];
       const scrollPosition = window.scrollY + 200; // Offset for better detection
 
       for (const sectionId of sections) {
@@ -51,6 +51,13 @@ const Navigation = () => {
             style={activeSection === "work" ? { color: "white", fontWeight: "bold" } : {}}
           >
             Work
+          </button>
+          <button
+            onClick={() => scrollToSection("projects")}
+            className="transition-colors text-white/80 hover:text-white hover:font-bold"
+            style={activeSection === "projects" ? { color: "white", fontWeight: "bold" } : {}}
+          >
+            Projects
           </button>
           {/* <button
             onClick={() => scrollToSection("writing")}

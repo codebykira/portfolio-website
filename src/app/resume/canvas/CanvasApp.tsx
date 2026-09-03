@@ -9,7 +9,7 @@ import { useCanvas, useUsageElapsed, newBlockId, type Block } from "./store";
 import { KIRA_TEMPLATES, blankByRole, blocksFromResume } from "./template";
 import ResumeDoc, { type Variant } from "../ResumeDoc";
 import { parsedToResume } from "../parsedToResume";
-import { useResumeTheme, THEMES, type ThemeId } from "../ThemeContext";
+import { useResumeTheme, THEMES } from "../ThemeContext";
 import type { Evaluation } from "@/app/builder/lib/schemas";
 import "../../builder/builder.css";
 
@@ -318,18 +318,25 @@ export default function CanvasApp() {
   // caller's OWN saved copy (RLS-scoped) via headless Chrome — no public data
   // endpoint, so one user's résumé can never leak into another's export.
   const [exporting, setExporting] = useState(false);
+  // Exports exactly what the right pane is showing (base with any unsaved
+  // edits, or the tailored preview), in the current theme.
   const exportPdf = async () => {
     if (exporting) return;
     setExporting(true);
     setSaveMsg("exporting…");
     try {
-      const res = await fetch(`/api/resume-pdf?variant=${role}&theme=${theme}`);
+      const label = showingTailored ? tailorLabel.trim() || "tailored" : `${role}-resume`;
+      const res = await fetch("/api/resume-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resume: rightResume, theme, variant: role, filename: label }),
+      });
       if (!res.ok) throw new Error("export failed");
       const blob = await res.blob();
       const href = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = href;
-      a.download = `Kira-Cheung-${role}-resume.pdf`;
+      a.download = `Kira-Cheung-${label.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "")}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();

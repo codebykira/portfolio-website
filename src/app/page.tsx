@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import DeskHero from "@/app/DeskHero";
 import Navigation from "@/components/tab-scroller";
 import Work from "@/app/Work";
+import Projects from "@/app/Projects";
 import ContactPage from "@/components/connect";
 import Story from "@/app/Story";
 import ClientOnly from "@/components/ClientOnly";
@@ -34,7 +35,7 @@ export default function Home() {
 
         {/* Blurb bridging the hero into the work — section-header font (Playfair).
             Only the text fades in on scroll; the sticker stays full-opacity. */}
-        <div className="relative w-full max-w-4xl flex justify-center py-20 md:py-28">
+        <div className="relative w-full max-w-4xl flex justify-center pt-6 pb-16 md:pt-8 md:pb-24">
           <AnimatedContent
             distance={120}
             direction="vertical"
@@ -71,6 +72,12 @@ export default function Home() {
           onProjectLeave={() => setShowClickMe(false)}
         />
         {/* <Writing /> */}
+        <div className="pt-24 md:pt-40">
+          <SectionHeader title="Projects" subtitle="Made for fun 🐈" />
+        </div>
+
+        <Projects />
+
         <div className="pt-24 md:pt-40">
           <SectionHeader title="Story" subtitle="Artist on the Move 🌍" />
         </div>
