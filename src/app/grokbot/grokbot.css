@@ -1531,3 +1531,38 @@ body:has(main.gb) {
   border-color: #48484a;
   color: #d8d8dc;
 }
+
+/* ---------- option shapes: the app's bot shapes, one color each ---------- */
+
+.gb-shape {
+  width: 54px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.gb-shape i {
+  display: block;
+  width: 4px;
+  height: 12px;
+  border-radius: 2.5px;
+  background: rgba(0, 0, 0, 0.75);
+}
+.gb-shape.circle {
+  border-radius: 50%;
+}
+.gb-shape.squircle {
+  border-radius: 16px;
+}
+.gb-shape.pill {
+  border-radius: 999px;
+  height: 40px;
+  margin-top: 6px;
+}
+.gb-shape.hex {
+  clip-path: polygon(25% 4%, 75% 4%, 97% 50%, 75% 96%, 25% 96%, 3% 50%);
+}
+.gb-shape.blob {
+  border-radius: 46% 54% 52% 48% / 55% 46% 54% 45%;
+}

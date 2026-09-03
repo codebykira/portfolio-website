@@ -56,10 +56,8 @@ function ScreenThumb({ caption }: { caption: string }) {
 // The channel + thread mockup plays itself like a screen recording the first
 // time it scrolls into view. Step indexes gate each message; the block's chip
 // flips from WORKING to DELIVERED near the end.
-const MOCK_STEPS = 11;
-const STEP_DELAYS = [
-  0, 900, 1800, 2900, 3900, 4700, 5600, 6600, 7900, 9000, 10200,
-];
+const MOCK_STEPS = 9;
+const STEP_DELAYS = [0, 800, 2200, 3200, 4000, 4900, 5800, 6900, 8100];
 
 function TagMock() {
   const ref = useRef<HTMLDivElement>(null);
@@ -88,7 +86,7 @@ function TagMock() {
   }, [inView, reduced, play, runId]);
 
   const on = (i: number) => `gb-step${step >= i ? " on" : ""}`;
-  const delivered = step >= 10;
+  const delivered = step >= 3;
 
   return (
     <div className="gb-mockwrap" ref={ref}>
@@ -105,31 +103,18 @@ function TagMock() {
         </button>
 
         <div className="gb-pane">
-          <p className="gb-pane-label gb-mono"># apartment-hunt · Kira, Sam</p>
-
-          <div className={`gb-sys gb-mono ${on(1)}`}>Today 2:04 PM</div>
+          <p className="gb-pane-label gb-mono">Option 1 · work in a thread</p>
 
           <div className={`gb-line me ${on(1)}`}>
-            <div className="gb-bubble">the Sunset place is back, $2.9k</div>
-          </div>
-
-          <div className={`gb-line ${on(2)}`}>
-            <div className="gb-name">Sam</div>
             <div className="gb-bubble">
-              no parking one right? can we get comps
+              <strong>@grok</strong> draft the launch deck, 6 slides
             </div>
           </div>
 
-          <div className={`gb-line me ${on(3)}`}>
-            <div className="gb-bubble">
-              <strong>@grok</strong> comps for 2BRs near Sunset under $3k
-            </div>
-          </div>
-
-          <div className={`gb-block ${on(4)}`}>
+          <div className={`gb-block ${on(2)}`}>
             <div className="gb-block-head">
               <BlobAv color="g" sm />
-              <div className="gb-block-name">grok · comp check</div>
+              <div className="gb-block-name">grok · launch deck</div>
               {delivered ? (
                 <span className="gb-chip done gb-mono">DELIVERED</span>
               ) : (
@@ -138,10 +123,7 @@ function TagMock() {
             </div>
             <div className="gb-block-body">
               {delivered ? (
-                <>
-                  14 comps. Median $2,780 — Sunset is 4% over, mostly the
-                  laundry. Table in thread.
-                </>
+                <>6 slides drafted. Review in the thread.</>
               ) : (
                 <span className="gb-typing" aria-label="working">
                   <i />
@@ -153,7 +135,7 @@ function TagMock() {
             <div className="gb-block-foot">
               <span className="gb-thread-link">Open thread →</span>
               <span className="gb-replies">
-                {delivered ? "6 replies · Kira, Sam, grok" : "in progress"}
+                {delivered ? "4 replies · Kira, Sam, grok" : "in progress"}
               </span>
             </div>
             <div className="gb-ask">
@@ -161,44 +143,40 @@ function TagMock() {
             </div>
           </div>
 
-          <div className={`gb-line ${on(11)}`}>
+          <div className={`gb-line ${on(4)}`}>
             <div className="gb-name">Sam</div>
-            <div className="gb-bubble">
-              4% over is fine, laundry is worth it
-            </div>
+            <div className="gb-bubble">clean. one card in the chat</div>
           </div>
 
           <div className="gb-composerbar">
-            <b>+</b> Message #apartment-hunt
+            <b>+</b> Message #launch
           </div>
         </div>
 
         <div className="gb-pane">
-          <p className="gb-pane-label gb-mono">Thread · comp check</p>
+          <p className="gb-pane-label gb-mono">Option 2 · work in the chat</p>
 
-          <div className={`gb-line ${on(5)}`}>
-            <div className="gb-name">grok</div>
+          <div className={`gb-line me ${on(5)}`}>
             <div className="gb-bubble">
-              Pulling the last 60 days. Screen&rsquo;s live if you want to
-              watch.
+              <strong>@grok</strong> draft the launch deck, 6 slides
             </div>
           </div>
 
-          <div className={on(6)}>
-            <ScreenThumb caption="grok's screen" />
+          <div className={`gb-line ${on(6)}`}>
+            <div className="gb-name">grok</div>
+            <div className="gb-bubble">On it — drafting 6 slides.</div>
           </div>
 
-          <div className={`gb-line ${on(7)}`}>
-            <div className="gb-name">Sam</div>
-            <div className="gb-bubble">skip anything below the park</div>
+          <div className={on(7)}>
+            <ScreenThumb caption="grok's screen" />
           </div>
 
           <div className={on(8)}>
             <div className="gb-attn">
               <p className="ttl">Needs your attention</p>
               <p className="bd">
-                One listing site wants a login. Take the screen, then hand it
-                back.
+                Slide 3 could be a chart or a table — pick one on my screen,
+                then hand it back.
               </p>
               <div className="btns">
                 <button type="button" className="gb-btn subtle">
@@ -214,15 +192,15 @@ function TagMock() {
           <div className={`gb-line ${on(9)}`}>
             <div className="gb-name">grok</div>
             <div className="gb-bubble">
-              Dropped 3 — median $2,780. Saved{" "}
-              <span className="gb-code">/workspace/comps.csv</span>. Posting
-              the summary back.
+              Done — 6 slides. Saved{" "}
+              <span className="gb-code">/workspace/launch-deck.key</span>.
             </div>
           </div>
         </div>
       </div>
       <p className="gb-caption gb-mono">
-        The channel gets one block. The thread holds the work.
+        Thread keeps the room quiet. In-chat lets everyone watch. Could be a
+        toggle per ask.
       </p>
     </div>
   );
@@ -530,16 +508,16 @@ function MockTag() {
   return (
     <div className="gb-mock single" ref={ref}>
       <div className="gb-pane">
-        <p className="gb-pane-label gb-mono"># apartment-hunt</p>
+        <p className="gb-pane-label gb-mono"># launch</p>
         <div className="gb-line me">
           <div className="gb-bubble">
-            <strong>@grok</strong> comps for 2BRs under $3k
+            <strong>@grok</strong> draft the launch deck
           </div>
         </div>
         <div className="gb-block">
           <div className="gb-block-head">
             <BlobAv color="g" sm />
-            <div className="gb-block-name">grok · comp check</div>
+            <div className="gb-block-name">grok · launch deck</div>
             {done ? (
               <span className="gb-chip done gb-mono">DELIVERED</span>
             ) : (
@@ -548,7 +526,7 @@ function MockTag() {
           </div>
           <div className="gb-block-body">
             {done ? (
-              <>14 comps. Median $2,780. Table in thread.</>
+              <>6 slides drafted. Review in thread.</>
             ) : (
               <span className="gb-typing" aria-label="working">
                 <i />
@@ -560,7 +538,7 @@ function MockTag() {
           <div className="gb-block-foot">
             <span className="gb-thread-link">Open thread →</span>
             <span className="gb-replies">
-              {done ? "6 replies" : "in progress"}
+              {done ? "4 replies" : "in progress"}
             </span>
           </div>
         </div>
@@ -691,20 +669,17 @@ function MockSideChat() {
       <div className="gb-pane">
         <p className="gb-pane-label gb-mono">Side chat · private</p>
         <div className="gb-line me">
-          <div className="gb-bubble">
-            is $2.9k actually bad? not ready to argue this in the channel
-          </div>
+          <div className="gb-bubble">is the pricing slide too dense?</div>
         </div>
         <div className="gb-line">
           <div className="gb-name">grok</div>
           <div className="gb-bubble">
-            4% over median, defensible with the laundry. Want the one-line
-            case?
+            Split it into two. Want the split drafted?
           </div>
         </div>
         {posted ? (
           <>
-            <div className="gb-sys gb-mono">posted to #apartment-hunt</div>
+            <div className="gb-sys gb-mono">posted to #launch</div>
             <div className="gb-block">
               <div className="gb-block-head">
                 <BlobAv color="g" sm />
@@ -714,7 +689,7 @@ function MockSideChat() {
                 <span className="gb-chip done gb-mono">POSTED</span>
               </div>
               <div className="gb-block-body">
-                Case for Sunset: 4% over median, laundry closes the gap.
+                Pricing slide split in two — clearer story.
               </div>
             </div>
           </>
@@ -724,7 +699,7 @@ function MockSideChat() {
             className="gb-publish gb-mono"
             onClick={() => setPosted(true)}
           >
-            → POST CONCLUSION TO #APARTMENT-HUNT
+            → Post conclusion to #launch
           </button>
         )}
       </div>
@@ -732,30 +707,41 @@ function MockSideChat() {
   );
 }
 
-// A model card whose glyph strokes draw themselves in on first view.
+// Each option is one of the app's bot shapes, in its own color.
+function Shape({
+  kind,
+  color,
+}: {
+  kind: "circle" | "squircle" | "hex" | "pill" | "blob";
+  color: string;
+}) {
+  return (
+    <div
+      className={`gb-shape ${kind}`}
+      style={{ background: color }}
+      aria-hidden="true"
+    >
+      <i />
+      <i />
+    </div>
+  );
+}
+
 function Model({
-  letter,
+  shape,
   title,
-  tagline,
-  glyph,
   children,
 }: {
-  letter: string;
+  shape: React.ReactNode;
   title: string;
-  tagline?: string;
-  glyph: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <Reveal>
-      <div ref={ref} className={`gb-model${inView ? " is-in" : ""}`}>
-        <div className="gb-model-glyph">{glyph}</div>
+      <div className="gb-model">
+        <div className="gb-model-glyph">{shape}</div>
         <div>
-          <span className="gb-model-letter gb-mono">{letter}</span>
           <h3 className="gb-h3 gb-display">{title}</h3>
-          {tagline && <p className="gb-tagline">{tagline}</p>}
           {children}
         </div>
       </div>
@@ -836,37 +822,8 @@ export default function GrokbotDoc() {
           </Reveal>
 
           <Model
-            letter="MODEL A"
             title="The Tag"
-            glyph={
-              <svg viewBox="0 0 64 64" aria-hidden="true">
-                <rect
-                  className="draw"
-                  x="4"
-                  y="4"
-                  width="56"
-                  height="56"
-                  rx="10"
-                  fill="none"
-                  stroke="#2a2a2e"
-                  strokeWidth="2"
-                />
-                <rect x="12" y="13" width="28" height="5" rx="2.5" fill="#6c6c73" />
-                <rect x="12" y="23" width="40" height="5" rx="2.5" fill="#6c6c73" />
-                <rect
-                  className="draw"
-                  x="12"
-                  y="33"
-                  width="40"
-                  height="17"
-                  rx="5"
-                  fill="#0f2916"
-                  stroke="#34c95e"
-                  strokeWidth="2"
-                />
-                <circle cx="20" cy="41.5" r="4" fill="#34c95e" />
-              </svg>
-            }
+            shape={<Shape kind="circle" color="#d6437f" />}
           >
             <p>
               A normal group chat. You{" "}
@@ -878,36 +835,8 @@ export default function GrokbotDoc() {
           </Model>
 
           <Model
-            letter="MODEL B"
             title="The Room"
-            glyph={
-              <svg viewBox="0 0 64 64" aria-hidden="true">
-                <rect
-                  className="draw"
-                  x="4"
-                  y="4"
-                  width="56"
-                  height="56"
-                  rx="10"
-                  fill="none"
-                  stroke="#2a2a2e"
-                  strokeWidth="2"
-                />
-                <rect
-                  className="draw"
-                  x="12"
-                  y="12"
-                  width="26"
-                  height="40"
-                  rx="5"
-                  fill="#0f2916"
-                  stroke="#34c95e"
-                  strokeWidth="2"
-                />
-                <circle cx="47" cy="23" r="5" fill="#6c6c73" />
-                <circle cx="47" cy="40" r="5" fill="#6c6c73" />
-              </svg>
-            }
+            shape={<Shape kind="squircle" color="#e8702a" />}
           >
             <p>
               Invite people into the bot&rsquo;s chat. Everyone sees the same
@@ -918,39 +847,8 @@ export default function GrokbotDoc() {
           </Model>
 
           <Model
-            letter="MODEL C"
             title="The Teammate"
-            glyph={
-              <svg viewBox="0 0 64 64" aria-hidden="true">
-                <rect
-                  className="draw"
-                  x="4"
-                  y="4"
-                  width="56"
-                  height="56"
-                  rx="10"
-                  fill="none"
-                  stroke="#2a2a2e"
-                  strokeWidth="2"
-                />
-                <circle cx="18" cy="19" r="5" fill="#6c6c73" />
-                <circle cx="18" cy="33" r="5" fill="#6c6c73" />
-                <rect x="13" y="43" width="10" height="10" rx="3.5" fill="#34c95e" />
-                <rect x="30" y="16" width="22" height="5" rx="2.5" fill="#2a2a2e" />
-                <rect x="30" y="30" width="22" height="5" rx="2.5" fill="#2a2a2e" />
-                <rect
-                  className="draw"
-                  x="30"
-                  y="44"
-                  width="22"
-                  height="7"
-                  rx="3.5"
-                  fill="#0f2916"
-                  stroke="#34c95e"
-                  strokeWidth="1.5"
-                />
-              </svg>
-            }
+            shape={<Shape kind="hex" color="#3b76e8" />}
           >
             <p>
               The bot is a full member. It has a name, joins channels, and
@@ -960,33 +858,8 @@ export default function GrokbotDoc() {
           </Model>
 
           <Model
-            letter="MODEL D"
             title="The Link"
-            glyph={
-              <svg viewBox="0 0 64 64" aria-hidden="true">
-                <rect
-                  className="draw"
-                  x="4"
-                  y="14"
-                  width="26"
-                  height="36"
-                  rx="7"
-                  fill="#0f2916"
-                  stroke="#34c95e"
-                  strokeWidth="2"
-                />
-                <path
-                  className="draw"
-                  d="M35 32 h14 m0 0 l-5 -5 m5 5 l-5 5"
-                  stroke="#6c6c73"
-                  strokeWidth="2.5"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle cx="56" cy="32" r="5" fill="#6c6c73" />
-              </svg>
-            }
+            shape={<Shape kind="pill" color="#2ba58c" />}
           >
             <p>
               Keep it single player, but every chat gets a share link.
@@ -996,45 +869,8 @@ export default function GrokbotDoc() {
           </Model>
 
           <Model
-            letter="MODEL E"
             title="The Side Chat"
-            glyph={
-              <svg viewBox="0 0 64 64" aria-hidden="true">
-                <rect
-                  className="draw"
-                  x="4"
-                  y="4"
-                  width="40"
-                  height="40"
-                  rx="10"
-                  fill="none"
-                  stroke="#2a2a2e"
-                  strokeWidth="2"
-                />
-                <rect x="12" y="14" width="24" height="5" rx="2.5" fill="#6c6c73" />
-                <rect x="12" y="24" width="18" height="5" rx="2.5" fill="#6c6c73" />
-                <rect
-                  className="draw"
-                  x="34"
-                  y="36"
-                  width="26"
-                  height="22"
-                  rx="8"
-                  fill="#0f2916"
-                  stroke="#34c95e"
-                  strokeWidth="2"
-                />
-                <path
-                  className="draw"
-                  d="M34 47 h-12 m0 0 l5 -5 m-5 5 l5 5"
-                  stroke="#34c95e"
-                  strokeWidth="2.5"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            }
+            shape={<Shape kind="blob" color="#7a52e0" />}
           >
             <p>
               Step out and chat with the bot alone. When you land on
@@ -1059,11 +895,11 @@ export default function GrokbotDoc() {
                 <thead>
                   <tr>
                     <th>Axis</th>
-                    <th>A · Tag</th>
-                    <th>B · Room</th>
-                    <th>C · Teammate</th>
-                    <th>D · Link</th>
-                    <th>E · Side Chat</th>
+                    <th>Tag</th>
+                    <th>Room</th>
+                    <th>Teammate</th>
+                    <th>Link</th>
+                    <th>Side Chat</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1143,8 +979,8 @@ export default function GrokbotDoc() {
               </table>
             </div>
             <p className="gb-caption gb-mono">
-              D is the plumbing. A is the first surface. B and E are features
-              of A. C comes later.
+              The Link is the plumbing. The Tag is the first surface. Room
+              and Side Chat are features of it. Teammate comes later.
             </p>
           </Reveal>
         </section>
@@ -1152,11 +988,8 @@ export default function GrokbotDoc() {
         <section className="gb-section">
           <Reveal>
             <p className="gb-kicker gb-mono">04 · Prototype</p>
-            <h2 className="gb-h2 gb-display">The Tag, up close</h2>
-            <p>
-              Two people talking, one asks the bot, the work forks into a
-              thread:
-            </p>
+            <h2 className="gb-h2 gb-display">Where the work lives</h2>
+            <p>Same ask — draft a slide deck. Two places it can go:</p>
           </Reveal>
 
           <TagMock />
@@ -1364,7 +1197,7 @@ export default function GrokbotDoc() {
                 <span className="to">A sidebar of chats; bots appear as blocks</span>
               </div>
             </div>
-            <p>Build order: D → A → B and E → C.</p>
+            <p>Build order: Link → Tag → Room + Side Chat → Teammate.</p>
           </Reveal>
         </section>
 
