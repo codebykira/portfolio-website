@@ -547,6 +547,22 @@ function Model({
 
 export default function GrokbotDoc() {
   const reduced = useReducedMotion();
+
+  // The site's global styles paint body white; keep the whole viewport
+  // (overscroll included) black while this page is mounted. CSS :has()
+  // covers this too — this is the fallback for browsers without it.
+  useEffect(() => {
+    const html = document.documentElement;
+    const prevBody = document.body.style.background;
+    const prevHtml = html.style.background;
+    document.body.style.background = "#0b0b0c";
+    html.style.background = "#0b0b0c";
+    return () => {
+      document.body.style.background = prevBody;
+      html.style.background = prevHtml;
+    };
+  }, []);
+
   return (
     <main className="gb">
       <div className="gb-col">
