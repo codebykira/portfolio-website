@@ -466,6 +466,228 @@ function ComposerMock() {
   );
 }
 
+// Mini prototypes, one per model, in the app's own chat language.
+
+// A: the block delivers itself shortly after scrolling into view.
+function MockTag() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const reduced = useReducedMotion();
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    if (!inView) return;
+    if (reduced) {
+      setDone(true);
+      return;
+    }
+    const t = setTimeout(() => setDone(true), 1600);
+    return () => clearTimeout(t);
+  }, [inView, reduced]);
+  return (
+    <div className="gb-mock single" ref={ref}>
+      <div className="gb-pane">
+        <p className="gb-pane-label gb-mono"># apartment-hunt</p>
+        <div className="gb-line me">
+          <div className="gb-bubble">
+            <strong>@grok</strong> comps for 2BRs under $3k
+          </div>
+        </div>
+        <div className="gb-block">
+          <div className="gb-block-head">
+            <div className="gb-av bot">G</div>
+            <div className="gb-block-name">grok · comp check</div>
+            {done ? (
+              <span className="gb-chip done gb-mono">DELIVERED</span>
+            ) : (
+              <span className="gb-chip working gb-mono">WORKING</span>
+            )}
+          </div>
+          <div className="gb-block-body">
+            {done ? (
+              <>14 comps. Median $2,780. Table in thread.</>
+            ) : (
+              <span className="gb-typing" aria-label="working">
+                <i />
+                <i />
+                <i />
+              </span>
+            )}
+          </div>
+          <div className="gb-block-foot">
+            <span className="gb-thread-link">Open thread →</span>
+            <span className="gb-replies">
+              {done ? "6 replies" : "in progress"}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// B: two people co-watching the bot's shared screen.
+function MockRoom() {
+  return (
+    <div className="gb-mock single">
+      <div className="gb-pane">
+        <p className="gb-pane-label gb-mono">New Bot · room</p>
+        <div className="gb-presence">
+          <div className="gb-av k">KC</div>
+          <div className="gb-av s">SD</div>
+          <span className="lbl gb-mono">2 WATCHING LIVE</span>
+        </div>
+        <div className="gb-screenpane gb-mono">▣ shared screen — live</div>
+        <div className="gb-line">
+          <div className="gb-name">Sam</div>
+          <div className="gb-bubble">it&rsquo;s on the wrong tab</div>
+        </div>
+        <div className="gb-line">
+          <div className="gb-name">New Bot</div>
+          <div className="gb-bubble">Fixed — watching the right one now.</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// C: a routine posts unprompted, then answers a follow-up.
+function MockTeammate() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const reduced = useReducedMotion();
+  const [step, setStep] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    if (reduced) {
+      setStep(3);
+      return;
+    }
+    const ts = [400, 1400, 2400].map((ms, i) =>
+      setTimeout(() => setStep(i + 1), ms)
+    );
+    return () => ts.forEach(clearTimeout);
+  }, [inView, reduced]);
+  const on = (i: number) => `gb-step${step >= i ? " on" : ""}`;
+  return (
+    <div className="gb-mock single" ref={ref}>
+      <div className="gb-pane">
+        <p className="gb-pane-label gb-mono"># standup · 4 people + grok</p>
+        <div className={`gb-sys gb-mono ${on(1)}`}>
+          Routine · weekdays 9:00 AM
+        </div>
+        <div className={`gb-line ${on(1)}`}>
+          <div className="gb-name">grok</div>
+          <div className="gb-bubble">
+            Morning digest: 3 PRs merged, 1 flaky test, deploy at noon.
+          </div>
+        </div>
+        <div className={`gb-line me ${on(2)}`}>
+          <div className="gb-bubble">whose test is flaky?</div>
+        </div>
+        <div className={`gb-line ${on(3)}`}>
+          <div className="gb-name">grok</div>
+          <div className="gb-bubble">
+            Sam&rsquo;s — checkout flow, fails 1 in 5.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// D: a share card — flip the permission, copy the link.
+function MockLink() {
+  const [copied, setCopied] = useState(false);
+  const [perm, setPerm] = useState<"VIEW" | "STEER">("VIEW");
+  return (
+    <div className="gb-mock single">
+      <div className="gb-pane">
+        <p className="gb-pane-label gb-mono">Job App · just you</p>
+        <div className="gb-line me">
+          <div className="gb-bubble">send this run to Sam</div>
+        </div>
+        <div className="gb-sharecard">
+          <span className="gb-code">grok.app/s/job-app/8f2k</span>
+          <button
+            type="button"
+            className="gb-share-perm gb-mono"
+            onClick={() => setPerm(perm === "VIEW" ? "STEER" : "VIEW")}
+          >
+            CAN {perm} ▾
+          </button>
+          <button
+            type="button"
+            className="gb-copybtn gb-mono"
+            onClick={() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1400);
+            }}
+          >
+            {copied ? "COPIED ✓" : "COPY"}
+          </button>
+        </div>
+        <div className="gb-line">
+          <div className="gb-name">Job App</div>
+          <div className="gb-bubble">
+            {perm === "VIEW"
+              ? "Sam can watch this session."
+              : "Sam can watch and steer this session."}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// E: draft privately, then actually post the conclusion.
+function MockSideChat() {
+  const [posted, setPosted] = useState(false);
+  return (
+    <div className="gb-mock single">
+      <div className="gb-pane">
+        <p className="gb-pane-label gb-mono">Side chat · private</p>
+        <div className="gb-line me">
+          <div className="gb-bubble">
+            is $2.9k actually bad? not ready to argue this in the channel
+          </div>
+        </div>
+        <div className="gb-line">
+          <div className="gb-name">grok</div>
+          <div className="gb-bubble">
+            4% over median, defensible with the laundry. Want the one-line
+            case?
+          </div>
+        </div>
+        {posted ? (
+          <>
+            <div className="gb-sys gb-mono">posted to #apartment-hunt</div>
+            <div className="gb-block">
+              <div className="gb-block-head">
+                <div className="gb-av bot">G</div>
+                <div className="gb-block-name">
+                  grok · via Kira&rsquo;s side chat
+                </div>
+                <span className="gb-chip done gb-mono">POSTED</span>
+              </div>
+              <div className="gb-block-body">
+                Case for Sunset: 4% over median, laundry closes the gap.
+              </div>
+            </div>
+          </>
+        ) : (
+          <button
+            type="button"
+            className="gb-publish gb-mono"
+            onClick={() => setPosted(true)}
+          >
+            → POST CONCLUSION TO #APARTMENT-HUNT
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // A model card whose glyph strokes draw themselves in on first view.
 function Model({
   letter,
@@ -565,7 +787,7 @@ export default function GrokbotDoc() {
           <Reveal>
             <p className="gb-kicker gb-mono">02 · Diverge</p>
             <h2 className="gb-h2 gb-display">
-              Four ways to put a bot in a room
+              Five ways to put a bot in a room
             </h2>
           </Reveal>
 
@@ -608,6 +830,7 @@ export default function GrokbotDoc() {
               posts one block with the result. Deeper work happens in a
               thread on that block.
             </p>
+            <MockTag />
           </Model>
 
           <Model
@@ -647,6 +870,7 @@ export default function GrokbotDoc() {
               conversation and the same screen. Good for watching together,
               not a home.
             </p>
+            <MockRoom />
           </Model>
 
           <Model
@@ -688,6 +912,7 @@ export default function GrokbotDoc() {
               The bot is a full member. It has a name, joins channels, and
               posts on its own schedule. Most powerful, most noisy. Later.
             </p>
+            <MockTeammate />
           </Model>
 
           <Model
@@ -723,6 +948,7 @@ export default function GrokbotDoc() {
               Keep it single player, but every chat gets a share link.
               Boring, and it&rsquo;s the plumbing the other three need.
             </p>
+            <MockLink />
           </Model>
 
           <Model
@@ -771,6 +997,7 @@ export default function GrokbotDoc() {
               something, post one conclusion back to the room. Draft in
               private, publish in public.
             </p>
+            <MockSideChat />
           </Model>
         </section>
       </div>
