@@ -3747,25 +3747,6 @@ body:has(main.gb) {
 
 /* ---------- restructure: evidence, stamps, bets, calls, queue ---------- */
 
-/* 01: the 1 line of evidence under the problem */
-.gb-observed {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin: 0 0 20px;
-  padding: 10px 14px;
-  border-left: 2px solid var(--gb-amber);
-  color: var(--gb-muted);
-  font-size: 15px;
-}
-.gb-observed .gb-mono {
-  flex: none;
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gb-amber);
-}
-
 /* the "ship" stamp on the chosen option in the story menu */
 .gb-stamp {
   display: inline-block;

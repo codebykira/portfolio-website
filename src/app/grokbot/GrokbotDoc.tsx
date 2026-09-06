@@ -2021,11 +2021,6 @@ export default function GrokbotDoc() {
               return to the bot as signal, so its model of the job stays 1
               person wide.
             </p>
-            <p className="gb-observed">
-              <span className="gb-mono">Observed</span>
-              In my own hunt, every answer John needed left the app as a
-              screenshot, and none of his replies came back in.
-            </p>
             <p>2 jobs, ordered by how many loops they add.</p>
 
             <div className="gb-why">
