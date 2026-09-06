@@ -29,10 +29,47 @@ function Reveal({
   );
 }
 
+// Shared eye-tracking: sets --ex/--ey on the element so its eyes lean
+// toward the cursor. Every bot face on the page uses this.
+function useEyeFollow<T extends HTMLElement>(reach = 5) {
+  const ref = useRef<T>(null);
+  const reduced = useReducedMotion();
+  useEffect(() => {
+    if (reduced) return;
+    let raf = 0;
+    const onMove = (e: MouseEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const el = ref.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        if (r.width === 0) return;
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        const d = Math.hypot(dx, dy) || 1;
+        const m = Math.min(d / 60, 1) * reach;
+        el.style.setProperty("--ex", `${(dx / d) * m}px`);
+        el.style.setProperty("--ey", `${(dy / d) * m * 0.8}px`);
+      });
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [reduced, reach]);
+  return ref;
+}
+
 // Bot avatar: the app's blob with dash eyes.
 function BlobAv({ color, sm }: { color: "g" | "j"; sm?: boolean }) {
+  const ref = useEyeFollow<HTMLSpanElement>(2.5);
   return (
-    <span className={`gb-blobav ${color}${sm ? " sm" : ""}`} aria-hidden="true">
+    <span
+      ref={ref}
+      className={`gb-blobav ${color}${sm ? " sm" : ""}`}
+      aria-hidden="true"
+    >
       <i />
       <i />
     </span>
@@ -357,32 +394,7 @@ function TitleBar({ name }: { name: string }) {
 // that translates toward the pointer (the blink animation owns the bar's own
 // transform, so the follow lives on the wrapper).
 function Blob() {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    if (reduced) return;
-    let raf = 0;
-    const onMove = (e: MouseEvent) => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const el = ref.current;
-        if (!el) return;
-        const r = el.getBoundingClientRect();
-        const dx = e.clientX - (r.left + r.width / 2);
-        const dy = e.clientY - (r.top + r.height / 2);
-        const d = Math.hypot(dx, dy) || 1;
-        const reach = Math.min(d / 60, 1) * 8;
-        el.style.setProperty("--ex", `${(dx / d) * reach}px`);
-        el.style.setProperty("--ey", `${(dy / d) * reach * 0.8}px`);
-      });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-    };
-  }, [reduced]);
+  const ref = useEyeFollow<HTMLDivElement>(8);
 
   return (
     <div className="gb-blob" ref={ref} aria-hidden="true">
@@ -2196,46 +2208,8 @@ export default function GrokbotDoc() {
         <section className="gb-section">
           <Reveal>
             <p className="gb-kicker gb-mono">04 · Prototype</p>
-            <h2 className="gb-h2 gb-display">The rules, and who a guest is</h2>
+            <h2 className="gb-h2 gb-display">Who a guest is</h2>
           </Reveal>
-
-          <div className="gb-col" style={{ marginLeft: 0 }}>
-            <Reveal>
-              <h3 className="gb-h3 gb-display">The rules</h3>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <div className="gb-rules">
-                <div className="gb-rule">
-                  <span className="gb-rule-num gb-mono">01</span>
-                  <div>
-                    <b>Answers in the chat. Works in a thread.</b>
-                    <p>A thread opens only when it touches something.</p>
-                  </div>
-                </div>
-                <div className="gb-rule">
-                  <span className="gb-rule-num gb-mono">02</span>
-                  <div>
-                    <b>A thread is a session.</b>
-                    <p>Context, screen, files. A desktop DM, shared.</p>
-                  </div>
-                </div>
-                <div className="gb-rule">
-                  <span className="gb-rule-num gb-mono">03</span>
-                  <div>
-                    <b>Anyone can steer. The asker owns it.</b>
-                    <p>Logins and the stop button stay with whoever asked.</p>
-                  </div>
-                </div>
-                <div className="gb-rule">
-                  <span className="gb-rule-num gb-mono">04</span>
-                  <div>
-                    <b>Conflicts get asked, not averaged.</b>
-                    <p>Opposite asks: it says so and asks.</p>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
 
           <div className="gb-col" style={{ marginLeft: 0 }}>
             <Reveal>
