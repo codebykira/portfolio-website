@@ -448,7 +448,7 @@ function ComposerMock() {
         ? "pick nestie, like you would any bot"
         : people.length === 0
           ? "now type an email. that is the whole invite."
-          : "the email becomes a link. the link opens the room.";
+          : "the email becomes a link. sam signs up, then lands in the room.";
   return (
     <div className="gb-mockwrap tag">
       <div className="gb-cw">
@@ -642,8 +642,8 @@ function ComposerMock() {
                       ref={n === 0 ? sentRef : undefined}
                     >
                       <span>
-                        Invite sent. <b>{email}</b> got a link to join this
-                        chat. No account needed.
+                        Invite sent. <b>{email}</b> got a link. They sign up,
+                        then land here.
                       </span>
                     </div>
                   ))}
@@ -701,88 +701,6 @@ function ComposerMock() {
 
 // B: the bot takes the computer and everyone in the chat watches the same
 // screen, live. One toggle shows the same task living in a thread vs. in the
-
-// C: the bot is a member. It reads the room and answers without being tagged,
-
-// The credential handoff, worked to a mock: the bot asks the asker, in the
-// thread, and everyone can see whose login it is using.
-function LoginMock() {
-  const [state, setState] = useState<"ask" | "connected">("ask");
-  return (
-    <div className="gb-mockwrap tag">
-      <div className="gb-mock single">
-        <div className="gb-pane gb-window">
-          <div className="gb-main">
-            <div className="gb-thread-head">
-              <span className="gb-thread-title">Thread</span>
-              <span className="gb-thread-sub">{SHIP} · deploy</span>
-            </div>
-            <div className="gb-feed">
-              <Msg who="kira">
-                <strong>@{SHIP}</strong> deploy main to prod
-              </Msg>
-              <Msg who="bot" name={SHIP}>
-                Prod needs Vercel. I don&rsquo;t hold logins, so this one is
-                yours to connect.
-              </Msg>
-              {state === "ask" ? (
-                <div className="gb-ask-card">
-                  <div className="gb-ask-head">
-                    <div>
-                      <p className="gb-ask-title">
-                        Connect your Vercel for this thread?
-                      </p>
-                      <p className="gb-ask-sub">
-                        Used only here, only by you. Revoked when the thread
-                        closes.
-                      </p>
-                    </div>
-                    <span className="gb-ask-x" aria-hidden="true">
-                      ×
-                    </span>
-                  </div>
-                  <div className="gb-ask-opts">
-                    <button
-                      type="button"
-                      className="gb-ask-opt"
-                      onClick={() => setState("connected")}
-                    >
-                      <span className="gb-ask-key">A</span>
-                      Connect my Vercel
-                    </button>
-                    <div className="gb-ask-opt">
-                      <span className="gb-ask-key">B</span>
-                      Ask Eli to connect his instead
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="gb-grant">
-                    <span className="gb-pav k mini">KC</span>
-                    Vercel · connected as <b>Kira</b> · this thread only
-                    <button
-                      type="button"
-                      className="gb-grant-x"
-                      onClick={() => setState("ask")}
-                    >
-                      Revoke
-                    </button>
-                  </div>
-                  <Msg who="bot" name={SHIP}>
-                    Got it. Deploying as Kira. Eli, you can watch, not push.
-                  </Msg>
-                  <Msg who="eli">fair</Msg>
-                </>
-              )}
-            </div>
-            <Composer placeholder="Reply in thread" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 const SHIP = "Shipper";
 
@@ -1278,8 +1196,8 @@ function ShareMock() {
               {added && !open && (
                 <div className="gb-invite-line">
                   <span>
-                    Invite sent. <b>sam@dubois.co</b> got a link to join this
-                    chat. No account needed.
+                    Invite sent. <b>sam@dubois.co</b> got a link. He signs up,
+                    then lands here.
                   </span>
                 </div>
               )}
@@ -1393,8 +1311,8 @@ const ADD_VIEWS: {
       "Fits the app's existing new-chat flow.",
     ],
     costs: [
+      "2 emails and no bot is a valid entry. That makes a human-only chat, and Grok is not a messaging app.",
       "No place to see who is in, or to take someone out.",
-      "Permissions have nowhere to live.",
     ],
   },
   {
@@ -1402,12 +1320,12 @@ const ADD_VIEWS: {
     label: "Invite dialog",
     sub: "like Google Docs: who is in, who is pending",
     gains: [
-      "Answers 2 questions at once: who is in, who is pending.",
-      "The bot appears on the list like a person, which is the whole thesis.",
+      "You invite from inside a bot's chat, so a room always has a bot in it. The rule is built into where the door is.",
+      "Answers who is in and who is pending, and the bot is on the list like a person.",
     ],
     costs: [
       "A modal. It interrupts the chat to manage the chat.",
-      "Roles are a new concept to explain (view, steer, own).",
+      "2 places to add things: bots in To:, people in Invite.",
     ],
   },
 ];
@@ -1486,6 +1404,61 @@ const FRAMES = [
 ] as const;
 
 type WorkView = "side" | "pip" | "thread";
+
+// The verdict for each step, shown next to the evidence: a stamp on the
+// option in the menu, 1 line of why under the frame.
+const DECISIONS: Record<
+  "add" | "convo" | "work",
+  { ship: readonly string[]; why: React.ReactNode }
+> = {
+  add: {
+    ship: ["share"],
+    why: (
+      <>
+        <b>Invite dialog.</b> Every room needs a bot, and the To: field cannot
+        promise that: 2 emails and no bot is a valid entry. The Invite lives
+        inside a bot&rsquo;s chat, so the rule is enforced by where the door is.
+        To: keeps its 1 job, picking the bot.
+      </>
+    ),
+  },
+  convo: {
+    ship: ["tag", "team"],
+    why: (
+      <>
+        <b>Both, 2 jobs.</b> The @ is the floor: an order that fires every time,
+        on day 1, whatever the model can do. Listening is the bet: it speaks
+        when it has something new, dialled up as the speak rules get learned.
+        Ship the floor loud and the listener quiet.
+      </>
+    ),
+  },
+  work: {
+    ship: ["side"],
+    why: (
+      <>
+        <b>Side panel.</b> Everyone sees the same loop while it runs. Picture in
+        picture is the upgrade once 2 bots can work at once; a thread hides the
+        loop, so no.
+      </>
+    ),
+  },
+};
+
+function Stamp({ frame, opt }: { frame: keyof typeof DECISIONS; opt: string }) {
+  return DECISIONS[frame].ship.includes(opt) ? (
+    <span className="gb-stamp gb-mono">ship</span>
+  ) : null;
+}
+
+function Why({ frame }: { frame: keyof typeof DECISIONS }) {
+  return (
+    <p className="gb-frame-why">
+      <span className="gb-mono">Decision</span>
+      <span>{DECISIONS[frame].why}</span>
+    </p>
+  );
+}
 
 const WORK_VIEWS: {
   key: WorkView;
@@ -1708,6 +1681,7 @@ function Storyboard() {
                     <span className="gb-story-dot" aria-hidden="true" />
                     <span>
                       <b>{w.label}</b>
+                      <Stamp frame="add" opt={w.key} />
                     </span>
                   </button>
                 ))}
@@ -1731,6 +1705,7 @@ function Storyboard() {
                     <span className="gb-story-dot" aria-hidden="true" />
                     <span>
                       <b>{v.label}</b>
+                      <Stamp frame="convo" opt={v.key} />
                     </span>
                   </button>
                 ))}
@@ -1754,6 +1729,7 @@ function Storyboard() {
                     <span className="gb-story-dot" aria-hidden="true" />
                     <span>
                       <b>{w.label}</b>
+                      <Stamp frame="work" opt={w.key} />
                     </span>
                   </button>
                 ))}
@@ -1783,6 +1759,7 @@ function Storyboard() {
           </FitBox>
           <div className="gb-frame-trades" key={`atrades-${add}`}>
             <TradeList gains={av.gains} costs={av.costs} />
+            <Why frame="add" />
           </div>
         </div>
         <div className="gb-story-frame" ref={refs[1]}>
@@ -1805,6 +1782,7 @@ function Storyboard() {
               <span className="gb-mono">Week 1 failure</span>
               {opt.fail}
             </p>
+            <Why frame="convo" />
           </div>
         </div>
         <div className="gb-story-frame" ref={refs[2]}>
@@ -1822,6 +1800,7 @@ function Storyboard() {
           </FitBox>
           <div className="gb-frame-trades" key={`wtrades-${view}`}>
             <TradeList gains={wv.gains} costs={wv.costs} />
+            <Why frame="work" />
           </div>
           <p className="gb-rule-note">
             <b>Where the screen goes is the whole question.</b> An answer closes
@@ -1883,6 +1862,24 @@ function Storyboard() {
     </div>
   );
 }
+
+const HYPOTHESES = [
+  {
+    id: "H1",
+    claim:
+      "2 people correcting the same bot together make it better, faster, than 1 person alone.",
+    measure:
+      "Corrections per bot from 2+ people; repeat asks on the same topic, compared with solo bots.",
+    kill: "Corrections cancel each other out and it gets worse. 2 steerers need a rule for who wins.",
+  },
+  {
+    id: "H2",
+    claim:
+      "A bot that speaks unprompted gets kept, if it speaks rarely and only with something new.",
+    measure: "Bots with 2+ humans still active at day 30; mutes by day 3.",
+    kill: "Muted by day 3. The speak rules were the product. Dial to 0; the room is @-only until they exist.",
+  },
+] as const;
 
 // Tag vs Teammate, side by side: what each gains, what each costs, and how
 
@@ -1993,6 +1990,11 @@ export default function GrokbotDoc() {
               return to the bot as signal, so its model of the job stays 1
               person wide.
             </p>
+            <p className="gb-observed">
+              <span className="gb-mono">Observed</span>
+              In my own hunt, every answer Sam needed left the app as a
+              screenshot, and none of his replies came back in.
+            </p>
             <p>2 jobs, ordered by how many loops they add.</p>
 
             <div className="gb-why">
@@ -2069,314 +2071,118 @@ export default function GrokbotDoc() {
             <p className="gb-kicker gb-mono">02 · Options</p>
             <h2 className="gb-h2 gb-display">Whose space is it?</h2>
             <p>
-              1 question, 2 answers. Both close the correction loop around the
-              group. A human always starts a cycle; they differ on whether the
-              bot needs an @ to pick it up. Scroll the story; flip the options
-              to compare.
+              3 questions, in the order a group hits them. Each option is a real
+              screen with what it gains, what it costs, and how it fails in week
+              1. The one I would ship is stamped. Scroll the story; flip the
+              options to compare.
             </p>
           </Reveal>
           <Storyboard />
         </section>
-      </div>
-
-      <div className="gb-wide">
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">03 · Converge</p>
-            <h2 className="gb-h2 gb-display">The decision</h2>
+            <p className="gb-kicker gb-mono">03 · Bets</p>
+            <h2 className="gb-h2 gb-display">What has to be true</h2>
             <p>
-              3 questions from the storyboard, 3 answers. Each one picks the
-              option that keeps the loop visible and closes it around the group.
+              2 bets: that people steer a bot together, and that it can speak
+              without being asked. How I would test each, and what would prove
+              it wrong.
             </p>
           </Reveal>
           <Reveal delay={0.05}>
-            <ol className="gb-order">
-              <li>
-                <span className="gb-order-letter gb-mono">01</span>
-                <div>
-                  <b>Adding a person</b>{" "}
-                  <span className="gb-order-tag ship">To: field</span>
-                  <p>
-                    An email goes where a bot would. Adding a human is not a
-                    special act, so there is nothing to learn. The Invite dialog
-                    comes later, when there is a room to manage.
-                  </p>
-                </div>
-              </li>
-              <li>
-                <span className="gb-order-letter gb-mono">02</span>
-                <div>
-                  <b>Does it need an @?</b>{" "}
-                  <span className="gb-order-tag ship">No. It listens</span>
-                  <p>
-                    The Teammate. It reads the room and picks cycles up on its
-                    own, so the loop closes without anyone remembering to tag
-                    it. Ships quiet, earns its voice as the speak rules get
-                    learned. &ldquo;@ to wake it&rdquo; stays as a setting, not
-                    a product.
-                  </p>
-                </div>
-              </li>
-              <li>
-                <span className="gb-order-letter gb-mono">03</span>
-                <div>
-                  <b>When it takes the computer</b>{" "}
-                  <span className="gb-order-tag ship">Side panel</span>
-                  <p>
-                    What the app does today: the card in the chat, the screen on
-                    the right. Everyone sees the same loop while it runs.
-                    Picture in picture is the upgrade path once 2 bots can work
-                    at once; a thread hides the loop, so no.
-                  </p>
-                </div>
-              </li>
-            </ol>
-
-            <div className="gb-bet">
-              <p className="gb-kicker gb-mono">Hypotheses</p>
-              <ul className="gb-hyp">
-                <li>
-                  <b>H1.</b> If a second human can talk to the bot directly,
-                  relays drop.{" "}
-                  <span>
-                    Measure: screenshots and pasted bot text per group chat.
-                  </span>
-                </li>
-                <li>
-                  <b>H2.</b> Corrections from the non-owner make the bot better
-                  for both people.{" "}
-                  <span>
-                    Measure: messages to the bot from someone other than its
-                    owner, and repeat asks on the same topic.
-                  </span>
-                </li>
-                <li>
-                  <b>H3.</b> A bot that speaks unprompted gets kept, not muted,
-                  if it speaks rarely and only with something new.{" "}
-                  <span>
-                    Measure: bots with 2+ humans still active at day 30; mutes
-                    by day 3.
-                  </span>
-                </li>
-                <li>
-                  <b>H4.</b> A visible screen catches mistakes before they ship.{" "}
-                  <span>
-                    Measure: handoffs answered within 1 minute; reverts after a
-                    bot run.
-                  </span>
-                </li>
-              </ul>
-              <p className="gb-kicker gb-mono">Assumptions</p>
-              <ul className="gb-hyp">
-                <li>
-                  <b>Brand.</b> Grok wants the agent fully visible: a face, a
-                  name, a screen everyone can watch. Not a background service
-                  that quietly does things. Every option here is built on that;
-                  if the brand wants the bot invisible, the Side panel and the
-                  Teammate are the wrong calls and Status only comes back.
-                </li>
-                <li>
-                  <b>1 bot per room</b> to start. More bots is more names, and
-                  that only works if a bot is a participant, not a feature of
-                  one account.
-                </li>
-                <li>
-                  <b>Guests come in by email link</b>, no account first. The
-                  identity question (guest to profile) is solved after they are
-                  in, not before.
-                </li>
-                <li>
-                  <b>Logins never pool.</b> The asker connects theirs, per
-                  thread, and the grant dies with the thread.
-                </li>
-                <li>
-                  <b>People already know the patterns</b> borrowed here:
-                  iMessage rows, a Google Docs share sheet, a side panel.
-                  Nothing needs a tutorial.
-                </li>
-              </ul>
-              <p>
-                <b>What would make me wrong:</b> if the bot gets muted by day 3,
-                the speak rules were the product and I shipped the personality
-                before the manners. Then &ldquo;@ to wake it&rdquo; is where we
-                live until the rules exist.
-              </p>
-            </div>
-          </Reveal>
-        </section>
-
-        <section className="gb-section">
-          <Reveal>
-            <p className="gb-kicker gb-mono">04 · Prototype</p>
-            <h2 className="gb-h2 gb-display">Who a guest is</h2>
-          </Reveal>
-
-          <div className="gb-col" style={{ marginLeft: 0 }}>
-            <Reveal>
-              <h3 className="gb-h3 gb-display">Email → guest → profile</h3>
-              <p>
-                The invite raises an identity question, same as Google Docs:
-              </p>
-              <div className="gb-map">
-                <div className="gb-maprow">
-                  <span className="from">Invited</span>
-                  <span className="arrow">→</span>
-                  <span className="to">The chip is an email.</span>
-                </div>
-                <div className="gb-maprow">
-                  <span className="from">Opens the link</span>
-                  <span className="arrow">→</span>
-                  <span className="to">
-                    Picks a name, joins as a guest. Can talk and steer.
-                  </span>
-                </div>
-                <div className="gb-maprow">
-                  <span className="from">Makes a profile</span>
-                  <span className="arrow">→</span>
-                  <span className="to">
-                    The email turns into a name everywhere. Only a profile can
-                    connect logins or own a block.
-                  </span>
-                </div>
+            <div className="gb-hyp-table" role="table">
+              <div className="gb-hyp-head" role="row">
+                <span>Hypothesis</span>
+                <span>Measure</span>
+                <span>Kill signal</span>
               </div>
-            </Reveal>
-          </div>
+              {HYPOTHESES.map((h) => (
+                <div className="gb-hyp-row" role="row" key={h.id}>
+                  <span>
+                    <b className="gb-mono">{h.id}</b>
+                    {h.claim}
+                  </span>
+                  <span>{h.measure}</span>
+                  <span>{h.kill}</span>
+                </div>
+              ))}
+            </div>
+            <div className="gb-assume">
+              <p>
+                <b>Assumed: the brand wants the agent visible.</b> A face, a
+                name, a screen everyone can watch. Every stamp above is built on
+                that. If Grok wants the bot invisible, the Side panel and the
+                Teammate are the wrong calls.
+              </p>
+              <p>
+                <b>Assumed: listening is a model bet, not a feature.</b> How
+                often the bot speaks unprompted is a dial tied to how well it
+                reads intent from loose talk. It starts near 0 and opens as the
+                speak rules get learned. The @ path does not depend on it.
+              </p>
+            </div>
+          </Reveal>
         </section>
-      </div>
 
-      <div className="gb-col">
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">05 · Constraints</p>
+            <p className="gb-kicker gb-mono">04 · Constraints</p>
             <h2 className="gb-h2 gb-display">The hard problems</h2>
-          </Reveal>
-
-          <Reveal>
-            <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">Who is it working for?</h3>
-              <p className="gb-stance">
-                <b>Call:</b> whoever started the cycle, tagged or not. Everyone
-                else is input.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">Whose logins?</h3>
-              <p className="gb-stance">
-                <b>Call:</b> logins never pool. The asker connects theirs, per
-                thread.
-              </p>
-              <p>Shipper needs Vercel. 3 ways to give it that, 1 survives.</p>
-              <ul className="gb-plain">
-                <li>
-                  <b>A shared bot login.</b> Fast. The first time it does
-                  something wrong, nobody authorized it. Out.
-                </li>
-                <li>
-                  <b>The owner&rsquo;s login.</b> Works until Eli deploys under
-                  Kira&rsquo;s name while she is asleep. Out.
-                </li>
-                <li>
-                  <b>The asker&rsquo;s login, per thread.</b> Rights follow the
-                  person who wanted the work. In.
-                </li>
-              </ul>
-              <LoginMock />
-              <p className="gb-caption gb-mono">
-                Scoped to the thread, named after the person, visible to the
-                room.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">What does it remember?</h3>
-              <p className="gb-stance">
-                <b>Call:</b> the chat is its memory. Every cycle leaves residue,
-                so no ask starts from zero. DMs stay in DMs.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">Two people, one run</h3>
-              <p className="gb-stance">
-                <b>Call:</b> new messages queue, visibly. Anyone can hit stop.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div className="gb-prob">
-              <h3 className="gb-h3 gb-display">Who pays?</h3>
-              <p className="gb-stance">
-                <b>Call:</b> the workspace. Each block shows its cost.
-              </p>
-            </div>
-          </Reveal>
-        </section>
-
-        <section className="gb-section">
-          <Reveal>
-            <p className="gb-kicker gb-mono">06 · Map</p>
-            <h2 className="gb-h2 gb-display">Desktop → web</h2>
-            <p>Everything maps:</p>
+            <p>
+              With 1 person these answer themselves. With 2, each needs a call.
+            </p>
           </Reveal>
           <Reveal delay={0.05}>
-            <div className="gb-map">
-              <div className="gb-maprow">
-                <span className="from">A bot&rsquo;s DM</span>
-                <span className="arrow">→</span>
-                <span className="to">A hosted session with a URL</span>
+            <div className="gb-calls">
+              <div className="gb-call">
+                <h3>Can a chat have no bot?</h3>
+                <p className="gb-call-verdict">
+                  No. Every room has a bot. Grok is not a messaging app, so
+                  people are added from inside a bot&rsquo;s chat.
+                </p>
               </div>
-              <div className="gb-maprow">
-                <span className="from">The bot&rsquo;s screen</span>
-                <span className="arrow">→</span>
-                <span className="to">A live pane streamed from a server</span>
+              <div className="gb-call">
+                <h3>What is the chat called?</h3>
+                <p className="gb-call-verdict">
+                  Like any group chat: the members, bot included. &ldquo;Kira,
+                  Sam, Nestie&rdquo; by default, and anyone can rename it.
+                </p>
               </div>
-              <div className="gb-maprow">
-                <span className="from">Routines</span>
-                <span className="arrow">→</span>
-                <span className="to">Server schedules that post blocks</span>
+              <div className="gb-call">
+                <h3>Does Sam need an account?</h3>
+                <p className="gb-call-verdict">
+                  Yes. The link goes to sign-up, then into the room. Every
+                  message and run has a real name on it.
+                </p>
               </div>
-              <div className="gb-maprow">
-                <span className="from">Plugins</span>
-                <span className="arrow">→</span>
-                <span className="to">
-                  Per-person logins, asked for in-thread
-                </span>
-              </div>
-              <div className="gb-maprow">
-                <span className="from">The sidebar of bots</span>
-                <span className="arrow">→</span>
-                <span className="to">
-                  A sidebar of chats; bots appear as blocks
-                </span>
+              <div className="gb-call">
+                <h3>Does it learn from Sam too?</h3>
+                <p className="gb-call-verdict">
+                  Yes. Anything either of you tells it in the room, it keeps:
+                  Sam says &ldquo;skip the BQE&rdquo; once and it stays skipped.
+                  Your private chat with it stays private, in both directions.
+                </p>
               </div>
             </div>
-            <p>Build order: D → A → B and E → C.</p>
           </Reveal>
         </section>
 
         <section className="gb-section">
           <Reveal>
-            <p className="gb-kicker gb-mono">07 · Iterate</p>
+            <p className="gb-kicker gb-mono">05 · Iterate</p>
             <h2 className="gb-h2 gb-display">Open questions</h2>
             <ul className="gb-openq">
-              <li>Is the block a message or a mini app?</li>
-              <li>Can a thread be pinned and become a room?</li>
-              <li>Two bots in one channel?</li>
-              <li>Can someone join a single thread by link?</li>
               <li>
-                Does a guest&rsquo;s side chat survive if they never make a
-                profile?
+                2 bots in 1 room. Does the To: field scale, or does a second
+                name need a second kind of row?
               </li>
               <li>
-                What does day one look like before the second person shows up?
+                Can a thread be pinned and become a room, so long work gets a
+                door of its own without hiding the loop?
+              </li>
+              <li>
+                Can someone be invited to 1 thread without joining the whole
+                room?
               </li>
             </ul>
           </Reveal>
