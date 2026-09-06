@@ -86,7 +86,7 @@ const BOT = "Nestie";
 
 const PEOPLE = {
   kira: { name: "Kira", initials: "KC", cls: "k" },
-  sam: { name: "Sam", initials: "SD", cls: "s" },
+  john: { name: "John", initials: "JD", cls: "s" },
   eli: { name: "Eli", initials: "EW", cls: "e" },
 } as const;
 
@@ -102,7 +102,7 @@ function Msg({
   innerRef,
   children,
 }: {
-  who: "kira" | "sam" | "eli" | "bot";
+  who: "kira" | "john" | "eli" | "bot";
   wide?: boolean;
   step?: string;
   foot?: React.ReactNode;
@@ -482,7 +482,7 @@ function ComposerMock() {
         ? "pick nestie, like you would any bot"
         : people.length === 0
           ? "now type an email. that is the whole invite."
-          : "the email becomes a link. sam signs up, then lands in the room.";
+          : "the email becomes a link. john signs up, then lands in the room.";
   return (
     <div className="gb-mockwrap tag">
       <div className="gb-cw">
@@ -728,7 +728,7 @@ function ComposerMock() {
 
 // Mini prototypes, one per model, in the app's own chat language.
 
-// A: the bot's own DM, opened up. Kira's Nestie chat gets a link, Sam walks
+// A: the bot's own DM, opened up. Kira's Nestie chat gets a link, John walks
 
 // A: every participant, human or bot, shows up the same way: picture, name,
 // bubble. The thread opens as a second pane on the right (open by default so
@@ -864,14 +864,14 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
             <TitleBar name={BOT} />
             <div className="gb-feed" ref={feed}>
               <div className={`gb-sys ${on(1)}`}>Today 1:52 PM</div>
-              <Msg who="sam" step={on(1)}>
+              <Msg who="john" step={on(1)}>
                 apartment hunting in new york is so difficult
               </Msg>
               <Msg who="kira" step={on(2)}>
                 everything decent is gone by noon. the Bedford one is back
                 though, $3.9k
               </Msg>
-              <Msg who="sam" step={on(3)}>
+              <Msg who="john" step={on(3)}>
                 feels steep. can we get comps
               </Msg>
               {variant === "tag" ? (
@@ -891,7 +891,7 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
               ) : (
                 <>
                   <Msg who="bot" step={on(4)} more={step >= 5}>
-                    Already pulled them when Sam said Bedford. 14 comps, median{" "}
+                    Already pulled them when John said Bedford. 14 comps, median{" "}
                     <b>$3,720</b>, so it is 5% over. Blame the washer.
                   </Msg>
                   <Msg who="bot" step={on(5)} cont>
@@ -901,7 +901,7 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
                       bot's answer above: the feed scrolls the taller messages
                       out of view, and the open space beside a short line is
                       the only place the ink does not land on other text */}
-                  <Msg who="sam" step={on(6)} innerRef={heardRef}>
+                  <Msg who="john" step={on(6)} innerRef={heardRef}>
                     ok that is a little creepy and very useful
                   </Msg>
                 </>
@@ -919,7 +919,7 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
           show={step >= 4}
           width={250}
         >
-          sam asked the room, not the bot. nothing happens until kira @s it.
+          john asked the room, not the bot. nothing happens until kira @s it.
         </AnchorNote>
       ) : (
         <AnchorNote
@@ -929,7 +929,7 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
           show={step >= 6}
           width={215}
         >
-          no @ anywhere. it heard sam say bedford and answered, like anyone else
+          no @ anywhere. it heard john say bedford and answered, like anyone else
           in the room would.
         </AnchorNote>
       )}
@@ -1227,7 +1227,7 @@ function ShareMock() {
               {added && !open && (
                 <div className="gb-invite-line">
                   <span>
-                    Invite sent. <b>sam@dubois.co</b> got a link. He signs up,
+                    Invite sent. <b>john@dubois.co</b> got a link. He signs up,
                     then lands here.
                   </span>
                 </div>
@@ -1252,7 +1252,7 @@ function ShareMock() {
                 {added ? (
                   <span className="gb-tochip human">
                     <span className="gb-av s">SD</span>
-                    sam@dubois.co
+                    john@dubois.co
                   </span>
                 ) : (
                   <button
@@ -1276,7 +1276,7 @@ function ShareMock() {
                 <div className="gb-share-row new">
                   <span className="gb-pav s">SD</span>
                   <div>
-                    <b>Sam Dubois</b>
+                    <b>John Dubois</b>
                     <small>invited · not opened yet</small>
                   </div>
                 </div>
@@ -1314,7 +1314,7 @@ function ShareMock() {
           width={190}
         >
           {added
-            ? "sam is on the list before he even opens it. so is the bot, like a person."
+            ? "john is on the list before he even opens it. so is the bot, like a person."
             : "type an email here. the bot is already on the list, like a person."}
         </AnchorNote>
       )}
@@ -1404,14 +1404,14 @@ const FRAMES = [
     key: "add",
     title: "Adding a person",
     blurb:
-      "Kira has Nestie. How does Sam get in? 2 ways, each borrowed from a product people already know.",
+      "Kira has Nestie. How does John get in? 2 ways, each borrowed from a product people already know.",
     variants: [],
   },
   {
     key: "convo",
     title: "Does it need an @?",
     blurb:
-      "Sam asks the group for comps. Nestie is in the chat. Does it need an @ before it answers?",
+      "John asks the group for comps. Nestie is in the chat. Does it need an @ before it answers?",
     variants: [
       {
         key: "tag",
@@ -1921,7 +1921,7 @@ const OPTIONS = [
     letter: "A",
     title: "The Tag",
     serves: "The humans' space, bot on call",
-    scenario: "Kira and Sam, hunting for a 2BR. Nestie is the apartment bot.",
+    scenario: "Kira and John, hunting for a 2BR. Nestie is the apartment bot.",
     blurb:
       "The humans host. @ the bot, it answers in the chat. When it has to act, the work forks into a thread with a live screen. Nothing reaches it without an @.",
     gains: [
@@ -2017,13 +2017,13 @@ export default function GrokbotDoc() {
               A Grok bot is a feedback loop with 1 person in it. Kira asks, it
               answers, Kira corrects, it remembers. The loop is what makes it
               good. When someone else needs it, the owner relays: copy out, copy
-              back. The relay breaks the loop. Sam&rsquo;s corrections never
+              back. The relay breaks the loop. John&rsquo;s corrections never
               return to the bot as signal, so its model of the job stays 1
               person wide.
             </p>
             <p className="gb-observed">
               <span className="gb-mono">Observed</span>
-              In my own hunt, every answer Sam needed left the app as a
+              In my own hunt, every answer John needed left the app as a
               screenshot, and none of his replies came back in.
             </p>
             <p>2 jobs, ordered by how many loops they add.</p>
@@ -2176,21 +2176,21 @@ export default function GrokbotDoc() {
                 <h3>What is the chat called?</h3>
                 <p className="gb-call-verdict">
                   Like any group chat: the members, bot included. &ldquo;Kira,
-                  Sam, Nestie&rdquo; by default, and anyone can rename it.
+                  John, Nestie&rdquo; by default, and anyone can rename it.
                 </p>
               </div>
               <div className="gb-call">
-                <h3>Does Sam need an account?</h3>
+                <h3>Does John need an account?</h3>
                 <p className="gb-call-verdict">
                   Yes. The link goes to sign-up, then into the room. Every
                   message and run has a real name on it.
                 </p>
               </div>
               <div className="gb-call">
-                <h3>Does it learn from Sam too?</h3>
+                <h3>Does it learn from John too?</h3>
                 <p className="gb-call-verdict">
                   Yes. Anything either of you tells it in the room, it keeps:
-                  Sam says &ldquo;skip the BQE&rdquo; once and it stays skipped.
+                  John says &ldquo;skip the BQE&rdquo; once and it stays skipped.
                   Your private chat with it stays private, in both directions.
                 </p>
               </div>

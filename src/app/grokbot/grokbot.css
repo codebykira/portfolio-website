@@ -20,10 +20,15 @@ body:has(main.gb) {
   --gb-ink: #f2f2f3;
   --gb-muted: #9a9aa1;
   --gb-faint: #6c6c73;
-  /* muted sage, not neon */
+  /* muted sage, not neon — the doc's own accent, used for text and rules */
   --gb-green: #8fb597;
   --gb-green-dim: #161c18;
   --gb-green-line: #2b382f;
+  /* the app's bot colors. A bot's shape and color are its identity, so every
+     face on the page — the mascot and the avatars — draws from these. */
+  --gb-bot-green: #4aa85a;
+  --gb-bot-amber: #f2a63c;
+  --gb-bot-pink: #e5388c;
   --gb-amber: #f0a13e;
   --gb-amber-dim: #2b2210;
   --gb-purple: #c4a2e8;
@@ -132,7 +137,7 @@ body:has(main.gb) {
   right: 0;
   width: 88px;
   height: 84px;
-  background: var(--gb-green);
+  background: var(--gb-bot-green);
   animation: gb-morph 7s ease-in-out infinite;
   /* eyes sit in the top-right corner of the face, like the app icons */
   display: flex;
@@ -3600,16 +3605,14 @@ body:has(main.gb) {
   gap: 3px;
   flex: none;
 }
-/* the app's bot colors: a bot's shape and color are its identity, so these
-   match the real avatar palette rather than the doc's own greens */
 .gb-blobav.g {
-  background: #4aa85a;
+  background: var(--gb-bot-green);
 }
 .gb-blobav.j {
-  background: #f2a63c;
+  background: var(--gb-bot-amber);
 }
 .gb-blobav.p {
-  background: #e5388c;
+  background: var(--gb-bot-pink);
 }
 .gb-blobav i {
   display: block;
