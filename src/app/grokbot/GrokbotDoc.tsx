@@ -62,7 +62,7 @@ function useEyeFollow<T extends HTMLElement>(reach = 5) {
 }
 
 // Bot avatar: the app's blob with dash eyes.
-function BlobAv({ color, sm }: { color: "g" | "j"; sm?: boolean }) {
+function BlobAv({ color, sm }: { color: "g" | "j" | "p"; sm?: boolean }) {
   const ref = useEyeFollow<HTMLSpanElement>(2.5);
   return (
     <span
@@ -212,6 +212,17 @@ function AnchorNote({
         setPos(null);
         return;
       }
+      // A target inside a scrolling feed can be scrolled clean out of it. Its
+      // rect keeps reporting a position, so the note would happily follow it
+      // off the panel; drop the note instead of drawing it somewhere wrong.
+      const scroller = t.closest(".gb-feed");
+      if (scroller) {
+        const sr = scroller.getBoundingClientRect();
+        if (tr.bottom < sr.top + 4 || tr.top > sr.bottom - 4) {
+          setPos(null);
+          return;
+        }
+      }
       // the mock may be scaled down by FitBox; measure in its own units
       const k = wr.width / wrap.offsetWidth || 1;
       const l = (tr.left - wr.left) / k;
@@ -225,19 +236,42 @@ function AnchorNote({
       if (side === "right") x = l + w + gap;
       if (side === "above") y = tp - gap;
       if (side === "below") y = tp + h + gap;
-      x = Math.round(x + dx);
-      y = Math.round(y + dy);
+      x = x + dx;
+      y = y + dy;
+      // The feed scrolls as messages play, so a target can slide clean out of
+      // the mock. Left alone the note follows it and lands on the heading
+      // above, where white ink on the page is unreadable. Clamp it to the
+      // wrap: it parks against the panel edge and still points inward.
+      // x/y are the anchor point, not the box — CSS translates the note off
+      // it per side, so the clamp has to undo that to know the real bounds.
+      const note = self.current;
+      const nw = note?.offsetWidth ?? width;
+      const nh = note?.offsetHeight ?? 0;
+      const pad = 8;
+      // how far the box extends from the anchor, per side's transform
+      const [ax, ay] =
+        side === "left"
+          ? [nw, nh / 2]
+          : side === "right"
+            ? [0, nh / 2]
+            : side === "above"
+              ? [nw / 2, nh]
+              : [nw / 2, 0];
+      const clamp = (v: number, lo: number, hi: number) =>
+        Math.min(Math.max(v, lo), Math.max(lo, hi));
+      x = Math.round(clamp(x, pad + ax, wrap.offsetWidth - pad - (nw - ax)));
+      y = Math.round(clamp(y, pad + ay, wrap.offsetHeight - pad - (nh - ay)));
       setPos((p) => (p && p.x === x && p.y === y ? p : { x, y }));
     };
     measure();
     // targets move as messages animate in and feeds scroll: keep looking
-    const id = window.setInterval(measure, 120);
+    const id = window.setInterval(measure, 90);
     window.addEventListener("resize", measure);
     return () => {
       window.clearInterval(id);
       window.removeEventListener("resize", measure);
     };
-  }, [target, side, dx, dy, align]);
+  }, [target, side, dx, dy, align, width]);
   const arrow =
     side === "left" ? (
       // note on the left, arrow points right
@@ -507,7 +541,7 @@ function ComposerMock() {
               </div>
             </div>
             <div className="gb-cw-row">
-              <BlobAv color="g" />
+              <BlobAv color="p" />
               <div>
                 <div className="gb-who">
                   Designer <span>Thursday</span>
@@ -560,7 +594,7 @@ function ComposerMock() {
                   </button>
                   <button type="button" className="gb-menurow">
                     <span className="icon">
-                      <BlobAv color="g" sm />
+                      <BlobAv color="p" sm />
                     </span>
                     Designer
                     <span className="gb-kbd">
@@ -788,7 +822,7 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
       setStep(6);
       return;
     }
-    const ts = [200, 900, 1700, 2600, 3600, 4600].map((ms, i) =>
+    const ts = [100, 450, 850, 1250, 1650, 2050].map((ms, i) =>
       setTimeout(() => setStep(i + 1), ms),
     );
     return () => ts.forEach(clearTimeout);
@@ -856,19 +890,18 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
                 </>
               ) : (
                 <>
-                  <Msg
-                    who="bot"
-                    step={on(4)}
-                    more={step >= 5}
-                    innerRef={heardRef}
-                  >
+                  <Msg who="bot" step={on(4)} more={step >= 5}>
                     Already pulled them when Sam said Bedford. 14 comps, median{" "}
                     <b>$3,720</b>, so it is 5% over. Blame the washer.
                   </Msg>
                   <Msg who="bot" step={on(5)} cont>
                     {comps}
                   </Msg>
-                  <Msg who="sam" step={on(6)}>
+                  {/* the note anchors to this last short bubble, not to the
+                      bot's answer above: the feed scrolls the taller messages
+                      out of view, and the open space beside a short line is
+                      the only place the ink does not land on other text */}
+                  <Msg who="sam" step={on(6)} innerRef={heardRef}>
                     ok that is a little creepy and very useful
                   </Msg>
                 </>
@@ -891,12 +924,10 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
       ) : (
         <AnchorNote
           target={heardRef}
-          side="above"
-          align="end"
-          dx={-120}
-          dy={-4}
-          show={step >= 4}
-          width={230}
+          side="right"
+          dx={4}
+          show={step >= 6}
+          width={215}
         >
           no @ anywhere. it heard sam say bedford and answered, like anyone else
           in the room would.
@@ -909,7 +940,7 @@ function ConvoMock({ variant }: { variant: "tag" | "team" }) {
 // Storyboard frame 2: the bot takes the computer. Same shape as the desktop
 // app: the Computer card sits in the chat, the bot's screen and routines sit
 // in the right panel. Nothing forks anywhere.
-const WORK_DELAYS = [0, 900, 1900, 3100, 4600, 5800];
+const WORK_DELAYS = [0, 450, 900, 1400, 1950, 2450];
 
 function WorkMock({ view }: { view: WorkView }) {
   const screenRef = useRef<HTMLDivElement>(null);

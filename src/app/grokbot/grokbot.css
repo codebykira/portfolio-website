@@ -1772,7 +1772,7 @@ body:has(main.gb) {
 .gb-step {
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transition: opacity 0.24s ease, transform 0.24s ease;
 }
 .gb-step.on {
   opacity: 1;
@@ -3600,11 +3600,16 @@ body:has(main.gb) {
   gap: 3px;
   flex: none;
 }
+/* the app's bot colors: a bot's shape and color are its identity, so these
+   match the real avatar palette rather than the doc's own greens */
 .gb-blobav.g {
-  background: #8fb597;
+  background: #4aa85a;
 }
 .gb-blobav.j {
-  background: #f5a623;
+  background: #f2a63c;
+}
+.gb-blobav.p {
+  background: #e5388c;
 }
 .gb-blobav i {
   display: block;
