@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono } from "next/font/google";
+import { Caveat, IBM_Plex_Mono } from "next/font/google";
 import GrokbotDoc from "./GrokbotDoc";
 
 const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-plex-mono",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-caveat",
   display: "swap",
 });
 
@@ -19,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function GrokbotPage() {
   return (
-    <div className={plexMono.variable}>
+    <div className={`${plexMono.variable} ${caveat.variable}`}>
       <GrokbotDoc />
     </div>
   );

@@ -126,7 +126,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
               >
                 {images.length > 1 ? (
                   // Multiple shots (e.g. phone screens) sit in a centred row.
-                  <div className="flex items-end justify-center gap-6">
+                  <div className="mb-[8vh] flex items-end justify-center gap-6">
                     {images.map((img, i) => (
                       <Image
                         key={i}
@@ -135,7 +135,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
                         width={img.width}
                         height={img.height}
                         sizes="450px"
-                        className={`h-auto w-[42%] rounded-2xl ${revealMediaFilter}`}
+                        className={`h-[56vh] w-auto rounded-2xl ${revealMediaFilter}`}
                       />
                     ))}
                   </div>

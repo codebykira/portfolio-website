@@ -1,170 +1,117 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Check, Copy, Github, Instagram, Linkedin } from "lucide-react";
-import { textColorAnimation } from "./animations";
+import { Linkedin } from "lucide-react";
 
 const EMAIL = "kiracheung0211@gmail.com";
+const X_URL = "https://x.com/CheungKira";
+const LINKEDIN_URL = "https://linkedin.com/in/kira-cheung";
 
 const XMark = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-    className={className}
-    fill="currentColor"
-  >
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
     <path d="M17.6 3h3.1l-6.8 7.8L22 21h-6.3l-4.9-6.4L5.2 21H2.1l7.3-8.3L1.7 3h6.4l4.4 5.9L17.6 3zm-1.1 16.2h1.7L7 4.7H5.2l11.3 14.5z" />
   </svg>
 );
 
-const socials = [
-  { label: "GitHub", href: "https://github.com/kiracheung0211", Icon: Github },
-  { label: "LinkedIn", href: "https://linkedin.com/in/kira-cheung", Icon: Linkedin },
-  { label: "Instagram", href: "https://instagram.com/kkiracheungg", Icon: Instagram },
-  { label: "X", href: "https://x.com/CheungKira", Icon: XMark },
+/* ── The thread ───────────────────────────────────────────
+ * A short iMessage-style exchange. Grey on the left is me, blue on the
+ * right is the visitor. Bubbles pop in one at a time once the section scrolls into
+ * view, and the last two "messages" are the actual buttons. Casual on
+ * purpose: this is the end of the page, not a form.
+ * ─────────────────────────────────────────────────────── */
+type Msg = { from: "you" | "me"; text: string };
+
+const THREAD: Msg[] = [
+  { from: "me", text: "hey. you made it to the bottom." },
+  { from: "you", text: "ok that was kinda fun" },
+  { from: "me", text: "want to build something together? or just say hi. both good." },
+  { from: "me", text: "big buttons below. pick one." },
 ];
+
+const STEP = 0.55; // seconds between bubbles
+
+function Bubble({ msg, index, reduceMotion }: { msg: Msg; index: number; reduceMotion: boolean | null }) {
+  const mine = msg.from === "you";
+  const anim = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, scale: 0.6, y: 12 },
+        whileInView: { opacity: 1, scale: 1, y: 0 },
+        viewport: { once: true, amount: 0.6 },
+        transition: { type: "spring" as const, stiffness: 420, damping: 26, delay: index * STEP },
+      };
+  return (
+    <motion.div
+      className={`flex w-full ${mine ? "justify-end" : "justify-start"}`}
+      style={{ transformOrigin: mine ? "bottom right" : "bottom left" }}
+      {...anim}
+    >
+      <p
+        className={`max-w-[85%] rounded-[1.6rem] px-5 py-3 text-base leading-snug sm:max-w-[70%] sm:text-lg ${
+          mine
+            ? "rounded-br-md bg-[#2f7bff] text-white shadow-[0_6px_24px_rgba(47,123,255,0.35)]"
+            : "rounded-bl-md bg-[#2c2c30] text-white/90"
+        }`}
+      >
+        {msg.text}
+      </p>
+    </motion.div>
+  );
+}
 
 const Connect = () => {
   const reduceMotion = useReducedMotion();
-  const [copied, setCopied] = useState(false);
-  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (resetTimer.current) clearTimeout(resetTimer.current);
-    };
-  }, []);
-
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-      setCopied(true);
-      if (resetTimer.current) clearTimeout(resetTimer.current);
-      resetTimer.current = setTimeout(() => setCopied(false), 2200);
-    } catch {
-      // Clipboard blocked. The mailto link next to it still works.
-      window.location.href = `mailto:${EMAIL}`;
-    }
-  };
-
-  // The site-wide dim-to-70% reveal, skipped when the visitor asked for less motion.
-  const reveal = reduceMotion
-    ? {}
-    : {
-        initial: textColorAnimation.initial,
-        whileInView: textColorAnimation.whileInView,
-        viewport: textColorAnimation.viewport,
-        transition: { duration: 0.9 },
-      };
-
-  const rise = (delay: number) =>
-    reduceMotion
-      ? {}
-      : {
-          initial: { opacity: 0, y: 18 },
-          whileInView: { opacity: 1, y: 0 },
-          viewport: { once: true, amount: 0.4 },
-          transition: { duration: 0.7, delay, ease: "easeOut" as const },
-        };
+  const pill =
+    "inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-base font-semibold transition-transform duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 motion-reduce:transition-none sm:text-lg";
 
   return (
     <section
       id="connect"
       aria-labelledby="connect-heading"
-      className="w-full px-4 pb-24 pt-36 sm:px-6 sm:pb-28 sm:pt-48 lg:px-8 lg:pt-56"
+      className="w-full px-4 pb-16 pt-16 sm:px-6 sm:pb-20 md:pt-24 lg:px-8"
     >
       <div className="mx-auto w-full max-w-6xl">
-        <div className="mb-8 h-px w-full bg-white/10" />
+        <h2 id="connect-heading" className="sr-only">
+          Contact
+        </h2>
 
-        <motion.p
-          className="indie-flower-regular mb-10 text-lg text-white/50 sm:text-xl"
-          {...rise(0)}
-        >
-          Last thing.
-        </motion.p>
-
-        <motion.h2
-          id="connect-heading"
-          className="ds-title max-w-[14ch] text-[clamp(2.75rem,8vw,7rem)] font-bold leading-[0.98] tracking-tight"
-          {...reveal}
-        >
-          You read the whole page. Now write to me.
-        </motion.h2>
-
-        <motion.div className="mt-14 sm:mt-20" {...rise(0.15)}>
-          <p className="mb-4 text-sm uppercase tracking-[0.2em] text-white/40">
-            One address, no form
-          </p>
-
-          <div className="flex flex-wrap items-baseline gap-x-5 gap-y-3">
-            <a
-              href={`mailto:${EMAIL}`}
-              className="group relative inline-block break-all text-[clamp(1.35rem,4.2vw,3.5rem)] font-medium leading-tight text-white/85 transition-colors duration-300 hover:text-white focus-visible:text-white focus-visible:outline-none motion-reduce:transition-none"
-            >
-              {EMAIL}
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-1 left-0 h-[3px] w-full origin-left scale-x-0 bg-[#412D15] transition-transform duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100 motion-reduce:transition-none sm:-bottom-2 sm:h-1"
-              />
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-1 left-0 h-[3px] w-full origin-left scale-x-0 bg-white/60 transition-transform delay-100 duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100 motion-reduce:transition-none sm:-bottom-2 sm:h-1"
-              />
-            </a>
-
-            <button
-              type="button"
-              onClick={copyEmail}
-              aria-label={copied ? "Email copied" : "Copy email address"}
-              className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm backdrop-blur-md transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 motion-reduce:transition-none ${
-                copied
-                  ? "border-[#412D15] bg-[#412D15] text-white"
-                  : "border-white/10 bg-white/5 text-white/70 hover:border-white/25 hover:text-white"
-              }`}
-            >
-              {copied ? (
-                <Check className="h-3.5 w-3.5" aria-hidden="true" />
-              ) : (
-                <Copy className="h-3.5 w-3.5" aria-hidden="true" />
-              )}
-              <span>{copied ? "Copied" : "Copy"}</span>
-            </button>
+        <div className="mx-auto w-full max-w-2xl">
+          <div className="flex flex-col gap-3">
+            {THREAD.map((msg, i) => (
+              <Bubble key={i} msg={msg} index={i} reduceMotion={reduceMotion} />
+            ))}
           </div>
 
-          <p className="mt-3 text-sm text-white/40" aria-live="polite">
-            {copied
-              ? "It is on your clipboard. Paste it wherever you write."
-              : "Click to open your mail app, or copy it for later."}
-          </p>
-        </motion.div>
+          {/* the buttons, always there */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={`mailto:${EMAIL}`}
+              className={`${pill} bg-[#2f7bff] text-white shadow-[0_10px_30px_rgba(47,123,255,0.45)] hover:bg-[#3d86ff]`}
+            >
+              Email me
+            </a>
+            <a
+              href={X_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${pill} border border-white/15 bg-white/10 text-white/85 hover:bg-white/15`}
+            >
+              <XMark className="h-4 w-4" />
+              DM me
+            </a>
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${pill} border border-white/15 bg-white/10 text-white/85 hover:bg-white/15`}
+            >
+              <Linkedin className="h-4 w-4" aria-hidden="true" />
+              LinkedIn
+            </a>
+          </div>
 
-        <motion.div
-          className="mt-24 flex flex-col gap-4 border-t border-white/10 pt-6 text-sm text-white/40 sm:mt-32 sm:flex-row sm:items-center sm:justify-between"
-          {...rise(0.3)}
-        >
-          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {socials.map(({ label, href, Icon }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-white/50 transition-colors duration-200 hover:text-white focus-visible:text-white focus-visible:outline-none motion-reduce:transition-none"
-                >
-                  <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>{label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <p>
-            <span className="indie-flower-regular text-base text-white/50">
-              Made by Kira.
-            </span>{" "}
-            <span className="text-white/30">{new Date().getFullYear()}</span>
-          </p>
-        </motion.div>
+        </div>
+
       </div>
     </section>
   );

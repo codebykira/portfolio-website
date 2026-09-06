@@ -169,7 +169,17 @@ h2 {
   * {
     @apply border-border;
   }
+  /* Page background lives on html too, so overscroll / rubber-banding shows
+     the same dark instead of white. overflow-x: clip kills the sideways
+     scroll from full-bleed sections (the projects scatter) without breaking
+     position: sticky the way overflow-x: hidden would. */
+  html {
+    background-color: var(--ds-bg);
+    overflow-x: clip;
+  }
   body {
     @apply bg-background text-foreground;
+    background-color: var(--ds-bg);
+    overflow-x: clip;
   }
 }

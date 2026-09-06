@@ -251,30 +251,69 @@ function MenuBarCatMedia() {
   );
 }
 
-/* ── Cat media ────────────────────────────────────────────
- * Static frame of the 3D cat. The real one is react-three-fiber and heavy,
- * so it stays on its own page.
+/* ── Scatter ──────────────────────────────────────────────
+ * The cards are not on a grid. On desktop each one gets a spot on a canvas
+ * (percent left / top, percent width, fixed height), a resting tilt, and a
+ * slow idle drift so the whole thing reads as things left on a table rather
+ * than tiles in a box. Edges overlap a little on purpose. On mobile it is a
+ * single column with the tilts kept, so it still feels loose.
  * ─────────────────────────────────────────────────────── */
-function CatMedia() {
+interface Spot {
+  left: number; // % of canvas width
+  top: number; // px from canvas top
+  width: number; // % of canvas width
+  height: number; // px
+  tilt: number; // deg at rest
+  drift: number; // px of vertical idle float
+  duration: number; // s per float cycle
+  delay: number; // s
+  z: number;
+}
+
+function Floating({ spot, children }: { spot: Spot; children: React.ReactNode }) {
+  const reduceMotion = useReducedMotion();
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[#0f0d13]">
-      <Image
-        src="/cat-blink.jpg"
-        alt="A 3D cat mid-blink"
-        width={1024}
-        height={1024}
-        sizes="(min-width: 1024px) 40vw, 100vw"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-      />
-    </div>
+    <motion.div
+      className="md:absolute"
+      style={{
+        left: `${spot.left}%`,
+        top: spot.top,
+        width: `${spot.width}%`,
+        height: spot.height,
+        zIndex: spot.z,
+      }}
+      animate={reduceMotion ? undefined : { y: [0, -spot.drift, 0] }}
+      transition={
+        reduceMotion
+          ? undefined
+          : { duration: spot.duration, delay: spot.delay, repeat: Infinity, ease: "easeInOut" }
+      }
+      whileHover={{ zIndex: 50 }}
+    >
+      {children}
+    </motion.div>
   );
 }
 
-/* ── The shelf ─────────────────────────────────────────── */
+const CANVAS_HEIGHT = 600;
+
+/* Percentages are of the full viewport width, not the content column: the
+   canvas breaks out of the page's max-width so cards can sit loose across
+   the whole screen. Small on purpose: these are toys, not the main work. */
+const SPOTS: Record<string, Spot> = {
+  deadLetters: { left: 4, top: 40, width: 28, height: 340, tilt: -2.2, drift: 10, duration: 7.5, delay: 0, z: 10 },
+  cat: { left: 38, top: 0, width: 22, height: 250, tilt: 2.6, drift: 8, duration: 6.2, delay: 1.1, z: 20 },
+  resume: { left: 64, top: 60, width: 26, height: 260, tilt: -1.8, drift: 7, duration: 6.9, delay: 1.7, z: 20 },
+  christmas: { left: 30, top: 320, width: 24, height: 240, tilt: 1.4, drift: 9, duration: 8.1, delay: 0.6, z: 30 },
+};
+
 export default function Projects() {
   return (
-    <div id="projects" className="w-full flex flex-col items-center py-12">
-      <div className="w-full max-w-7xl px-4">
+    <div id="projects" className="w-full flex flex-col items-center pt-6">
+      {/* Full-bleed: escape the page's max-w-7xl column so the scatter can use
+          the whole viewport. overflow-x-clip stops the poked-out cards from
+          adding a horizontal scrollbar while leaving vertical lifts unclipped. */}
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip px-4 md:px-0">
         <AnimatedContent
           direction="vertical"
           reverse
@@ -285,67 +324,51 @@ export default function Projects() {
           threshold={0.1}
           delay={0.1}
         >
-          <p className="mb-6 max-w-2xl text-base text-white/60">
-            things I built because I wanted to. no client, no deadline, mostly weekends.
-          </p>
+          <div
+            className="scatter relative flex flex-col gap-6 md:block md:h-[var(--canvas-h)]"
+            style={{ ["--canvas-h" as string]: `${CANVAS_HEIGHT}px` }}
+          >
+            <style>{`
+              @media (max-width: 767px) {
+                .scatter > * { position: relative !important; left: auto !important; top: auto !important; width: 100% !important; }
+                .scatter > *:nth-child(1) { height: 48vh !important; min-height: 18rem; }
+                .scatter > *:nth-child(n+2) { height: 34vh !important; min-height: 13rem; }
+              }
+            `}</style>
 
-          {/*
-            Desktop: 12 columns, 3 rows.
-              Dead Letters   cols 1-7,  rows 1-2 (tall, dominant)
-              The Cat        cols 8-12, row 1
-              Menu Bar Cat   cols 8-12, row 2
-              Christmas Card cols 1-6,  row 3
-              Résumé Builder cols 7-12, row 3
-            Mobile: one column, in that order.
-          */}
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-12 md:auto-rows-[15rem] lg:auto-rows-[17rem]">
-            <div className="h-[70vh] min-h-[26rem] md:col-span-7 md:row-span-2 md:h-auto md:min-h-0">
+            <Floating spot={SPOTS.deadLetters}>
               <ShelfCard
                 href="/dead-letters"
                 title="Dead Letters"
                 tag="web · webcam"
-                tilt={-0.6}
+                tilt={SPOTS.deadLetters.tilt}
                 media={<DeadLettersMedia />}
                 blurb={[
                   "An anonymous note exchange, one in and one out. You type the thing you haven't said onto real paper, crumple it onto the table, and uncrumple a stranger's in return.",
                   "Nothing is stored, nothing is signed. The paper is real chroma-keyed footage. Squeeze your hand at the webcam to crumple it.",
                 ]}
               />
-            </div>
+            </Floating>
 
-            <div className="h-[46vh] min-h-[18rem] md:col-span-5 md:h-auto md:min-h-0">
-              <ShelfCard
-                href="/cat"
-                title="The Cat"
-                tag="web · 3d"
-                tilt={0.8}
-                media={<CatMedia />}
-                blurb={[
-                  "About 2M polys decimated to 80k so it runs in a browser. It breathes, sways, flicks an ear and blinks on exponential timers, so it never looks metronomic.",
-                  "Drag to turn, scroll to zoom, click to pet.",
-                ]}
-              />
-            </div>
-
-            <div className="h-[46vh] min-h-[18rem] md:col-span-5 md:h-auto md:min-h-0">
+            <Floating spot={SPOTS.cat}>
               <ShelfCard
                 title="Menu Bar Cat"
                 tag="macOS app"
-                tilt={-0.5}
+                tilt={SPOTS.cat.tilt}
                 alwaysShowCopy
                 media={<MenuBarCatMedia />}
                 blurb={[
                   "A SwiftUI menu bar app. The pixel cat mirrors what my Claude Code agents are doing across git worktrees. When a run finishes, the cat tells you, like a pet getting your attention instead of a notification you dismiss.",
                 ]}
               />
-            </div>
+            </Floating>
 
-            <div className="h-[46vh] min-h-[18rem] md:col-span-6 md:h-auto md:min-h-0">
+            <Floating spot={SPOTS.christmas}>
               <ShelfCard
                 external={CHRISTMAS_CARD_URL}
                 title="Christmas Card"
                 tag="web · 3d"
-                tilt={0.5}
+                tilt={SPOTS.christmas.tilt}
                 media={
                   <ClientOnly fallback={<div className="h-full w-full bg-black" />}>
                     <ChristmasCardEmbed />
@@ -355,14 +378,14 @@ export default function Projects() {
                   "An interactive 3D card you personalize with a message and photos, then share as a link.",
                 ]}
               />
-            </div>
+            </Floating>
 
-            <div className="h-[46vh] min-h-[18rem] md:col-span-6 md:h-auto md:min-h-0">
+            <Floating spot={SPOTS.resume}>
               <ShelfCard
                 href="/resume"
                 title="Résumé Builder"
                 tag="web · tool"
-                tilt={-0.7}
+                tilt={SPOTS.resume.tilt}
                 media={
                   <ClientOnly fallback={<div className="h-full w-full bg-[#EDEFF3]" />}>
                     <ResumeBuilderEmbed />
@@ -372,7 +395,7 @@ export default function Projects() {
                   "Drop in any résumé, PDF or DOCX. It gets parsed and re-rendered in a clean ATS-friendly template in seconds.",
                 ]}
               />
-            </div>
+            </Floating>
           </div>
         </AnimatedContent>
       </div>

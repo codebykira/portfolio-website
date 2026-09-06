@@ -35,7 +35,7 @@ export default function Home() {
 
         {/* Blurb bridging the hero into the work — section-header font (Playfair).
             Only the text fades in on scroll; the sticker stays full-opacity. */}
-        <div className="relative w-full max-w-4xl flex justify-center pt-6 pb-16 md:pt-8 md:pb-24">
+        <div className="relative mx-auto w-full max-w-4xl flex justify-center pt-6 pb-16 md:pt-8 md:pb-24">
           <AnimatedContent
             distance={120}
             direction="vertical"
@@ -72,13 +72,13 @@ export default function Home() {
           onProjectLeave={() => setShowClickMe(false)}
         />
         {/* <Writing /> */}
-        <div className="pt-24 md:pt-40">
+        <div className="pt-16 md:pt-24">
           <SectionHeader title="Projects" subtitle="Made for fun 🐈" />
         </div>
 
         <Projects />
 
-        <div className="pt-24 md:pt-40">
+        <div className="pt-16 md:pt-24">
           <SectionHeader title="Story" subtitle="Artist on the Move 🌍" />
         </div>
         <Story />

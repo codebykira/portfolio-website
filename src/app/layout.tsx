@@ -46,6 +46,7 @@ export const metadata: Metadata = {
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-inter",
 });
 
 const interTight = Inter_Tight({
@@ -69,7 +70,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body
         suppressHydrationWarning={true}
-        className={`${inter.className} ${interTight.variable} ${playfair.variable}`}
+        className={`${inter.className} ${inter.variable} ${interTight.variable} ${playfair.variable}`}
       >
         {children}
         <Analytics />

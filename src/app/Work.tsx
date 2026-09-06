@@ -1,7 +1,63 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import ProjectShowcase from "../components/project-showcase";
+
+/* ── Atrios media ─────────────────────────────────────────
+ * Home and Inbox, one account, so they share one frame. Home sits behind at
+ * the top-left, Inbox in front at the bottom-right, overlapping in the middle
+ * like 2 windows left open. The pair is centred in the card. On hover they
+ * ease apart a touch and darken so the overlay text reads.
+ * ─────────────────────────────────────────────────────── */
+const SHOT =
+  "h-auto w-full rounded-2xl border border-white/10 drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] transition-[filter] duration-300 ease-out group-hover:brightness-[0.55]";
+
+function AtriosMedia() {
+  return (
+    <div className="relative h-full w-full overflow-hidden">
+      <div
+        className="absolute inset-0 dot-grid-static"
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(252, 247, 233, 0.18) 1px, transparent 1.1px)",
+          backgroundSize: "14px 14px",
+        }}
+      />
+      {/* The pair is one centred group: Home top-left, Inbox bottom-right,
+          overlapping in the middle. The group is sized by aspect ratio so it
+          scales with the card instead of cropping off the edges. */}
+      <div className="absolute inset-0 flex items-center justify-center p-4 md:p-6">
+        <div
+          className="relative"
+          style={{ aspectRatio: "1.5 / 1", width: "min(100%, calc((72vh - 3rem) * 1.5))" }}
+        >
+          {/* Home, behind */}
+          <div className="absolute left-0 top-0 w-[76%] transition-transform duration-500 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2">
+            <Image
+              src="/atrios-home-v3.jpg"
+              alt="The Atrios home: companies to introduce friends to"
+              width={2000}
+              height={1095}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className={SHOT}
+            />
+          </div>
+          {/* Inbox, in front */}
+          <div className="absolute bottom-0 right-0 w-[76%] transition-transform duration-500 ease-out group-hover:translate-x-2 group-hover:translate-y-2">
+            <Image
+              src="/atrios-inbox-v3.jpg"
+              alt="The Atrios Inbox: companies that want to meet you"
+              width={2000}
+              height={1093}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className={SHOT}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface WorkProps {
   onProjectEnter: () => void;
@@ -12,7 +68,7 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
   return (
       <div
         id="work"
-        className="min-h-screen w-full flex justify-center items-center flex-col"
+        className="w-full flex justify-center items-center flex-col"
       >
 
       <div className="w-full max-w-7xl px-4 space-y-6 flex flex-col">
@@ -28,14 +84,7 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
               "The best products you use came from a friend, not an ad. Atrios is built on that instinct: you think about what your friends would actually want, curate a few, and get rewarded for the care. We're building the version that does, backed by a16z.",
               "I shape the Atrios experience. I designed every screen and write the code behind them, backend to frontend. Every screen, every line, every detail that makes it feel less like software.",
             ]}
-            images={[
-              {
-                src: "/atrios-network-v2.png",
-                alt: "Atrios — introductions for your network",
-                width: 3006,
-                height: 1652,
-              },
-            ]}
+            media={<AtriosMedia />}
             logo={{
               src: "/atrios-icon.png",
               alt: "Atrios Logo",
@@ -45,8 +94,6 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
             gradientColor="#F3E6C4"
             heightClass="h-[72vh]"
             revealOnHover
-            mediaOffset
-            mediaWidth="118%"
           />
         </Link>
 
@@ -80,6 +127,7 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
             heightClass="h-[72vh]"
             revealOnHover
             mediaCenter
+            mediaWidth="min(92%, calc((72vh - 1rem) / 0.5625))"
           />
         </Link>
 
