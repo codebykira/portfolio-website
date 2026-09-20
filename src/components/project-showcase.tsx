@@ -214,8 +214,15 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
             )}
             <h1 className="text-2xl font-bold text-white sm:text-3xl">{title}</h1>
           </div>
+          {/* A phone gets the opening paragraph only. The copy is untouched —
+              the rest is hidden at this width, not cut. */}
           {description.map((paragraph, index) => (
-            <p key={index} className="text-sm leading-relaxed sm:text-base">
+            <p
+              key={index}
+              className={`text-sm leading-relaxed sm:text-base ${
+                index > 0 ? "max-sm:hidden" : ""
+              }`}
+            >
               {paragraph}
             </p>
           ))}

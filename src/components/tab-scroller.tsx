@@ -38,9 +38,10 @@ const Navigation = () => {
     <nav className="fixed pt-4 pr-4 z-50 flex justify-end w-screen max-sm:justify-center max-sm:pr-0">
       <div className="px-4 py-1 flex items-center justify-center rounded-full border border-white/15 bg-white/10 shadow-lg shadow-black/20 backdrop-blur-xl backdrop-saturate-150 max-sm:py-1 max-sm:px-3 indie-flower-regular text-base sm:text-lg">
         <div className="flex items-center space-x-6 max-sm:space-x-4">
+          {/* the logo is the one thing the phone bar can spare */}
           <button
             onClick={() => scrollToSection("home")}
-            className="transition-colors text-white/80 hover:text-white hover:font-bold"
+            className="transition-colors text-white/80 hover:text-white hover:font-bold max-sm:hidden"
             style={activeSection === "home" ? { color: "white", fontWeight: "bold" } : {}}
           >
             <GirlSVG width={28} height={28} isActive={activeSection === "home"} />
