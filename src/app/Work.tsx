@@ -23,10 +23,25 @@ function AtriosMedia() {
           backgroundSize: "14px 14px",
         }}
       />
+      {/* On a phone the overlapping pair is two postage stamps. One laptop
+          shot reads instead, and it keeps the product recognisable. */}
+      {/* Sits in the top of the card, clear of the copy. Barely dimmed: the
+          mockup is already a dark laptop on a dark UI, and at the 0.55 the
+          other cards use it disappears into the page. */}
+      <div className="absolute inset-0 flex items-start justify-center p-4 pt-6 sm:hidden">
+        <Image
+          src="/atrios-laptop.png"
+          alt="The Atrios home, open in a browser"
+          width={900}
+          height={584}
+          sizes="380px"
+          className="h-auto w-[98%] brightness-90"
+        />
+      </div>
       {/* The pair is one centred group: Home top-left, Inbox bottom-right,
           overlapping in the middle. The group is sized by aspect ratio so it
           scales with the card instead of cropping off the edges. */}
-      <div className="absolute inset-0 flex items-center justify-center p-4 md:p-6">
+      <div className="absolute inset-0 flex items-center justify-center p-4 max-sm:hidden md:p-6">
         <div
           className="relative"
           style={{ aspectRatio: "1.5 / 1", width: "min(100%, calc((72vh - 3rem) * 1.5))" }}

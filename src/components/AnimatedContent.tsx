@@ -14,6 +14,8 @@ interface AnimatedContentProps {
   scale?: number;
   threshold?: number;
   delay?: number;
+  /** Classes for the animated wrapper, e.g. hiding it at a breakpoint. */
+  className?: string;
 }
 
 const AnimatedContent: React.FC<AnimatedContentProps> = ({
@@ -28,6 +30,7 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
   scale = 1.1,
   threshold = 0.2,
   delay = 0.3,
+  className,
 }) => {
   const getInitialTransform = () => {
     if (direction === "horizontal") {
@@ -53,6 +56,7 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
 
   return (
     <motion.div
+      className={className}
       initial={initial}
       whileInView={animate}
       transition={{

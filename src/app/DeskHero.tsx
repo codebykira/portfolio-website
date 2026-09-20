@@ -7,6 +7,7 @@ import type { Variants } from "framer-motion";
 import NotebookDraw from "@/components/NotebookDraw";
 import SpotifyPlayer, { type SpotifyPlayerHandle } from "@/components/SpotifyPlayer";
 import { playKeyboardSound } from "@/lib/keyboardSound";
+import "./desk-hero.css";
 
 /**
  * Dark, full-viewport "desk scene" hero, arranged top-down like a real desk:
@@ -102,8 +103,12 @@ export default function DeskHero() {
       />
 
       {/* ── Desk stage = the mat's footprint, centred in the viewport ── */}
-      <div className="relative z-10 mx-auto aspect-[1583/675] w-[94%] max-w-[1550px]">
-        {/* ── Leather desk mat: behind everything; fills the centred stage ── */}
+      <div className="relative z-10 mx-auto aspect-[1583/675] w-[94%] max-w-[1550px] max-sm:aspect-[3/5]">
+        {/* ── Leather desk mat: behind everything; fills the centred stage ──
+             The mat image is hidden on a phone, where it reads as a dark
+             rectangle rather than as leather. Only the image goes: this
+             wrapper is the sticky note's dragConstraints, so hiding it would
+             collapse those bounds to a point. */}
         <motion.div
           ref={matRef}
           initial={{ opacity: 0 }}
@@ -117,7 +122,7 @@ export default function DeskHero() {
             width={1583}
             height={675}
             priority
-            className="h-full w-full object-cover drop-shadow-[0_50px_90px_rgba(0,0,0,0.7)]"
+            className="h-full w-full object-cover drop-shadow-[0_50px_90px_rgba(0,0,0,0.7)] max-sm:hidden"
           />
         </motion.div>
 
@@ -125,7 +130,7 @@ export default function DeskHero() {
         <motion.div
           animate={{ opacity: lit ? 1 : 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}
-          className="pointer-events-none absolute inset-0 z-[2] mix-blend-screen"
+          className="dh-lightpool pointer-events-none absolute inset-0 z-[2] mix-blend-screen"
           style={{
             background:
               "radial-gradient(42% 58% at 14% 42%, rgba(255,168,92,0.6) 0%, rgba(255,140,70,0.28) 38%, rgba(255,120,55,0.07) 62%, rgba(0,0,0,0) 78%)",
@@ -137,7 +142,7 @@ export default function DeskHero() {
           variants={enter()}
           initial="hidden"
           animate="show"
-          className="absolute z-30 w-[22%]"
+          className="dh-lamp absolute z-30 w-[22%]"
           style={{ top: "-20%", left: "4%" }}
         >
           <motion.button
@@ -228,7 +233,7 @@ export default function DeskHero() {
               whileHover={{ ...HOVER, zIndex: 25 }}
               whileTap={{ scale: 0.99 }}
               {...entrance}
-              className="absolute z-20 block cursor-pointer"
+              className={`dh-mug dh-mug-${i} absolute z-20 block cursor-pointer`}
               style={mug.style}
             >
               {img}
@@ -237,7 +242,7 @@ export default function DeskHero() {
             <motion.div
               key={mug.src}
               {...entrance}
-              className="absolute z-20 block"
+              className={`dh-mug dh-mug-${i} absolute z-20 block`}
               style={mug.style}
             >
               {img}
@@ -251,7 +256,7 @@ export default function DeskHero() {
           initial="hidden"
           animate="show"
           whileHover={HOVER}
-          className="absolute z-20 w-[10%]"
+          className="dh-frame absolute z-20 w-[10%]"
           style={{ top: "1%", left: "64%" }}
         >
           <Image
@@ -268,7 +273,7 @@ export default function DeskHero() {
           variants={enter()}
           initial="hidden"
           animate="show"
-          className="absolute z-[15] w-[22%]"
+          className="dh-notebook absolute z-[15] w-[22%]"
           style={{ bottom: "8%", left: "9%" }}
         >
           {!drawing && (
@@ -308,7 +313,7 @@ export default function DeskHero() {
           whileHover={HOVER}
           whileTap={{ scale: 0.99 }}
           onClick={playKeyboardSound}
-          className="absolute z-20 w-[33%] cursor-pointer"
+          className="dh-laptop absolute z-20 w-[33%] cursor-pointer"
           style={{ top: "6%", left: "30%" }}
         >
           <Image
@@ -332,7 +337,7 @@ export default function DeskHero() {
           whileTap={{ scale: 0.97 }}
           aria-label={airpodsOpen ? "Put the AirPods back" : "Take the AirPods out"}
           aria-pressed={airpodsOpen}
-          className="absolute z-[14] block w-[7%] cursor-pointer focus:outline-none"
+          className="dh-airpods absolute z-[14] block w-[7%] cursor-pointer focus:outline-none"
           style={{ top: "71%", left: "37%", rotate: "2deg" }}
         >
           <motion.div
@@ -373,7 +378,7 @@ export default function DeskHero() {
           initial={{ opacity: 0, scale: 0.85, rotate: 6 }}
           animate={{ opacity: 1, scale: 1, rotate: 6 }}
           transition={{ duration: 0.7, delay: ENTER_DELAY, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute z-30 w-[7%] cursor-grab touch-none active:cursor-grabbing"
+          className="dh-sticky absolute z-30 w-[7%] cursor-grab touch-none active:cursor-grabbing"
           style={{ top: "calc(2% + 209px)", left: "calc(55% - 15px)" }}
         >
           <Image
@@ -399,7 +404,7 @@ export default function DeskHero() {
               animate={{ opacity: active ? 1 : 0, scale: active ? 1 : 0.96 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
               aria-label="Show the next snack"
-              className="absolute z-20 block cursor-pointer focus:outline-none"
+              className="dh-snack absolute z-20 block cursor-pointer focus:outline-none"
               style={{ ...snack.style, pointerEvents: active ? "auto" : "none" }}
             >
               <Image

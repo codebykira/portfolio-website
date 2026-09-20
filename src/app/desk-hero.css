@@ -1,0 +1,94 @@
+/* Desk hero, phone layout.
+ *
+ * On a wide screen the items sit where they would on a real desk: a landscape
+ * mat, things spread left to right. A portrait phone has the opposite budget —
+ * no width, plenty of height — so below `sm` the mat is hidden and the scene
+ * is re-laid as a vertical desk: lamp and photo across the top, the mac in the
+ * middle, the notebook directly under it, and the mugs stepping down the right.
+ *
+ * The positions are inline styles on the elements (they come from JS data), so
+ * these overrides have to be !important to win. Percentages are of the stage,
+ * which switches to a 3/5 portrait box at this width — 376x627 on a 400px
+ * viewport. Every box below was checked against every other for overlap at
+ * that size; if you move one, re-check its neighbours in the same band.
+ */
+@media (max-width: 639px) {
+  /* top band: lamp left, photo stand right, both clear of the mac */
+  .dh-lamp {
+    width: 32% !important;
+    top: -4% !important;
+    left: 1% !important;
+  }
+
+  .dh-frame {
+    width: 23% !important;
+    top: -1% !important;
+    left: auto !important;
+    right: 5% !important;
+  }
+
+  /* the mac, centred */
+  .dh-laptop {
+    width: 64% !important;
+    top: 20% !important;
+    left: 16% !important;
+  }
+
+  /* the sticky note rides on the mac's screen, as it does on desktop */
+  .dh-sticky {
+    width: 17% !important;
+    top: 24% !important;
+    left: 60% !important;
+  }
+
+  /* the notebook sits directly under the mac */
+  .dh-notebook {
+    width: 46% !important;
+    top: 52% !important;
+    bottom: auto !important;
+    left: 13% !important;
+  }
+
+  .dh-snack {
+    width: 32% !important;
+    top: 74% !important;
+    right: auto !important;
+    left: 6% !important;
+  }
+
+  .dh-airpods {
+    width: 16% !important;
+    top: 89% !important;
+    left: 14% !important;
+  }
+
+  /* the three mugs step down the right edge, one per band */
+  .dh-mug-0 {
+    width: 22% !important;
+    top: 52% !important;
+    right: 4% !important;
+  }
+
+  .dh-mug-1 {
+    width: 23% !important;
+    top: 68% !important;
+    right: 7% !important;
+  }
+
+  .dh-mug-2 {
+    width: 21% !important;
+    top: 84% !important;
+    right: 4% !important;
+  }
+
+  /* the lamp's pool is aimed at its desktop position; re-aim it at the lamp */
+  .dh-lightpool {
+    background: radial-gradient(
+      44% 22% at 17% 9%,
+      rgba(255, 168, 92, 0.55) 0%,
+      rgba(255, 140, 70, 0.24) 40%,
+      rgba(255, 120, 55, 0.06) 64%,
+      rgba(0, 0, 0, 0) 80%
+    ) !important;
+  }
+}
