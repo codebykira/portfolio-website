@@ -9,6 +9,7 @@ import ClientOnly from "@/components/ClientOnly";
 import SectionHeader from "../components/section-header";
 import AnimatedContent from "../components/AnimatedContent";
 import StickerPeel from "../components/StickerPeel";
+import RotateHint from "../components/RotateHint";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
       <ClientOnly>
         <DeskHero />
       </ClientOnly>
+      <RotateHint />
       <div className="max-w-7xl mx-auto flex flex-col gap-6 justify-center">
 
         {/* Blurb bridging the hero into the work — section-header font (Playfair).
