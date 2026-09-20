@@ -158,19 +158,20 @@
   }
 }
 
-/* The story board places its cards and handwriting in percentages, so those
-   shrink with the sheet — but sticker widths arrive as pixels and do not. On a
-   phone that leaves every sticker roughly three times too big for the board it
-   sits on, piling onto the cards and the notes. Scale each one off its own
-   inline --sticker-width so the whole set keeps its relative sizing. */
+/* The phone board is a different composition, not the desktop one shrunk: one
+   or two cards across instead of three, each much larger, with its stickers
+   scattered around it. Sticker widths arrive as pixels and would otherwise
+   stay at their desktop size, so they are scaled off their own inline
+   --sticker-width. 0.85 is the figure the mobile placement was solved against
+   — change it and the scatter needs re-solving, or stickers will collide. */
 @media (max-width: 639px) {
   .draggable.story-sticker {
-    width: calc(var(--sticker-width) * 0.42) !important;
+    width: calc(var(--sticker-width) * 0.85) !important;
   }
 
   .draggable.story-sticker .sticker-image,
   .draggable.story-sticker .flap-image {
-    width: calc(var(--sticker-width) * 0.42) !important;
+    width: calc(var(--sticker-width) * 0.85) !important;
   }
 }
 
