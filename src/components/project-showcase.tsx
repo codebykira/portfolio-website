@@ -100,7 +100,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
   // A phone has no hover, so the reveal never fires there: the media stays
   // dimmed from the start and the text sits on top of it permanently.
   const revealMediaFilter =
-    "transition-[filter] duration-300 ease-out drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] brightness-[0.55] sm:brightness-100 sm:group-hover:brightness-[0.55]";
+    "transition-[filter] duration-300 ease-out drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] sm:group-hover:brightness-[0.55]";
 
   // Media fills the card; the logo stays visible, and title/description/tags
   // fade in over a scrim on hover.
@@ -110,12 +110,12 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
   if (revealOnHover) {
     return (
       <div
-        className={`group relative ${heightClass} ${widthClass} overflow-hidden rounded-3xl bg-white/5 text-white/70 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)] max-sm:rounded-none max-sm:bg-transparent max-sm:shadow-none`}
+        className={`group relative ${heightClass} ${widthClass} overflow-hidden rounded-3xl bg-white/5 text-white/70 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)] max-sm:h-auto max-sm:rounded-none max-sm:bg-transparent max-sm:shadow-none`}
       >
         {/* Media fills the card; with mediaOffset it shifts right/down so the
             bottom-right corner crops off the card edge. The image darkens on
             hover so the overlay text stays readable. */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 max-sm:relative max-sm:inset-auto max-sm:h-[34vh]">
           {!media && images[0] && (mediaOffset || mediaCenter) ? (
             /* Natural-aspect screenshot over a dot grid, anchored to the
                bottom-right and bleeding off the right/bottom card edges. */
@@ -131,24 +131,22 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
               {/* A wide desktop shot shrinks to nothing in a phone-width card.
                   When a mobile cut-out is supplied it takes over below `sm`. */}
               {mobileImage && (
-                <div
-                  className="absolute bottom-0 left-1/2 max-w-none origin-bottom -translate-x-1/2 sm:hidden"
-                  style={{ width: mobileWidth ?? "54%" }}
-                >
+                <div className="absolute inset-0 flex items-center justify-center p-2 sm:hidden">
                   <Image
                     src={mobileImage.src}
                     alt={mobileImage.alt}
                     width={mobileImage.width}
                     height={mobileImage.height}
                     sizes="320px"
-                    className={`h-auto w-full ${revealMediaFilter}`}
+                    className={`max-h-full w-auto object-contain ${revealMediaFilter}`}
+                    style={{ maxWidth: mobileWidth ?? "62%" }}
                   />
                 </div>
               )}
               {/* Lifts and grows a touch on hover, anchored at the bottom so
                   the screenshot rises out of the card rather than drifting. */}
               <div
-                className={`absolute bottom-0 max-w-none origin-bottom transition-transform duration-500 ease-out sm:group-hover:-translate-y-4 sm:group-hover:scale-[1.03] ${
+                className={`absolute bottom-0 max-w-none origin-bottom transition-transform duration-500 ease-out max-sm:bottom-auto max-sm:top-4 sm:group-hover:-translate-y-4 sm:group-hover:scale-[1.03] ${
                   mediaCenter ? "left-1/2 -translate-x-1/2" : "-right-24"
                 } ${mobileImage ? "max-sm:hidden" : ""}`}
                 style={{ width: mediaWidth ?? (mediaCenter ? "130%" : "97%") }}
@@ -164,7 +162,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
                         width={img.width}
                         height={img.height}
                         sizes="450px"
-                        className={`h-[56vh] w-auto rounded-2xl ${revealMediaFilter}`}
+                        className={`h-[56vh] w-auto rounded-2xl max-sm:h-[26vh] ${revealMediaFilter}`}
                       />
                     ))}
                   </div>
@@ -188,7 +186,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
               alt={images[0].alt}
               fill
               sizes="900px"
-              className="object-cover transition-[filter] duration-300 ease-out brightness-[0.55] sm:brightness-100 sm:group-hover:brightness-[0.55]"
+              className="object-cover transition-[filter] duration-300 ease-out sm:group-hover:brightness-[0.55]"
             />
           ) : null}
         </div>
@@ -196,7 +194,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
         {/* Overlay: logo + title + description + tags. Always on below `sm`,
             where there is no pointer to hover with; the scrim goes nearly
             solid there so the copy reads over the screenshot. */}
-        <div className="absolute inset-0 flex flex-col justify-end gap-2 overflow-y-auto p-5 bg-gradient-to-t from-black/95 via-black/75 to-black/20 opacity-100 transition-opacity duration-300 ease-out sm:gap-3 sm:p-6 sm:from-black/90 sm:via-black/50 sm:to-transparent sm:opacity-0 sm:group-hover:opacity-100">
+        <div className="absolute inset-0 flex flex-col justify-end gap-2 overflow-y-auto p-5 max-sm:static max-sm:overflow-visible max-sm:px-4 max-sm:pt-3 max-sm:bg-none bg-gradient-to-t from-black/95 via-black/75 to-black/20 opacity-100 transition-opacity duration-300 ease-out sm:gap-3 sm:p-6 sm:from-black/90 sm:via-black/50 sm:to-transparent sm:opacity-0 sm:group-hover:opacity-100">
           {/* Negative margin pulls the description up to the title without
               closing the gaps between paragraphs and tags. */}
           <div className="-mb-1 flex items-center gap-3 sm:-mb-2">

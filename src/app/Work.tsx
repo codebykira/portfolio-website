@@ -11,7 +11,7 @@ import ProjectShowcase from "../components/project-showcase";
  * ease apart a touch and darken so the overlay text reads.
  * ─────────────────────────────────────────────────────── */
 const SHOT =
-  "h-auto w-full rounded-2xl border border-white/10 drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] transition-[filter] duration-300 ease-out brightness-[0.55] sm:brightness-100 sm:group-hover:brightness-[0.55]";
+  "h-auto w-full rounded-2xl border border-white/10 drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] transition-[filter] duration-300 ease-out sm:group-hover:brightness-[0.55]";
 
 function AtriosMedia() {
   return (
@@ -35,7 +35,7 @@ function AtriosMedia() {
           width={900}
           height={584}
           sizes="380px"
-          className="h-auto w-[98%] brightness-90"
+          className="h-auto w-[98%]"
         />
       </div>
       {/* The pair is one centred group: Home top-left, Inbox bottom-right,
@@ -170,6 +170,12 @@ export default function Work() {
               alt: "Waverly Logo",
               width: 48,
               height: 48
+            }}
+            mobileImage={{
+              src: "/waverly-phone.png",
+              alt: "A Waverly community feed",
+              width: 620,
+              height: 1178,
             }}
             gradientColor="#FEBA4F"
             heightClass="h-[72vh]"
