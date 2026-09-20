@@ -31,16 +31,16 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
       threshold={0.2}
       delay={0.3}
     >
-      <div className="w-full max-w-4xl flex justify-start">
+      <div className="w-full max-w-4xl flex justify-start px-4 md:px-0">
 
           <h1
-            className={`text-8xl font-bold ${color} tracking-tighter text-left`}
+            className={`text-5xl sm:text-7xl md:text-8xl font-bold ${color} tracking-tighter text-left`}
           >
             {title}
           </h1>
           {subtitle && (
             <p
-              className={`left-4 bottom-4 -rotate-3 text-base text-white/70 ${kalam.className}`}
+              className={`left-4 bottom-4 -rotate-3 text-sm sm:text-base text-white/70 ${kalam.className}`}
             >
               {subtitle}
             </p>

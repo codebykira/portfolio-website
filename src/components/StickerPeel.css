@@ -145,6 +145,19 @@
   width: var(--sticker-width, 200px);
 }
 
+/* A sticker sized for a desktop column swallows a phone screen and lands on
+   the copy behind it. The width is set inline from the `width` prop, so the
+   phone size has to out-rank it. */
+/* 767px, not 639px: it has to match the `md:` prefix on the sticker's own
+   position classes, or the tablet range gets the phone placement at the
+   desktop size. */
+@media (max-width: 767px) {
+  .draggable.sticker-compact {
+    width: 118px !important;
+    --sticker-width: 118px !important;
+  }
+}
+
 .sticker-main,
 .flap {
   will-change: clip-path, transform;

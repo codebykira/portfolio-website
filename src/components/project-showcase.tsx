@@ -90,8 +90,10 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
 
   // drop-shadow (not box-shadow) so the glow traces the image's alpha — the
   // phone silhouettes — rather than its bounding box.
+  // A phone has no hover, so the reveal never fires there: the media stays
+  // dimmed from the start and the text sits on top of it permanently.
   const revealMediaFilter =
-    "transition-[filter] duration-300 ease-out drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] group-hover:brightness-[0.55]";
+    "transition-[filter] duration-300 ease-out drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] brightness-[0.55] sm:brightness-100 sm:group-hover:brightness-[0.55]";
 
   // Media fills the card; the logo stays visible, and title/description/tags
   // fade in over a scrim on hover.
@@ -159,19 +161,21 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
               alt={images[0].alt}
               fill
               sizes="900px"
-              className="object-cover transition-[filter] duration-300 ease-out group-hover:brightness-[0.55]"
+              className="object-cover transition-[filter] duration-300 ease-out brightness-[0.55] sm:brightness-100 sm:group-hover:brightness-[0.55]"
             />
           ) : null}
         </div>
 
-        {/* Hover overlay: logo + title + description + tags */}
-        <div className="absolute inset-0 flex flex-col justify-end gap-3 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
+        {/* Overlay: logo + title + description + tags. Always on below `sm`,
+            where there is no pointer to hover with; the scrim goes nearly
+            solid there so the copy reads over the screenshot. */}
+        <div className="absolute inset-0 flex flex-col justify-end gap-2 overflow-y-auto p-5 bg-gradient-to-t from-black/95 via-black/75 to-black/20 opacity-100 transition-opacity duration-300 ease-out sm:gap-3 sm:p-6 sm:from-black/90 sm:via-black/50 sm:to-transparent sm:opacity-0 sm:group-hover:opacity-100">
           {/* Negative margin pulls the description up to the title without
               closing the gaps between paragraphs and tags. */}
-          <div className="-mb-2 flex items-center gap-3">
+          <div className="-mb-1 flex items-center gap-3 sm:-mb-2">
             {logo && (
               <div
-                className="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-white/15 bg-black/25 backdrop-blur-sm"
+                className="h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-white/15 bg-black/25 backdrop-blur-sm sm:h-14 sm:w-14"
                 style={logoBgColor ? { backgroundColor: logoBgColor } : undefined}
               >
                 <Image
@@ -183,10 +187,10 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
                 />
               </div>
             )}
-            <h1 className="text-3xl font-bold text-white">{title}</h1>
+            <h1 className="text-2xl font-bold text-white sm:text-3xl">{title}</h1>
           </div>
           {description.map((paragraph, index) => (
-            <p key={index} className="text-base leading-relaxed">
+            <p key={index} className="text-sm leading-relaxed sm:text-base">
               {paragraph}
             </p>
           ))}

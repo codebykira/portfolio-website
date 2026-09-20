@@ -83,7 +83,7 @@ export default function DeskHero() {
     <>
     <section
       id="home"
-      className="relative flex h-screen min-h-[560px] w-full items-center justify-center overflow-hidden bg-[#0b0a0e] max-sm:h-auto max-sm:min-h-0 max-sm:py-16"
+      className="relative flex h-screen min-h-[560px] w-full items-center justify-center overflow-hidden bg-[#0b0a0e] max-sm:h-auto max-sm:min-h-0 max-sm:pb-10 max-sm:pt-28"
     >
       {/* Ambient dark base */}
       <div

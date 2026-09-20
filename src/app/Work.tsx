@@ -11,7 +11,7 @@ import ProjectShowcase from "../components/project-showcase";
  * ease apart a touch and darken so the overlay text reads.
  * ─────────────────────────────────────────────────────── */
 const SHOT =
-  "h-auto w-full rounded-2xl border border-white/10 drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] transition-[filter] duration-300 ease-out group-hover:brightness-[0.55]";
+  "h-auto w-full rounded-2xl border border-white/10 drop-shadow-[0_0_40px_rgba(0,0,0,0.55)] transition-[filter] duration-300 ease-out brightness-[0.55] sm:brightness-100 sm:group-hover:brightness-[0.55]";
 
 function AtriosMedia() {
   return (
@@ -59,12 +59,7 @@ function AtriosMedia() {
   );
 }
 
-interface WorkProps {
-  onProjectEnter: () => void;
-  onProjectLeave: () => void;
-}
-
-export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
+export default function Work() {
   return (
       <div
         id="work"
@@ -75,8 +70,6 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
         <Link
           href="/atrios"
           className="block w-full cursor-pointer"
-          onMouseEnter={onProjectEnter}
-          onMouseLeave={onProjectLeave}
         >
           <ProjectShowcase
             title="Atrios"
@@ -100,8 +93,6 @@ export default function Work({ onProjectEnter, onProjectLeave }: WorkProps) {
         <Link
           href="/blind-hangouts"
           className="block w-full cursor-pointer"
-          onMouseEnter={onProjectEnter}
-          onMouseLeave={onProjectLeave}
         >
           <ProjectShowcase
             title="Blind Hangouts"
