@@ -26,11 +26,7 @@ export default function Home() {
         {/* Blurb bridging the hero into the work — section-header font (Playfair).
             Only the text fades in on scroll; the sticker stays full-opacity. */}
         <div className="relative mx-auto w-full max-w-4xl flex justify-center px-4 pt-6 pb-24 md:px-0 md:pt-8 md:pb-24">
-          {/* The blurb is hidden on a phone: the vertical desk already fills
-              the screen, and the line under it just pushed the work further
-              down. The sticker stays. */}
           <AnimatedContent
-            className="max-sm:hidden"
             distance={120}
             direction="vertical"
             duration={1.2}

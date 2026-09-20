@@ -8,21 +8,22 @@
  *
  * The positions are inline styles on the elements (they come from JS data), so
  * these overrides have to be !important to win. Percentages are of the stage,
- * which switches to a 3/5 portrait box at this width — 376x627 on a 400px
- * viewport. Every box below was checked against every other for overlap at
- * that size; if you move one, re-check its neighbours in the same band.
+ * which switches to a 3/6.8 portrait box at this width — 376x852 on a 400px
+ * viewport. Boxes are laid out in bands and were checked pairwise for overlap
+ * at that size, and the last band stops 43px above where the Spotify card
+ * opens. If you move one, re-check its band and that clearance.
  */
 @media (max-width: 639px) {
   /* top band: lamp left, photo stand right, both clear of the mac */
   .dh-lamp {
     width: 32% !important;
-    top: -4% !important;
+    top: -3.3% !important;
     left: 1% !important;
   }
 
   .dh-frame {
     width: 23% !important;
-    top: -1% !important;
+    top: -1.9% !important;
     left: auto !important;
     right: 5% !important;
   }
@@ -30,7 +31,7 @@
   /* the mac, centred */
   .dh-laptop {
     width: 64% !important;
-    top: 20% !important;
+    top: 14.7% !important;
     left: 16% !important;
   }
 
@@ -43,48 +44,61 @@
 
   /* the notebook sits directly under the mac */
   .dh-notebook {
-    width: 46% !important;
-    top: 52% !important;
+    width: 58% !important;
+    top: 39% !important;
+    left: 3% !important;
     bottom: auto !important;
-    left: 13% !important;
   }
 
   .dh-snack {
-    width: 32% !important;
-    top: 74% !important;
+    width: 30% !important;
+    top: 60.8% !important;
     right: auto !important;
-    left: 6% !important;
+    left: 5% !important;
   }
 
   .dh-airpods {
-    width: 16% !important;
-    top: 89% !important;
-    left: 14% !important;
+    width: 15% !important;
+    top: 72.3% !important;
+    left: 10% !important;
   }
 
   /* the three mugs step down the right edge, one per band */
   .dh-mug-0 {
     width: 22% !important;
-    top: 52% !important;
-    right: 4% !important;
+    top: 44.3% !important;
+    left: auto !important;
+    right: 5% !important;
   }
 
   .dh-mug-1 {
     width: 23% !important;
-    top: 68% !important;
-    right: 7% !important;
+    top: 60% !important;
+    left: auto !important;
+    right: 6% !important;
   }
 
   .dh-mug-2 {
-    width: 21% !important;
-    top: 84% !important;
-    right: 4% !important;
+    width: 20% !important;
+    top: 71% !important;
+    left: auto !important;
+    right: 5% !important;
   }
 
-  /* the lamp's pool is aimed at its desktop position; re-aim it at the lamp */
+  /* The lamp's pool is aimed at its desktop position, so re-aim it at the
+     lamp. It also has to outgrow the stage. The lamp sits near the top-left
+     corner, so a pool drawn inside `inset-0` gets sliced by the stage edge
+     while it is still ~25% opaque, and that slice reads as a rectangle three
+     percent inside the viewport. Spilling the element past the viewport puts
+     the only hard cut at the screen edge, where there is nothing to see. */
   .dh-lightpool {
+    left: -25% !important;
+    right: -10% !important;
+    top: -20% !important;
+    bottom: auto !important;
+    height: 70% !important;
     background: radial-gradient(
-      44% 22% at 17% 9%,
+      30% 40% at 31% 39%,
       rgba(255, 168, 92, 0.55) 0%,
       rgba(255, 140, 70, 0.24) 40%,
       rgba(255, 120, 55, 0.06) 64%,

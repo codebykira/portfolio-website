@@ -103,7 +103,7 @@ export default function DeskHero() {
       />
 
       {/* ── Desk stage = the mat's footprint, centred in the viewport ── */}
-      <div className="relative z-10 mx-auto aspect-[1583/675] w-[94%] max-w-[1550px] max-sm:aspect-[3/5]">
+      <div className="relative z-10 mx-auto aspect-[1583/675] w-[94%] max-w-[1550px] max-sm:aspect-[3/6.8]">
         {/* ── Leather desk mat: behind everything; fills the centred stage ──
              The mat image is hidden on a phone, where it reads as a dark
              rectangle rather than as leather. Only the image goes: this
