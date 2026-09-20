@@ -158,6 +158,22 @@
   }
 }
 
+/* The story board places its cards and handwriting in percentages, so those
+   shrink with the sheet — but sticker widths arrive as pixels and do not. On a
+   phone that leaves every sticker roughly three times too big for the board it
+   sits on, piling onto the cards and the notes. Scale each one off its own
+   inline --sticker-width so the whole set keeps its relative sizing. */
+@media (max-width: 639px) {
+  .draggable.story-sticker {
+    width: calc(var(--sticker-width) * 0.42) !important;
+  }
+
+  .draggable.story-sticker .sticker-image,
+  .draggable.story-sticker .flap-image {
+    width: calc(var(--sticker-width) * 0.42) !important;
+  }
+}
+
 .sticker-main,
 .flap {
   will-change: clip-path, transform;

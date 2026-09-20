@@ -49,10 +49,10 @@ interface ProjectDetails {
   mobileImage?: { src: string; alt: string; width: number; height: number };
   /** Width of `mobileImage` relative to the card (default "54%"). */
   mobileWidth?: string;
-  /** Which paragraph to keep on a phone, where only one is shown. Defaults to
-      the first, but that is usually the setup — the one worth keeping is the
-      one about what I did on the project. */
-  mobileParagraph?: number;
+  /** The one paragraph a phone gets, written for that space: what the product
+      does, where it got to, and what I did. The desktop paragraphs are long
+      enough that no single one of them covers all three. */
+  mobileDescription?: string;
   /** Frame a stacked image with a translucent white border instead of the dot grid. */
   bordered?: boolean;
   /** Lay the header out as title-left / description-right (title sized to content). */
@@ -78,7 +78,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
   mediaWidth,
   mobileImage,
   mobileWidth,
-  mobileParagraph = 0,
+  mobileDescription,
   logoBgColor,
   bordered = false,
   splitHeader = false,
@@ -219,13 +219,16 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
             )}
             <h1 className="text-2xl font-bold text-white sm:text-3xl">{title}</h1>
           </div>
-          {/* A phone gets one paragraph. The copy is untouched — the others
-              are hidden at this width, not cut. */}
+          {/* A phone gets the single purpose-written paragraph; the full set
+              is hidden at that width, not cut. */}
+          {mobileDescription && (
+            <p className="text-sm leading-relaxed sm:hidden">{mobileDescription}</p>
+          )}
           {description.map((paragraph, index) => (
             <p
               key={index}
               className={`text-sm leading-relaxed sm:text-base ${
-                index === mobileParagraph ? "" : "max-sm:hidden"
+                mobileDescription ? "max-sm:hidden" : ""
               }`}
             >
               {paragraph}

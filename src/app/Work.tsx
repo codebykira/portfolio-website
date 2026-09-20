@@ -88,7 +88,7 @@ export default function Work() {
         >
           <ProjectShowcase
             title="Atrios"
-            mobileParagraph={1}
+            mobileDescription="Atrios pays people to make warm introductions: a friend vouches for you, and it becomes a booked meeting. I'm on the founding team doing design, product and engineering, and took it from prototype to $2M ARR and 8,000 users in 5 months. Backed by a16z."
             description={[
               "The best products you use came from a friend, not an ad. Atrios is built on that instinct: you think about what your friends would actually want, curate a few, and get rewarded for the care. We're building the version that does, backed by a16z.",
               "I shape the Atrios experience. I designed every screen and write the code behind them, backend to frontend. Every screen, every line, every detail that makes it feel less like software.",
@@ -112,7 +112,7 @@ export default function Work() {
         >
           <ProjectShowcase
             title="Blind Hangouts"
-            mobileParagraph={1}
+            mobileDescription="Blind Hangouts learns what you and your friends like to do, finds a time that works for everyone, and books the plan, with a small surprise in it. I founded it and design and build the product. Backed by Founders Inc."
             description={[
               "The people you want to see most are usually the ones you see least. Not because you don't care, but because caring costs coordination.",
               "I founded Blind Hangouts, backed by Founders Inc, to take the coordination off your plate. It learns what you and your friends like to do, finds a time that works for everyone, and books the plan. There's always a small surprise in it too.",
@@ -150,7 +150,7 @@ export default function Work() {
         <div className="w-full">
           <ProjectShowcase
             title="Waverly"
-            mobileParagraph={1}
+            mobileDescription="Waverly was an AI social platform for finding your people. Employee #2 and Betaworks-backed, we reached 10K users and coverage in BBC News, BetaKit and Collision. I came in on growth and ended up designing and writing the product."
             description={[
               "Waverly was my first real job in a startup. Employee #2, Betaworks-backed, an AI social platform for finding your people. We got to 10K users and were covered by BBC News, BetaKit, and Collision.",
               "My job was growth. What I actually did was fall in love with building. I kept asking why people weren't coming back, and every answer lived inside the product, so eventually I was in there designing and writing it. Everything I do now started there.",

@@ -101,17 +101,13 @@ const FOOD_NOTE = {
 const Story = () => {
   return (
     <motion.div id="story" className="relative" transition={{ duration: 0.3 }}>
-      {/* The board is one composition laid out in percentages across a wide
-          sheet, but the stickers are sized in pixels. Let the sheet narrow to a
-          phone and the two disagree: the sheet turns portrait while the
-          stickers stay put, so they end up several times too big and pile onto
-          the cards and the handwriting. Below `sm` the sheet instead keeps a
-          landscape width and the page scrolls sideways to it, which holds every
-          relative position exactly as designed. Stickers set touch-action:none,
-          so dragging one never turns into a scroll. */}
-      <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:overflow-visible sm:px-0">
+      {/* One sheet of paper holding every card and sticker. The cards and the
+          handwriting are positioned in percentages, so they reflow with the
+          sheet; the stickers are sized in pixels and do not, which is why they
+          are scaled down below `sm` in StickerPeel.css. The sheet itself never
+          exceeds the column — a wider sheet made the whole page scroll. */}
       <div
-        className="relative h-[560px] w-full min-w-[880px] overflow-hidden rounded-3xl bg-[#F6ECD5] sm:h-[700px] sm:min-w-0"
+        className="relative h-[560px] w-full overflow-hidden rounded-3xl bg-[#F6ECD5] sm:h-[700px]"
         style={{
           backgroundImage: "url(/paper-bg.jpg)",
           backgroundSize: "cover",
@@ -162,11 +158,10 @@ const Story = () => {
               width={s.width}
               rotate={s.rotate}
               shadowIntensity={0.4}
-              className={s.className}
+              className={`story-sticker ${s.className}`}
             />
           ))}
         </ClientOnly>
-      </div>
       </div>
     </motion.div>
   );
