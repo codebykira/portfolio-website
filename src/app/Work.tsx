@@ -17,7 +17,7 @@ function AtriosMedia() {
   return (
     <div className="relative h-full w-full overflow-hidden">
       <div
-        className="absolute inset-0 dot-grid-static"
+        className="absolute inset-0 dot-grid-static max-sm:hidden"
         style={{
           backgroundImage: "radial-gradient(circle, rgba(252, 247, 233, 0.18) 1px, transparent 1.1px)",
           backgroundSize: "14px 14px",
@@ -113,6 +113,12 @@ export default function Work() {
               alt: "Blind Hangouts Logo",
               width: 48,
               height: 48
+            }}
+            mobileImage={{
+              src: "/blind-hangouts-phone.png",
+              alt: "Blind Hangouts: picking between two activities",
+              width: 600,
+              height: 1073,
             }}
             gradientColor="#F7EED7"
             heightClass="h-[72vh]"

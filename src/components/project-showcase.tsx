@@ -44,6 +44,11 @@ interface ProjectDetails {
   /** Width of the reveal-on-hover image relative to the card (default "97%",
       or "130%" when centred). Values over 100% crop against the card edges. */
   mediaWidth?: string;
+  /** Stand-in for `images` below `sm`, for when the desktop shot is too wide
+      to read on a phone. Centred and bottom-anchored. */
+  mobileImage?: { src: string; alt: string; width: number; height: number };
+  /** Width of `mobileImage` relative to the card (default "54%"). */
+  mobileWidth?: string;
   /** Frame a stacked image with a translucent white border instead of the dot grid. */
   bordered?: boolean;
   /** Lay the header out as title-left / description-right (title sized to content). */
@@ -67,6 +72,8 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
   mediaOffset = false,
   mediaCenter = false,
   mediaWidth,
+  mobileImage,
+  mobileWidth,
   logoBgColor,
   bordered = false,
   splitHeader = false,
@@ -97,10 +104,13 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
 
   // Media fills the card; the logo stays visible, and title/description/tags
   // fade in over a scrim on hover.
+  // On a phone the card loses its panel entirely — no fill, border, rounding
+  // or shadow — so the art and the copy sit straight on the page.
+  // overflow-hidden stays: it is what crops the bleeding media.
   if (revealOnHover) {
     return (
       <div
-        className={`group relative ${heightClass} ${widthClass} overflow-hidden rounded-3xl bg-white/5 text-white/70 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)]`}
+        className={`group relative ${heightClass} ${widthClass} overflow-hidden rounded-3xl bg-white/5 text-white/70 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)] max-sm:rounded-none max-sm:bg-transparent max-sm:shadow-none`}
       >
         {/* Media fills the card; with mediaOffset it shifts right/down so the
             bottom-right corner crops off the card edge. The image darkens on
@@ -111,19 +121,36 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
                bottom-right and bleeding off the right/bottom card edges. */
             <>
               <div
-                className="absolute inset-0 dot-grid-static"
+                className="absolute inset-0 dot-grid-static max-sm:hidden"
                 style={{
                   backgroundImage:
                     "radial-gradient(circle, rgba(252, 247, 233, 0.18) 1px, transparent 1.1px)",
                   backgroundSize: "14px 14px",
                 }}
               />
+              {/* A wide desktop shot shrinks to nothing in a phone-width card.
+                  When a mobile cut-out is supplied it takes over below `sm`. */}
+              {mobileImage && (
+                <div
+                  className="absolute bottom-0 left-1/2 max-w-none origin-bottom -translate-x-1/2 sm:hidden"
+                  style={{ width: mobileWidth ?? "54%" }}
+                >
+                  <Image
+                    src={mobileImage.src}
+                    alt={mobileImage.alt}
+                    width={mobileImage.width}
+                    height={mobileImage.height}
+                    sizes="320px"
+                    className={`h-auto w-full ${revealMediaFilter}`}
+                  />
+                </div>
+              )}
               {/* Lifts and grows a touch on hover, anchored at the bottom so
                   the screenshot rises out of the card rather than drifting. */}
               <div
                 className={`absolute bottom-0 max-w-none origin-bottom transition-transform duration-500 ease-out sm:group-hover:-translate-y-4 sm:group-hover:scale-[1.03] ${
                   mediaCenter ? "left-1/2 -translate-x-1/2" : "-right-24"
-                }`}
+                } ${mobileImage ? "max-sm:hidden" : ""}`}
                 style={{ width: mediaWidth ?? (mediaCenter ? "130%" : "97%") }}
               >
                 {images.length > 1 ? (
