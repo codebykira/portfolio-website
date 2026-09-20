@@ -101,9 +101,17 @@ const FOOD_NOTE = {
 const Story = () => {
   return (
     <motion.div id="story" className="relative" transition={{ duration: 0.3 }}>
-      {/* One sheet of paper holding every card and sticker. */}
+      {/* The board is one composition laid out in percentages across a wide
+          sheet, but the stickers are sized in pixels. Let the sheet narrow to a
+          phone and the two disagree: the sheet turns portrait while the
+          stickers stay put, so they end up several times too big and pile onto
+          the cards and the handwriting. Below `sm` the sheet instead keeps a
+          landscape width and the page scrolls sideways to it, which holds every
+          relative position exactly as designed. Stickers set touch-action:none,
+          so dragging one never turns into a scroll. */}
+      <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:overflow-visible sm:px-0">
       <div
-        className="relative h-[560px] w-full overflow-hidden rounded-3xl bg-[#F6ECD5] sm:h-[700px]"
+        className="relative h-[560px] w-full min-w-[880px] overflow-hidden rounded-3xl bg-[#F6ECD5] sm:h-[700px] sm:min-w-0"
         style={{
           backgroundImage: "url(/paper-bg.jpg)",
           backgroundSize: "cover",
@@ -158,6 +166,7 @@ const Story = () => {
             />
           ))}
         </ClientOnly>
+      </div>
       </div>
     </motion.div>
   );
