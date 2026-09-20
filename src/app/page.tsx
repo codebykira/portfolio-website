@@ -2,7 +2,6 @@
 import DeskHero from "@/app/DeskHero";
 import Navigation from "@/components/tab-scroller";
 import Work from "@/app/Work";
-import Projects from "@/app/Projects";
 import ContactPage from "@/components/connect";
 import Story from "@/app/Story";
 import ClientOnly from "@/components/ClientOnly";
@@ -59,12 +58,6 @@ export default function Home() {
 
         <Work />
         {/* <Writing /> */}
-        <div className="pt-16 md:pt-24">
-          <SectionHeader title="Projects" subtitle="Made for fun 🐈" />
-        </div>
-
-        <Projects />
-
         <div className="pt-16 md:pt-24">
           <SectionHeader title="Story" subtitle="Artist on the Move 🌍" />
         </div>

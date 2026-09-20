@@ -62,13 +62,13 @@ function Bubble({ msg, index, reduceMotion }: { msg: Msg; index: number; reduceM
 const Connect = () => {
   const reduceMotion = useReducedMotion();
   const pill =
-    "inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-base font-semibold transition-transform duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 motion-reduce:transition-none sm:text-lg";
+    "inline-flex items-center justify-center gap-1.5 rounded-full px-3.5 py-2.5 text-sm font-semibold sm:gap-2 sm:px-7 sm:py-3.5 sm:text-base transition-transform duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 motion-reduce:transition-none sm:text-lg";
 
   return (
     <section
       id="connect"
       aria-labelledby="connect-heading"
-      className="w-full px-4 pb-16 pt-16 sm:px-6 sm:pb-20 md:pt-24 lg:px-8"
+      className="w-full px-4 pb-28 pt-16 sm:px-6 sm:pb-20 md:pt-24 lg:px-8"
     >
       <div className="mx-auto w-full max-w-6xl">
         <h2 id="connect-heading" className="sr-only">
@@ -83,7 +83,7 @@ const Connect = () => {
           </div>
 
           {/* the buttons, always there */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-2 min-[340px]:flex-nowrap sm:gap-3">
             <a
               href={`mailto:${EMAIL}`}
               className={`${pill} bg-[#2f7bff] text-white shadow-[0_10px_30px_rgba(47,123,255,0.45)] hover:bg-[#3d86ff]`}
