@@ -31,11 +31,11 @@ const ProjectHoverCard: React.FC<ProjectHoverCardProps> = ({
   <div
     className={`group relative ${heightClass} w-full overflow-hidden rounded-3xl bg-white/5 text-white/70 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)]`}
   >
-    <div className="absolute inset-0 transition-[filter] duration-300 ease-out group-hover:brightness-[0.55]">
+    <div className="absolute inset-0 transition-[filter] duration-300 ease-out brightness-[0.55] sm:brightness-100 sm:group-hover:brightness-[0.55]">
       {media}
     </div>
 
-    <div className="absolute inset-0 flex flex-col justify-end gap-1 p-5 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
+    <div className="absolute inset-0 flex flex-col justify-end gap-1 p-5 bg-gradient-to-t from-black/95 via-black/75 to-black/20 opacity-100 transition-opacity duration-300 ease-out sm:from-black/90 sm:via-black/50 sm:to-transparent sm:opacity-0 sm:group-hover:opacity-100">
       <div className="-mb-1 flex items-center gap-2.5">
         {logo && (
           <div className="h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-white/15 bg-black/25 backdrop-blur-sm">

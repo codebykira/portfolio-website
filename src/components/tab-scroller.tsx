@@ -35,15 +35,15 @@ const Navigation = () => {
   }, []);
 
   return (
-    <nav className="fixed pt-6 pr-6 z-50 flex justify-end w-screen max-sm:justify-center max-sm:pr-0">
-      <div className="px-6 py-0.5 flex items-center justify-center rounded-full border border-white/15 bg-white/10 shadow-lg shadow-black/20 backdrop-blur-xl backdrop-saturate-150 max-sm:py-2 max-sm:px-4 indie-flower-regular text-xl">
-        <div className="flex items-center space-x-8  max-sm:space-x-5">
+    <nav className="fixed pt-4 pr-4 z-50 flex justify-end w-screen max-sm:justify-center max-sm:pr-0">
+      <div className="px-4 py-1 flex items-center justify-center rounded-full border border-white/15 bg-white/10 shadow-lg shadow-black/20 backdrop-blur-xl backdrop-saturate-150 max-sm:py-1 max-sm:px-3 indie-flower-regular text-base sm:text-lg">
+        <div className="flex items-center space-x-6 max-sm:space-x-4">
           <button
             onClick={() => scrollToSection("home")}
             className="transition-colors text-white/80 hover:text-white hover:font-bold"
             style={activeSection === "home" ? { color: "white", fontWeight: "bold" } : {}}
           >
-            <GirlSVG isActive={activeSection === "home"} />
+            <GirlSVG width={28} height={28} isActive={activeSection === "home"} />
           </button>
           <button
             onClick={() => scrollToSection("work")}

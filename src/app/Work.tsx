@@ -32,7 +32,7 @@ function AtriosMedia() {
           style={{ aspectRatio: "1.5 / 1", width: "min(100%, calc((72vh - 3rem) * 1.5))" }}
         >
           {/* Home, behind */}
-          <div className="absolute left-0 top-0 w-[76%] transition-transform duration-500 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2">
+          <div className="absolute left-0 top-0 w-[76%] transition-transform duration-500 ease-out sm:group-hover:-translate-x-2 sm:group-hover:-translate-y-2">
             <Image
               src="/atrios-home-v3.jpg"
               alt="The Atrios home: companies to introduce friends to"
@@ -43,7 +43,7 @@ function AtriosMedia() {
             />
           </div>
           {/* Inbox, in front */}
-          <div className="absolute bottom-0 right-0 w-[76%] transition-transform duration-500 ease-out group-hover:translate-x-2 group-hover:translate-y-2">
+          <div className="absolute bottom-0 right-0 w-[76%] transition-transform duration-500 ease-out sm:group-hover:translate-x-2 sm:group-hover:translate-y-2">
             <Image
               src="/atrios-inbox-v3.jpg"
               alt="The Atrios Inbox: companies that want to meet you"

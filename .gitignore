@@ -51,3 +51,6 @@ next-env.d.ts
 # hand-tracking assets, provisioned by scripts/setup-handtracking.mjs
 /public/mediapipe/
 /public/models/
+
+# stray editor/agent backups
+*.backup

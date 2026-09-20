@@ -81,9 +81,16 @@ export default function DeskHero() {
 
   return (
     <>
+    {/* The desk sits low enough to clear the fixed nav. Two things make the
+        number less obvious than it looks: the lamp overhangs the mat by ~20%
+        of the stage height, so the clearance is measured to the lamp; and
+        items-center spends half the padding on the gap below, so the padding
+        has to be roughly double the gap you want. pt-44 is the smallest value
+        that clears the nav at 1440x770, 1280x700 and 1536x864 without the
+        stage clipping at the bottom of a short window. */}
     <section
       id="home"
-      className="relative flex h-screen min-h-[560px] w-full items-center justify-center overflow-hidden bg-[#0b0a0e] max-sm:h-auto max-sm:min-h-0 max-sm:pb-10 max-sm:pt-28"
+      className="relative flex h-screen min-h-[560px] w-full items-center justify-center overflow-hidden bg-[#0b0a0e] sm:pt-44 max-sm:h-auto max-sm:min-h-0 max-sm:pb-10 max-sm:pt-36"
     >
       {/* Ambient dark base */}
       <div

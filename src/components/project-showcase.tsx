@@ -121,7 +121,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
               {/* Lifts and grows a touch on hover, anchored at the bottom so
                   the screenshot rises out of the card rather than drifting. */}
               <div
-                className={`absolute bottom-0 max-w-none origin-bottom transition-transform duration-500 ease-out group-hover:-translate-y-4 group-hover:scale-[1.03] ${
+                className={`absolute bottom-0 max-w-none origin-bottom transition-transform duration-500 ease-out sm:group-hover:-translate-y-4 sm:group-hover:scale-[1.03] ${
                   mediaCenter ? "left-1/2 -translate-x-1/2" : "-right-24"
                 }`}
                 style={{ width: mediaWidth ?? (mediaCenter ? "130%" : "97%") }}
@@ -202,7 +202,7 @@ const ProjectShowcase: React.FC<ProjectDetails> = ({
 
   return (
     <div
-      className={`${heightClass} ${widthClass} overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md text-white/70 max-sm:h-2/3 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)] transition-colors duration-300 ease-out hover:bg-white/10`}
+      className={`${heightClass} ${widthClass} overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md text-white/70 max-sm:h-2/3 project-card shadow-[0_8px_32px_rgba(0,0,0,0.37)] transition-colors duration-300 ease-out sm:hover:bg-white/10`}
     >
       <div className={`flex gap-4 ${stacked ? "flex-col" : "flex-row h-full max-sm:flex-col items-center"}`}>
         {/* Header Section */}

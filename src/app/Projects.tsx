@@ -49,7 +49,8 @@ function ShelfCard({
     "absolute inset-0 flex flex-col justify-end gap-1.5 p-5 md:p-6 bg-gradient-to-t from-black/90 via-black/55 to-transparent transition-opacity duration-300 ease-out";
   const scrimVisibility = alwaysShowCopy
     ? "opacity-100"
-    : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100";
+    : // no hover on touch: the copy is simply on below `sm`
+      "opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100";
 
   const card = (
     <motion.div
@@ -61,9 +62,9 @@ function ShelfCard({
           : { rotate: 0, y: -6, scale: 1.015, transition: { type: "spring", stiffness: 260, damping: 22 } }
       }
       whileTap={reduceMotion || !interactive ? undefined : { scale: 0.99 }}
-      className="group relative h-full w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-white/70 shadow-[0_8px_32px_rgba(0,0,0,0.37)] transition-shadow duration-300 ease-out hover:shadow-[0_18px_48px_rgba(0,0,0,0.5)]"
+      className="group relative h-full w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-white/70 shadow-[0_8px_32px_rgba(0,0,0,0.37)] transition-shadow duration-300 ease-out sm:hover:shadow-[0_18px_48px_rgba(0,0,0,0.5)]"
     >
-      <div className="absolute inset-0 transition-[filter] duration-300 ease-out group-hover:brightness-[0.6]">
+      <div className="absolute inset-0 transition-[filter] duration-300 ease-out brightness-[0.6] sm:brightness-100 sm:group-hover:brightness-[0.6]">
         {media}
       </div>
 
@@ -74,7 +75,7 @@ function ShelfCard({
       {external && (
         <span
           aria-hidden
-          className="absolute right-4 top-4 z-10 grid h-8 w-8 place-items-center rounded-full border border-white/15 bg-black/40 text-white/70 backdrop-blur-md transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          className="absolute right-4 top-4 z-10 grid h-8 w-8 place-items-center rounded-full border border-white/15 bg-black/40 text-white/70 backdrop-blur-md transition-transform duration-300 ease-out sm:group-hover:-translate-y-0.5 sm:group-hover:translate-x-0.5"
         >
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9L9 3M4 3h5v5" />
@@ -133,7 +134,7 @@ function DeadLettersMedia() {
         width={880}
         height={887}
         sizes="(min-width: 1024px) 60vw, 100vw"
-        className="absolute inset-0 h-full w-full object-contain p-6 transition-[opacity,transform] duration-500 ease-out group-hover:scale-[0.96] group-hover:opacity-0 md:p-10"
+        className="absolute inset-0 h-full w-full object-contain p-6 transition-[opacity,transform] duration-500 ease-out sm:group-hover:scale-[0.96] sm:group-hover:opacity-0 md:p-10"
       />
       <Image
         src="/dead-letters/ball.webp"
@@ -142,7 +143,7 @@ function DeadLettersMedia() {
         width={880}
         height={887}
         sizes="(min-width: 1024px) 60vw, 100vw"
-        className="absolute inset-0 h-full w-full object-contain p-6 opacity-0 transition-[opacity,transform] duration-500 ease-out scale-[1.04] group-hover:scale-100 group-hover:opacity-100 md:p-10"
+        className="absolute inset-0 h-full w-full object-contain p-6 opacity-0 transition-[opacity,transform] duration-500 ease-out scale-[1.04] sm:group-hover:scale-100 sm:group-hover:opacity-100 md:p-10"
       />
     </div>
   );
