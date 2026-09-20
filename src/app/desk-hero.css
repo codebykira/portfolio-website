@@ -3,15 +3,16 @@
  * On a wide screen the items sit where they would on a real desk: a landscape
  * mat, things spread left to right. A portrait phone has the opposite budget —
  * no width, plenty of height — so below `sm` the mat is hidden and the scene
- * is re-laid as a vertical desk. Items sit in bands so nothing can collide
- * vertically, but within a band each one is nudged sideways, floated to its own
- * height and turned a few degrees, so it reads as things put down rather than
- * as a grid. `rotate` is used, not `transform`, because framer-motion owns the
- * transform on these elements.
+ * is re-laid as a vertical desk, following a reference render: lamp and photo
+ * frame across the top, the mac centred, snack and AirPods flanking it, the
+ * notebook large underneath, and the three mugs in a row along the bottom.
+ * `rotate` is used, not `transform`, because framer-motion owns the transform
+ * on these elements. The sticky note is hidden here — it is not in the
+ * reference, and it has nowhere to sit once the mac shrinks.
  *
  * The positions are inline styles on the elements (they come from JS data), so
  * these overrides have to be !important to win. Percentages are of the stage,
- * which switches to a 3/6.8 portrait box at this width — 376x852 on a 400px
+ * which switches to a 3/5.11 portrait box at this width — 376x640 on a 400px
  * viewport. Boxes are laid out in bands and were checked pairwise for overlap
  * at that size, and the last band stops 43px above where the Spotify card
  * opens. If you move one, re-check its band and that clearance.
@@ -19,82 +20,84 @@
 @media (max-width: 639px) {
   /* top band: lamp left, photo stand right, both clear of the mac */
   .dh-lamp {
-    width: 32% !important;
-    top: -3.52% !important;
-    left: 1.02% !important;
-    rotate: 0.7deg !important;
+    width: 31% !important;
+    top: 3.1% !important;
+    right: auto !important;
+    left: 2% !important;
+    rotate: -2deg !important;
   }
 
   .dh-frame {
-    width: 22% !important;
-    top: -0.09% !important;
-    left: auto !important;
-    right: 4.09% !important;
-    rotate: -7.3deg !important;
+    width: 20% !important;
+    top: 16.4% !important;
+    right: auto !important;
+    left: 78% !important;
+    rotate: 3deg !important;
   }
 
   /* the mac, centred */
   .dh-laptop {
-    width: 64% !important;
-    top: 14.71% !important;
-    left: 15.39% !important;
-    rotate: 1deg !important;
+    width: 54% !important;
+    top: 20% !important;
+    right: auto !important;
+    left: 22% !important;
+    rotate: 0deg !important;
   }
 
   /* the sticky note rides on the mac's screen, as it does on desktop */
   .dh-sticky {
-    width: 17% !important;
-    top: 24% !important;
-    left: 60% !important;
+    display: none !important;
   }
 
   /* the notebook sits directly under the mac */
   .dh-notebook {
-    width: 58% !important;
-    top: 39.19% !important;
-    left: 2.14% !important;
+    width: 67% !important;
+    top: 51.6% !important;
+    right: auto !important;
+    left: 17% !important;
     bottom: auto !important;
-    rotate: -2deg !important;
+    rotate: 0deg !important;
   }
 
   .dh-snack {
-    width: 30% !important;
-    top: 65.5% !important;
+    width: 17% !important;
+    top: 39.1% !important;
     right: auto !important;
-    left: 17.2% !important;
-    rotate: -5.6deg !important;
+    left: 3% !important;
+    rotate: -6deg !important;
   }
 
   .dh-airpods {
-    width: 15% !important;
-    top: 72.51% !important;
-    left: 40.89% !important;
-    rotate: 13.2deg !important;
+    width: 9.5% !important;
+    top: 43% !important;
+    right: auto !important;
+    left: 80.5% !important;
+    rotate: 8deg !important;
   }
 
   /* the three mugs step down the right edge, one per band */
   .dh-mug-0 {
     width: 22% !important;
-    top: 48.78% !important;
-    left: auto !important;
-    right: 6.06% !important;
-    rotate: 11.4deg !important;
+    top: 82.5% !important;
+    right: auto !important;
+    left: 12% !important;
+    rotate: 0deg !important;
   }
 
   .dh-mug-1 {
-    width: 23% !important;
-    top: 60.52% !important;
-    left: auto !important;
-    right: 10.38% !important;
-    rotate: -8deg !important;
+    width: 20% !important;
+    top: 82.9% !important;
+    right: auto !important;
+    left: 42% !important;
+    rotate: 0deg !important;
   }
 
   .dh-mug-2 {
-    width: 20% !important;
-    top: 71.68% !important;
-    left: auto !important;
-    right: 7.06% !important;
-    rotate: 6.3deg !important;
+    width: 21% !important;
+    top: 82.5% !important;
+    right: auto !important;
+    left: 70% !important;
+    rotate: 0deg !important;
   }
 
   /* The lamp's pool is aimed at its desktop position, so re-aim it at the

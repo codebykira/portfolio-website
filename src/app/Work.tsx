@@ -117,10 +117,12 @@ export default function Work() {
             ]}
             images={[
               {
-                src: "/screenshots.png",
+                // trimmed of the 48% empty margin the 1920x1080 canvas carried,
+                // so the phones themselves fill the frame
+                src: "/screenshots-tight.png",
                 alt: "Blind Hangouts app screenshots",
-                width: 1920,
-                height: 1080
+                width: 1027,
+                height: 792
               }
             ]}
             logo={{
@@ -139,7 +141,7 @@ export default function Work() {
             heightClass="h-[72vh]"
             revealOnHover
             mediaCenter
-            mediaWidth="min(92%, calc((72vh - 1rem) / 0.5625))"
+            mediaWidth="min(92%, calc((72vh - 2rem) / 0.7712))"
           />
         </Link>
 

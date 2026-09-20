@@ -91,7 +91,7 @@ export default function DeskHero() {
         stage clipping at the bottom of a short window. */}
     <section
       id="home"
-      className="relative flex h-screen min-h-[560px] w-full items-center justify-center overflow-hidden bg-[#0b0a0e] sm:pt-44 max-sm:h-auto max-sm:min-h-0 max-sm:pb-10 max-sm:pt-36"
+      className="relative flex h-screen min-h-[560px] w-full items-center justify-center overflow-hidden bg-[#0b0a0e] sm:pt-44 max-sm:h-auto max-sm:min-h-0 max-sm:pb-44 max-sm:pt-16"
     >
       {/* Ambient dark base */}
       <div
@@ -103,7 +103,7 @@ export default function DeskHero() {
       />
 
       {/* ── Desk stage = the mat's footprint, centred in the viewport ── */}
-      <div className="relative z-10 mx-auto aspect-[1583/675] w-[94%] max-w-[1550px] max-sm:aspect-[3/6.8]">
+      <div className="relative z-10 mx-auto aspect-[1583/675] w-[94%] max-w-[1550px] max-sm:aspect-[3/5.11]">
         {/* ── Leather desk mat: behind everything; fills the centred stage ──
              The mat image is hidden on a phone, where it reads as a dark
              rectangle rather than as leather. Only the image goes: this
