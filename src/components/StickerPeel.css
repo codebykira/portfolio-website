@@ -162,16 +162,16 @@
    or two cards across instead of three, each much larger, with its stickers
    scattered around it. Sticker widths arrive as pixels and would otherwise
    stay at their desktop size, so they are scaled off their own inline
-   --sticker-width. 0.85 is the figure the mobile placement was solved against
+   --sticker-width. 0.72 is the figure the mobile placement was solved against
    — change it and the scatter needs re-solving, or stickers will collide. */
 @media (max-width: 639px) {
   .draggable.story-sticker {
-    width: calc(var(--sticker-width) * 0.85) !important;
+    width: calc(var(--sticker-width) * 0.72) !important;
   }
 
   .draggable.story-sticker .sticker-image,
   .draggable.story-sticker .flap-image {
-    width: calc(var(--sticker-width) * 0.85) !important;
+    width: calc(var(--sticker-width) * 0.72) !important;
   }
 }
 
